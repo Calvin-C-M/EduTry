@@ -1,12 +1,14 @@
+require('dotenv').config({ path:'./.env.local' })
+
 const express = require("express")
 const next = require("next")
 
-const dev = process.env.NODE_ENV !== "production"
+const port = process.env.PORT
+const hostname = process.env.HOSTNAME
+
+const dev = process.env.ENVIRONMENT !== "production"
 const app = next({ dev })
 const handle = app.getRequestHandler()
-
-const port = 3000
-const host = 'https://localhost'
 
 app.prepare()
 .then(() => {
@@ -35,6 +37,6 @@ app.prepare()
 
     server.listen(port, (err) => {
         if(err) throw err
-        console.log(`Server running on ${host + ':' + port}`)
+        console.log(`Server running on https://${hostname}:${port}`)
     })
 })
