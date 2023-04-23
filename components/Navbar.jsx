@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import Logo from '../public/edutry.svg'
 
 const Navbar = () => {
   const [nav, setNav] = useState(false)
@@ -17,7 +18,7 @@ const Navbar = () => {
     <div className='fixed w-full h-20 px-10 md:px-16 shadow-md bg-white'>
         <div className='flex justify-between items-center h-full'>
             <Link href=''>
-                <Image src='./edutry.svg' alt='edutry logo' width={96} height={37} />
+                <Image src={Logo} alt='edutry logo' className='w-[96px] h-[37px]' />
             </Link>
             <div className='hidden md:flex items-center'>
                 <ul className='flex items-center font-medium text-gray-dark mx-3'>
@@ -31,16 +32,12 @@ const Navbar = () => {
                         <li className={router.asPath == '/#contact' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Kontak</li>
                     </Link>
                     <div className='flex-none'>
-                        <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>
-                            <Link href='/'>
-                                Login
-                            </Link>
-                        </button>
-                        <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>
-                            <Link href='/'>
-                                Sign Up
-                            </Link>
-                        </button>
+                        <Link href='/dashboard'>
+                            <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>Login</button>
+                        </Link>
+                        <Link href='/'>
+                            <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>Sign Up</button>
+                        </Link>
                     </div>
                 </ul>
             </div>
