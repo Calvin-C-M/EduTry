@@ -6,7 +6,7 @@ import Pict from '../public/pict.png'
 const Tryouts = () => {
   return (
     <div className='w-full px-10 md:px-28 py-8 pb-20'>
-        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 place-items-center gap-3 md:gap-5'>
+        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-auto place-items-center gap-3 md:gap-5'>
             <div className='flex flex-col bg-white w-full h-full rounded-lg overflow-hidden border border-primary shadow-lg'>
                 <Link href='/'>
                     <Image className='w-full' src={Pict} alt='Tryout' />
