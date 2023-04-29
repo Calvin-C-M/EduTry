@@ -24,20 +24,7 @@ module.exports = {
         },
         red: '#DA4444',
         green: '#5EBB4B',
-      },
-      keyframes: {
-        scroll: {
-          from: {
-            transform: 'translate-x-0'
-          },
-          to: {
-            transform: '-translate-x-full'
-          },
-        },
-      },
-      animation: {
-        scroll: 'scroll 3s linear infinite',
-      },
+      }
     },
   },
   plugins: [require("daisyui")],
