@@ -28,6 +28,10 @@ app.prepare()
         return app.render(req, res, '/test', req.query)
     })
 
+    server.get('/intro-tryout', (req,res) => {
+        return app.render(req, res, '/intro-tryout', req.query)
+    })
+
     // =========================================
 
     // Untuk handle route halaman
