@@ -1,16 +1,29 @@
 import Banner from '../components/Banner'
-import Tryouts from '../components/Tryouts'
+import Pict from '../public/pict.png'
+import TryoutCard from '../components/TryoutCard'
 
 export default function Dashboard() {
+  const tryoutsData = [
+    {id:7, nama:"Tryout UTBK #5", harga:20000, pict:Pict, href:""},
+    {id:6, nama:"Tryout Mandiri #4", harga:20000, pict:Pict, href:""},
+    {id:5, nama:"Tryout Mandiri #3", harga:15000, pict:Pict, href:""},
+    {id:4, nama:"Tryout UTBK #4", harga:20000, pict:Pict, href:""},
+    {id:3, nama:"Tryout UTBK #3", harga:20000, pict:Pict, href:""},
+    {id:2, nama:"Tryout UTBK #2", harga:15000, pict:Pict, href:""},
+    {id:1, nama:"Tryout Mandiri #2", harga:15000, pict:Pict, href:""},
+  ]
+
   return (
     <div>
       <Banner />
-      <div>
-        <div className='w-full px-10 md:px-28 pt-8 md:pt-16'>
-          <h1>Tryout Terbaru</h1>
+      <div className='w-full px-10 md:px-28 pt-8 md:pt-16'>
+        <h1>Tryout Terbaru</h1>
+      </div>
+      <div className='w-full px-10 md:px-28 py-8 pb-20'>
+        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-auto place-items-center gap-3 md:gap-5'>
+          {tryoutsData.map(data => <TryoutCard id={data.id} pict={data.pict} nama={data.nama} harga={data.harga} href={data.href} />)}
         </div>
       </div>
-      <Tryouts />
     </div>
   )
 }
