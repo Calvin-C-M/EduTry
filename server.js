@@ -33,6 +33,11 @@ app.prepare()
         return app.render(req, res, '/dashboard', req.query)
     })
 
+    server.get('/tryouts', (req, res) => {
+        console.log("Tryouts")
+        return app.render(req, res, '/tryouts', req.query)
+    })
+
     // =========================================
 
     // Untuk handle route halaman

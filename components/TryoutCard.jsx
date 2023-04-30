@@ -2,9 +2,9 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-const Tryouts = ({ id, pict, nama, harga, href }) => {
+const TryoutCard = ({ key, pict, nama, harga, href }) => {
   return (
-    <div key={id} className='flex flex-col bg-white w-full h-full rounded-lg overflow-hidden border border-primary shadow-lg'>
+    <div key={key} className='flex flex-col bg-white w-full h-full rounded-lg overflow-hidden border border-primary shadow-lg'>
         <Link href={href}>
             <Image className='w-full' src={pict} alt='Tryout' />
         </Link>
@@ -21,4 +21,4 @@ const Tryouts = ({ id, pict, nama, harga, href }) => {
   )
 }
 
-export default Tryouts
+export default TryoutCard
