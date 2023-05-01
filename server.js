@@ -30,7 +30,11 @@ app.prepare()
 
     server.get('/dashboard', (req, res) => {
         console.log("Dashboard")
-        return app.render(req, res, '/dashboard', req.query)
+        return app.render(req, res, '/dasboard', req.query)
+    })
+
+    server.get('/intro-tryout', (req, res) => {
+        return app.render(req, res, '/intro-tryout', req.query)
     })
 
     // =========================================
