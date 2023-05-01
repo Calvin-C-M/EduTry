@@ -2,6 +2,7 @@ import Image from "next/image";
 import Profile from "@/public/profile.jpg"
 import Link from "next/link";
 import getPathname from "@/utils/getPathname";
+import Button from "./Button";
 
 const Sidebar = () => {
     const navLinks = [
@@ -36,9 +37,9 @@ const Sidebar = () => {
                     navLinks.map(links => LinkList(links.name, links.href))
                 }
             </div>
-            <button className="bg-white font-bold text-primary flex items-center justify-center px-8 py-1 w-full">
+            <Button className="bg-white font-bold text-primary flex items-center justify-center px-8 py-1 w-full">
                 Logout
-            </button>
+            </Button>
         </nav>
     );
 }
