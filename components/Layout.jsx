@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
         <header>
           <Sidebar />
         </header>
-        <main className='ml-44 mr-12 pt-5'>
+        <main className='ml-44 mr-12 py-5'>
           {children}
         </main>
       </>
