@@ -27,7 +27,6 @@ const Tryout = () => {
                     {
                         tryoutData.map(data => <TryoutCard key={data.id} image={TestImage} title={data.title} date={data.date} href={data.href}  />)
                     }
-                    {/* <TryoutCard image={TestImage} title="Tryout #1" date="dd/mm/yyyy" href="#" /> */}
                 </section>
             </section>
         </>
