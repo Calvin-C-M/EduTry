@@ -28,6 +28,11 @@ app.prepare()
         return app.render(req, res, '/test', req.query)
     })
 
+    server.get('/dashboard', (req, res) => {
+        console.log("Dashboard")
+        return app.render(req, res, '/dashboard', req.query)
+    })
+
     // =========================================
 
     // Untuk handle route halaman
