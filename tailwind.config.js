@@ -24,9 +24,12 @@ module.exports = {
         },
         red: '#DA4444',
         green: '#5EBB4B',
+      },
+      gridTemplateColumns: {
+        'auto' : 'repeat(auto-fill, minmax(208px, 1fr))'
       }
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }
 
