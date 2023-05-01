@@ -42,6 +42,10 @@ app.prepare()
         return app.render(req, res, '/tryouts', req.query)
     })
 
+    server.get('/admin/tryout', (req, res) => {
+        return app.render(req, res, '/admin/tryout', req.query)
+    })
+
     // =========================================
 
     // Untuk handle route halaman
