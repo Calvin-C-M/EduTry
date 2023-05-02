@@ -9,17 +9,28 @@ const SubTryout = () => {
     return (
         <>
             <SearchBar setText={setSearchText} />
-            <div className="">
-                <h1>Sub Tryout - Tryout #3</h1>
-                <section className="flex flex-col items-center gap-5 bg-white">
+            <div>
+                <h1 className="mb-3">Sub Tryout - Tryout #3</h1>
+                <section className="flex flex-col items-center gap-5 p-5 bg-white">
                     <section>
-                        <h2 className="text-center">TPS</h2>
+                        <h2 className="text-center mb-2">TPS</h2>
                         <SubTryoutLayout>
+                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
+                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
+                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
+                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
+                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
                             <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
                         </SubTryoutLayout>
                     </section>
                     <section>
-                        <h2 className="text-center">Literasi & PNM</h2>
+                        <h2 className="text-center mb-2">Literasi & PNM</h2>
+                        <SubTryoutLayout>
+                            <SubTryoutCard judul={"Literasi dalam Bahasa Indonesia"} waktu={20} soal={20} />
+                            <SubTryoutCard judul={"Literasi dalam Bahasa Indonesia"} waktu={20} soal={20} />
+                            <SubTryoutCard judul={"Literasi dalam Bahasa Indonesia"} waktu={20} soal={20} />
+                            <SubTryoutCard judul={"Literasi dalam Bahasa Indonesia"} waktu={20} soal={20} />
+                        </SubTryoutLayout>
                     </section>
                 </section>
             </div>

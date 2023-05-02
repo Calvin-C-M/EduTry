@@ -8,7 +8,7 @@ const SubTryoutCard = ({ judul, waktu, soal }) => {
     return (
         <div className="border-2 border-blue-dark rounded-md px-5 py-2 flex items-center justify-between gap-24">
             <div>
-                <h3>{judul}</h3>
+                <h3 className="w-48">{judul}</h3>
                 <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1">
                         <TextSnippetOutlinedIcon />
