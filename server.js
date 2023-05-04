@@ -30,6 +30,32 @@ app.prepare()
         return app.render(req, res, '/test', req.query)
     })
 
+    server.get('/dashboard', (req, res) => {
+        console.log("Dashboard")
+        return app.render(req, res, '/dasboard', req.query)
+    })
+
+    server.get('/intro-tryout', (req, res) => {
+        return app.render(req, res, '/intro-tryout', req.query)
+    })
+
+    server.get('/tryouts', (req, res) => {
+        console.log("Tryouts")
+        return app.render(req, res, '/tryouts', req.query)
+    })
+
+    server.get('/admin/tryout', (req, res) => {
+        return app.render(req, res, '/admin/tryout', req.query)
+    })
+
+    server.get('/admin/subtryout', (req, res) => {
+        return app.render(req, res, '/admin/subtryout', req.query)
+    })
+
+    server.get('/admin/pembayaran', (req, res) => {
+        return app.render(req, res, '/admin/pembayaran', req.query)
+    })
+
     // =========================================
 
     // Untuk handle route halaman
