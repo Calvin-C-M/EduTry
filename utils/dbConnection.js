@@ -1,17 +1,17 @@
-import { MongoClient } from 'mongodb'
-require('dotenv').config({ path: './.env.local' })
+const { MongoClient } = require("mongodb")
+require("dotenv").config({ path:'./.env.local' })
 
-const mongoDbUri = process.env.MONGODB_URI || ""
+const uri = process.env.MONGODB_URI || ""
 
-const client = new MongoClient(mongoDbUri)
-
-let clientPromise
+let client;
+let clientPromise;
 
 try {
+    client = new MongoClient(uri)
     clientPromise = client.connect()
-    console.log("Database connected")
+    console.log("Database Connected!")
 } catch(err) {
-    console.log(err)
+    console.error(err)
 }
 
-export default clientPromise;
+module.exports = clientPromise

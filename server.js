@@ -1,9 +1,8 @@
-import clientPromise from "./utils/dbConnection"
-
+const { clientPromise } = require("./utils/dbConnection.js");
 require('dotenv').config({ path:'./.env.local' })
 
-const express = require("express")
-const next = require("next")
+const express = require("express");
+const next = require("next");
 
 const port = process.env.PORT
 const hostname = process.env.HOSTNAME
