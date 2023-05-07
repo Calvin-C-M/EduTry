@@ -58,13 +58,17 @@ app.prepare()
     server.get('/admin/pembayaran', (req, res) => {
         return app.render(req, res, '/admin/pembayaran', req.query)
     })
-
+    
+    server.get(/discuss', (req, res) => {
+        return app.render(req, res, '/discuss', req.query)
+    })
+    
     server.get('/api/users', async (req, res) => {
         const client = await clientPromise
         const database = client.db("edutry")
         const result = await database.collection("user").find({}).toArray()
     })
-
+    
     // =========================================
 
     // Untuk handle route halaman
