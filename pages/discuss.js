@@ -45,7 +45,7 @@ export default function Discuss() {
             {discussData.map((data) => <DiscussPanel data={data} handle={handleComment} />)}
         </div>
         <QuestionBox send={''} handle={handleModal} modalStatus={modal} name={'Tanya Soal'} placeholder={'Masukkan Pertanyaan'} />
-        <QuestionBox send={''} handle={handleComment} modalStatus={comment} name={'Tambah Komentar'} placeholder={'Masukkan Pertanyaan'} />
+        <QuestionBox send={''} handle={handleComment} modalStatus={comment} name={'Tambah Komentar'} placeholder={'Masukkan Komentar'} />
     </div>
   )
 }
