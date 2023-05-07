@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-secondary text-base font-[Roboto] text-black
+    @apply bg-secondary text-sm md:text-base font-[Roboto] text-black
   }
 
   h1, h2, h3, h4, h5, h6 {

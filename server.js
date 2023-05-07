@@ -32,7 +32,7 @@ app.prepare()
 
     server.get('/dashboard', (req, res) => {
         console.log("Dashboard")
-        return app.render(req, res, '/dasboard', req.query)
+        return app.render(req, res, '/dashboard', req.query)
     })
 
     server.get('/intro-tryout', (req, res) => {
@@ -42,6 +42,14 @@ app.prepare()
     server.get('/tryouts', (req, res) => {
         console.log("Tryouts")
         return app.render(req, res, '/tryouts', req.query)
+    })
+
+    server.get('/my-tryouts', (req, res) => {
+        return app.render(req, res, '/my-tryouts', req.query)
+    })
+    
+    server.get(/discuss', (req, res) => {
+        return app.render(req, res, '/discuss', req.query)
     })
 
     server.get('/admin/tryout', (req, res) => {
@@ -108,7 +116,7 @@ app.prepare()
 
         res.send(result).status(200)    
     })
-
+    
     // =========================================
 
     // Untuk handle route halaman
