@@ -2,6 +2,7 @@ const clientPromise = require("./utils/dbConnection.js");
 require('dotenv').config({ path:'./.env.local' })
 
 const express = require("express");
+const { ObjectId } = require("mongodb");
 const next = require("next");
 
 const port = process.env.PORT
@@ -46,6 +47,10 @@ app.prepare()
     server.get('/my-tryouts', (req, res) => {
         return app.render(req, res, '/my-tryouts', req.query)
     })
+    
+    server.get(/discuss', (req, res) => {
+        return app.render(req, res, '/discuss', req.query)
+    })
 
     server.get('/admin/tryout', (req, res) => {
         return app.render(req, res, '/admin/tryout', req.query)
@@ -58,15 +63,58 @@ app.prepare()
     server.get('/admin/pembayaran', (req, res) => {
         return app.render(req, res, '/admin/pembayaran', req.query)
     })
-    
-    server.get(/discuss', (req, res) => {
-        return app.render(req, res, '/discuss', req.query)
-    })
-    
-    server.get('/api/users', async (req, res) => {
+
+    // API Calls
+    server.get('/api/users ', async (req, res) => {
         const client = await clientPromise
-        const database = client.db("edutry")
+        const database = client.db(process.env.MONGODB_NAME)
         const result = await database.collection("user").find({}).toArray()
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/users/:id', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const id = ObjectId(req.params.id)
+        const result = await database.collection("user").find({ _id: id}).toArray()
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/tryouts', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const result = await database.collection("tryout").find({}).toArray()
+        
+        res.send(result).status(200)
+    })
+
+    server.get('/api/tryouts/:id', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const id = ObjectId(req.params.id)
+        const result = await database.collection("tryout").find({ _id: id }).toArray()
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/subtryouts/:id', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const id = ObjectId(req.params.id)
+        const result = await database.collection("subtryout").find({ _id: id }).toArray()
+
+        res.send(result).status(200)    
+    })
+
+    server.get('/api/soal/:id', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const id = ObjectId(req.params.id)
+        const result = await database.collection("soal").find({ _id: id }).toArray()
+
+        res.send(result).status(200)    
     })
     
     // =========================================
