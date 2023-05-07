@@ -26,7 +26,8 @@ module.exports = {
         green: '#5EBB4B',
       },
       gridTemplateColumns: {
-        'auto' : 'repeat(auto-fill, minmax(208px, 1fr))'
+        'auto' : 'repeat(auto-fill, minmax(208px, 1fr))',
+        'myto' : 'repeat(auto-fill, minmax(380px, 1fr))'
       }
     },
   },

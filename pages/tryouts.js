@@ -1,7 +1,7 @@
 import Pict from '../public/pict.png'
 import TryoutCard from '../components/TryoutCard'
 
-export default function Dashboard() {
+export default function Tryouts() {
   const tryoutsData = [
     {id:7, nama:"Tryout UTBK #5", harga:20000, pict:Pict, href:""},
     {id:6, nama:"Tryout Mandiri #4", harga:20000, pict:Pict, href:""},
@@ -15,7 +15,7 @@ export default function Dashboard() {
   return (
     <div>
       <div className='w-full px-10 md:px-28 pt-36'>
-        <h1>Paket Tryout</h1>
+        <h1 className='text-primary'>Paket Tryout</h1>
       </div>
       <div className='w-full px-10 md:px-28 py-8 pb-20'>
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-auto place-items-center gap-3 md:gap-5'>

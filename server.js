@@ -1,7 +1,8 @@
+const clientPromise = require("./utils/dbConnection.js");
 require('dotenv').config({ path:'./.env.local' })
 
-const express = require("express")
-const next = require("next")
+const express = require("express");
+const next = require("next");
 
 const port = process.env.PORT
 const hostname = process.env.HOSTNAME
@@ -30,7 +31,7 @@ app.prepare()
 
     server.get('/dashboard', (req, res) => {
         console.log("Dashboard")
-        return app.render(req, res, '/dasboard', req.query)
+        return app.render(req, res, '/dashboard', req.query)
     })
 
     server.get('/intro-tryout', (req, res) => {
@@ -40,6 +41,10 @@ app.prepare()
     server.get('/tryouts', (req, res) => {
         console.log("Tryouts")
         return app.render(req, res, '/tryouts', req.query)
+    })
+
+    server.get('/my-tryouts', (req, res) => {
+        return app.render(req, res, '/my-tryouts', req.query)
     })
 
     server.get('/admin/tryout', (req, res) => {
@@ -53,11 +58,17 @@ app.prepare()
     server.get('/admin/pembayaran', (req, res) => {
         return app.render(req, res, '/admin/pembayaran', req.query)
     })
-
-    server.get('/discuss', (req, res) => {
+    
+    server.get(/discuss', (req, res) => {
         return app.render(req, res, '/discuss', req.query)
     })
-
+    
+    server.get('/api/users', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db("edutry")
+        const result = await database.collection("user").find({}).toArray()
+    })
+    
     // =========================================
 
     // Untuk handle route halaman

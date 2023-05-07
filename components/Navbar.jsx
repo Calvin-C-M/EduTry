@@ -115,10 +115,10 @@ const Navbar = () => {
                             <li className={router.asPath == '/dashboard' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Dashboard</li>
                         </Link>
                         <Link href='/tryouts' className='flex justify-end py-5'>
-                            <li className={router.asPath == '//tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Paket TO</li>
+                            <li className={router.asPath == '/tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Paket TO</li>
                         </Link>
                         <Link href='/my-tryouts' className='flex justify-end py-5'>
-                            <li className={router.asPath == '//my-tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>My Tryout</li>
+                            <li className={router.asPath == '/my-tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>My Tryout</li>
                         </Link>
                     </ul>
                     <div className='flex justify-end'>
