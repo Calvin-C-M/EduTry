@@ -1,7 +1,8 @@
+const clientPromise = require("./utils/dbConnection.js");
 require('dotenv').config({ path:'./.env.local' })
 
-const express = require("express")
-const next = require("next")
+const express = require("express");
+const next = require("next");
 
 const port = process.env.PORT
 const hostname = process.env.HOSTNAME
@@ -56,6 +57,12 @@ app.prepare()
 
     server.get('/admin/pembayaran', (req, res) => {
         return app.render(req, res, '/admin/pembayaran', req.query)
+    })
+
+    server.get('/api/users', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db("edutry")
+        const result = await database.collection("user").find({}).toArray()
     })
 
     // =========================================
