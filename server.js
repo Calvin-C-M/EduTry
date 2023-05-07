@@ -72,7 +72,24 @@ app.prepare()
         const result = await database.collection("user").find({ _id: id}).toArray()
 
         res.send(result).status(200)
-    })  
+    })
+
+    server.get('/api/tryouts', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const result = await database.collection("tryout").find({}).toArray()
+        
+        res.send(result).status(200)
+    })
+
+    server.get('/api/tryouts/:id', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const id = ObjectId(req.params.id)
+        const result = await database.collection("tryout").find({ _id: id }).toArray()
+
+        res.send(result).status(200)
+    })
 
     // =========================================
 
