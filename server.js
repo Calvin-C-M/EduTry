@@ -54,6 +54,10 @@ app.prepare()
         return app.render(req, res, '/admin/pembayaran', req.query)
     })
 
+    server.get('/discuss', (req, res) => {
+        return app.render(req, res, '/discuss', req.query)
+    })
+
     // =========================================
 
     // Untuk handle route halaman
