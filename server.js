@@ -48,7 +48,7 @@ app.prepare()
         return app.render(req, res, '/my-tryouts', req.query)
     })
     
-    server.get(/discuss', (req, res) => {
+    server.get('/discuss', (req, res) => {
         return app.render(req, res, '/discuss', req.query)
     })
 
