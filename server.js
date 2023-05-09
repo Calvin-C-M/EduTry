@@ -1,4 +1,5 @@
 const clientPromise = require("./utils/dbConnection.js");
+const loginBlocker = require("./utils/loginBlocker.js");
 require('dotenv').config({ path:'./.env.local' })
 
 const express = require("express");
@@ -41,39 +42,42 @@ app.prepare()
     })
 
     server.get('/dashboard', (req, res) => {
-        if(!req.session.isLoggedIn) {
-            req.flash("message", "Login dulu!")
-            res.redirect("/login")
-        }
+        loginBlocker(req, res)
         return app.render(req, res, '/dashboard', req.query)
     })
 
     server.get('/intro-tryout', (req, res) => {
+        loginBlocker(req, res)
         return app.render(req, res, '/intro-tryout', req.query)
     })
 
     server.get('/tryouts', (req, res) => {
-        console.log("Tryouts")
+        loginBlocker(req, res)
         return app.render(req, res, '/tryouts', req.query)
     })
 
     server.get('/my-tryouts', (req, res) => {
+        loginBlocker(req, res)
         return app.render(req, res, '/my-tryouts', req.query)
     })
     
     server.get('/discuss', (req, res) => {
+        loginBlocker(req, res)
         return app.render(req, res, '/discuss', req.query)
     })
 
     server.get('/admin/tryout', (req, res) => {
+        loginBlocker(req, res)
         return app.render(req, res, '/admin/tryout', req.query)
     })
 
     server.get('/admin/subtryout', (req, res) => {
+        loginBlocker(req, res)
         return app.render(req, res, '/admin/subtryout', req.query)
     })
 
     server.get('/admin/pembayaran', (req, res) => {
+        loginBlocker(req, res)
         return app.render(req, res, '/admin/pembayaran', req.query)
     })
 
