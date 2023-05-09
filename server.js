@@ -2,6 +2,9 @@ const clientPromise = require("./utils/dbConnection.js");
 require('dotenv').config({ path:'./.env.local' })
 
 const express = require("express");
+const session = require("express-session");
+const flash = require("connect-flash");
+const bodyParser = require("body-parser");
 const { ObjectId } = require("mongodb");
 const next = require("next");
 
@@ -15,6 +18,13 @@ const handle = app.getRequestHandler()
 app.prepare()
 .then(() => {
     const server = express()
+    server.use(session({
+        secret: "edutry",
+        resave: true,
+        saveUninitialized: true
+    }))
+    server.use(bodyParser.urlencoded({ extended: true }))
+    server.use(flash())
 
     // Apabila dalam sebuah route dibutuhkan SSR
     // Konfigurasi dibawah ini
@@ -31,7 +41,10 @@ app.prepare()
     })
 
     server.get('/dashboard', (req, res) => {
-        console.log("Dashboard")
+        if(!req.session.isLoggedIn) {
+            req.flash("message", "Login dulu!")
+            res.redirect("/login")
+        }
         return app.render(req, res, '/dashboard', req.query)
     })
 
@@ -63,6 +76,49 @@ app.prepare()
     server.get('/admin/pembayaran', (req, res) => {
         return app.render(req, res, '/admin/pembayaran', req.query)
     })
+
+    server.get('/login', (req, res) => {
+        console.log(req.flash('message'))
+        return app.render(req, res, '/test-login', req.query)
+    })
+    
+    // Contollers
+    server.post('/control/login', async (req, res) => {
+        const inputData = req.body
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const accountData = await database.collection("account").find({ username: inputData.username }).toArray()
+
+        if(accountData.length < 1 || inputData.password != accountData[0].password) {
+            req.flash('message', 'Invalid Login!')
+            res.redirect('/login')
+        } else {
+            req.session.isLoggedIn = true
+            switch(accountData[0].role) {
+                case "USER":
+                    const userData = await database.collection("user").find({ id_account: accountData[0]._id.toString() }).toArray()
+                    req.session.user = {
+                        name: userData[0].name,
+                        email: userData[0].email,
+                        kontak: userData[0].kontak,
+                        tryouts: userData[0].tryouts,
+                        pilihan: userData[0].pilihan,
+                    }
+                    res.redirect('/dashboard')
+                    break;
+
+                case "ADMIN":
+                    const adminData = await database.collection("admin").find({ id_account: accountData[0]._id.toString() }).toArray()
+                    req.session.admin = {
+                        nama: adminData[0].nama,
+                        is_prime: adminData[0].is_prime,
+                    }
+                    res.redirect('/admin/tryout')
+                    break;
+            }
+        }
+    })    
 
     // API Calls
     server.get('/api/users ', async (req, res) => {
@@ -116,7 +172,7 @@ app.prepare()
 
         res.send(result).status(200)    
     })
-    
+
     // =========================================
 
     // Untuk handle route halaman
