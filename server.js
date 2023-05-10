@@ -85,6 +85,11 @@ app.prepare()
         console.log(req.flash('message'))
         return app.render(req, res, '/test-login', req.query)
     })
+
+    server.get('/register', (req, res) => {
+        console.log(req.flash('message'))
+        return app.render(req, res, '/test-register', req.query)
+    })
     
     // Contollers
     server.post('/control/login', async (req, res) => {
@@ -103,7 +108,7 @@ app.prepare()
                 case "USER":
                     const userData = await database.collection("user").find({ id_account: accountData[0]._id.toString() }).toArray()
                     req.session.user = {
-                        name: userData[0].name,
+                        nama: userData[0].nama,
                         email: userData[0].email,
                         kontak: userData[0].kontak,
                         tryouts: userData[0].tryouts,
@@ -122,7 +127,51 @@ app.prepare()
                     break;
             }
         }
-    })    
+    })
+
+    server.post('/control/register', async (req, res) => {
+        /**
+         * req.body = {
+         *      username: String,
+         *      email: String,
+         *      password: String
+         * }
+         */
+        const inputData = req.body
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const accountData = await database.collection("account").find({ username: inputData.username }).toArray()
+        const userData = await database.collection("user").find({ email: inputData.email }).toArray()
+
+        if(accountData.length > 0) {
+            req.flash('message', 'Username is taken!')
+            res.redirect('/register')
+        } else if(userData.length > 0) {
+            req.flash('message', 'Email is already registered!')
+            res.redirect('/register')
+        } else {
+            await database.collection('account').insertOne({
+                username: inputData.username,
+                password: inputData.password,
+                role: "USER"
+            })
+
+            const account = await database.collection('account').find({ username: inputData.username }).toArray()
+
+            await database.collection('user').insertOne({
+                nama: inputData.username,
+                email: inputData.email,
+                kontak: "",
+                tryouts: [],
+                pilihan: [],
+                id_account: account[0]._id
+            })
+            
+            req.flash('message', 'Pendaftaran berhasil!')
+            res.redirect('/login')
+        }
+    })
 
     // API Calls
     server.get('/api/users ', async (req, res) => {
