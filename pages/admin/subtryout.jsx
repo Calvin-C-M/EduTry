@@ -5,8 +5,9 @@ import Button from "@/components/Button";
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from "react";
 
-const SubTryout = () => {
+const SubTryout = ({ data }) => {
     const [searchText, setSearchText] = useState("")
+    console.log(data)
 
     return (
         <>
@@ -42,6 +43,14 @@ const SubTryout = () => {
             </div>
         </>
     );
+}
+
+export const getServerSideProps = async ({ res }) => {
+    const data = res.tryout
+
+    return {
+        props: { data }
+    }
 }
  
 export default SubTryout;

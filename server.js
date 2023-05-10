@@ -71,8 +71,22 @@ app.prepare()
         return app.render(req, res, '/admin/tryout', req.query)
     })
 
-    server.get('/admin/subtryout', (req, res) => {
+    server.get('/admin/subtryout/:id', async (req, res) => {
         loginBlocker(req, res)
+
+        const id = new ObjectId(req.params.id)
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const tryoutData = await database.collection('tryout').find({ _id: id }).toArray()
+
+        res.tryout = {
+            nama: tryoutData[0].nama,
+            harga: tryoutData[0].harga,
+            created_at: tryoutData[0].created_at,
+            deadline: tryoutData[0].deadline,
+            subtryouts: tryoutData[0].subtryout
+        }
+
         return app.render(req, res, '/admin/subtryout', req.query)
     })
 
@@ -192,7 +206,7 @@ app.prepare()
         } else {
             await database.collection('tryout').insertOne({
                 nama: inputData.nama,
-                created_by: new Date().toJSON().slice(0, 10),
+                created_at: new Date().toJSON().slice(0, 10),
                 deadline: inputData.deadline,
                 harga: inputData.harga,
                 subtryout: []
