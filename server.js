@@ -90,6 +90,10 @@ app.prepare()
         console.log(req.flash('message'))
         return app.render(req, res, '/test-register', req.query)
     })
+
+    server.get('/admin/test-tryout', (req, res) => {
+        return app.render(req, res, '/admin/test-tryout', req.query)
+    })
     
     // Contollers
     server.post('/control/login', async (req, res) => {
@@ -189,6 +193,7 @@ app.prepare()
             await database.collection('tryout').insertOne({
                 nama: inputData.nama,
                 created_by: new Date().toJSON().slice(0, 10),
+                deadline: inputData.deadline,
                 harga: inputData.harga,
                 subtryout: []
             })
