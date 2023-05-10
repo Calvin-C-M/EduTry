@@ -23,7 +23,7 @@ const Score = ({ name, data }) => {
                             <td className='p-2 md:p-3 text-sm md:text-base text-center'>-</td>
                         </tr>
                     ) : (data.map((data) => 
-                        <tr>
+                        <tr key={data.id}>
                             <td className='p-2 md:p-3 text-sm md:text-base text-left'>{data.nama}</td>
                             <td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.benar}</td>
                             <td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.salah}</td>

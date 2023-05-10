@@ -2,7 +2,12 @@ import Link from 'next/link'
 import React, {useState} from 'react'
 import Score from '@/components/Score'
 import Rank from '@/components/Rank'
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import { Doughnut } from 'react-chartjs-2'
+import Chart from 'chart.js/auto'
+import { CategoryScale } from 'chart.js'
+
+Chart.register(CategoryScale)
 
 export default function Result() {
     const [status, setStatus] = useState(true)
@@ -35,6 +40,28 @@ export default function Result() {
         {id:10, nama:'John Doe', pilihan:'Farmasi', asal:'Bandung', nilai:560},
     ]
 
+    const dataStat = {
+        id:1, benar:504, salah:424, kosong:327,
+    }
+
+    const data = {
+        labels: [
+            `Benar`,
+            'Salah',
+            'Kosong'
+        ],
+        datasets: [{
+            label: 'Total',
+            data: [dataStat.benar, dataStat.salah, dataStat.kosong],
+            backgroundColor: [
+                'rgb(94, 187, 75)',
+                'rgb(218, 68, 68)',
+                'rgb(85, 132, 176)'
+            ],
+            hoverOffset: 4
+        }]
+    }
+
   return (
     <div className='w-full px-10 md:px-28 py-28'>
         <div className='flex items-center text-primary'>
@@ -57,6 +84,12 @@ export default function Result() {
             </div>
         ) : (
             <div>
+                <div className='w-full my-3'>
+                    <h1 className='flex justify-center w-full text-primary'>Statistik</h1>
+                    <div className='w-full bg-white px-2 md:px-10 py-3 md:py-12 my-8 rounded-md'>
+                        <Doughnut data={data} className='w-full md:w-4/5' options={{ maintainAspectRatio: false }} />
+                    </div>
+                </div>
                 <Rank data={dataRank} />
             </div>
         )}
