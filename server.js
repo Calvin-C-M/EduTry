@@ -173,6 +173,31 @@ app.prepare()
         }
     })
 
+    server.post('/add/tryout', async (req, res) => {
+        const inputData = req.body
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        const tryoutData = await database.collection("tryout").find({ nama: inputData.nama }).toArray()
+
+        if(tryoutData.length > 0) {
+            // If tryout name already exist
+            req.flash('message', 'Tryout already exist!')
+            res.redirect('/admin/tryout')
+        } else {
+            await database.collection('tryout').insertOne({
+                nama: inputData.nama,
+                created_by: new Date().toJSON().slice(0, 10),
+                harga: inputData.harga,
+                subtryout: []
+            })
+
+            req.flash('message', 'Tryout berhasil dibuat!')
+            res.redirect('/admin/tryout')
+        }
+    })
+
     // API Calls
     server.get('/api/users ', async (req, res) => {
         const client = await clientPromise
