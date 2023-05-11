@@ -241,7 +241,7 @@ app.prepare()
          *      nama: String,
          *      jenis: String,
          *      waktu_pengerjaan: Integer,
-         *      id_tryout: ObjectId
+         *      id_tryout: String
          * }
          */
 
@@ -264,10 +264,10 @@ app.prepare()
 
             try {
                 await database.collection('tryout').updateOne(
-                    { "_id": idTryout.toString() },
+                    { "_id": idTryout },
                     {
                         $push: {
-                            "subtryout": subtryoutId
+                            "subtryout": subtryoutId.toString()
                         }
                     }
                 )
@@ -279,6 +279,68 @@ app.prepare()
         } catch(err) {
             console.log(err)
         }
+    })
+
+    server.post('/add/soal', async (req, res) => {
+        /**
+         * req.body = {
+         *      isi: String,
+         *      jawaban: String,
+         *      bobot: Double,
+         *      pilihan_1: String,
+         *      pilihan_2: String,
+         *      pilihan_3: String,
+         *      pilihan_4: String,
+         *      pilihan_5: String,
+         *      pembahasan: Object
+         *      id_subtryout: String
+         * }
+         */
+
+        const subtryoutId = new ObjectId(req.body.id_subtryout)
+        const pilihan = [
+            req.body.pilihan_1,
+            req.body.pilihan_2,
+            req.body.pilihan_3,
+            req.body.pilihan_4,
+            req.body.pilihan_5,
+        ]
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        const soalId = new ObjectId()
+
+        try {
+            await database.collection('soal').insertOne({
+                "_id": soalId,
+                "isi": req.body.isi,
+                "jawaban": req.body.jawaban,
+                "bobot": req.body.bobot,
+                "pilihan": pilihan,
+                "pembahasan": {
+                    "isi": "",
+                    "link_video": "",
+                    "link_forum": ""
+                }
+            })
+
+            try {
+                await database.collection('subtryout').updateOne(
+                    { "_id": subtryoutId },
+                    {
+                        $push: {
+                            "soal": soalId.toString()
+                        }
+                    }
+                )
+            } catch(err) {
+                console.log(err)
+            }
+        } catch(err) {
+            console.log(err)
+        }
+
     })
 
     // API Calls
