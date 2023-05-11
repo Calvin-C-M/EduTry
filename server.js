@@ -108,6 +108,24 @@ app.prepare()
     server.get('/admin/test-tryout', (req, res) => {
         return app.render(req, res, '/admin/test-tryout', req.query)
     })
+
+    server.get('/admin/test-subtryout/:id', async (req, res) => {
+        const id = new ObjectId(req.params.id)
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const tryoutData = await database.collection('tryout').find({ _id: id }).toArray()
+
+        res.tryout = {
+            _id: id.toString(),
+            nama: tryoutData[0].nama,
+            harga: tryoutData[0].harga,
+            created_at: tryoutData[0].created_at,
+            deadline: tryoutData[0].deadline,
+            subtryouts: tryoutData[0].subtryout
+        }
+
+        return app.render(req, res, '/admin/test-subtryout', req.query)
+    })
     
     // Contollers
     server.post('/control/login', async (req, res) => {
@@ -214,6 +232,52 @@ app.prepare()
 
             req.flash('message', 'Tryout berhasil dibuat!')
             res.redirect('/admin/tryout')
+        }
+    })
+
+    server.post('/add/subtryout', async (req, res) => {
+        /**
+         * req.body = {
+         *      nama: String,
+         *      jenis: String,
+         *      waktu_pengerjaan: Integer,
+         *      id_tryout: ObjectId
+         * }
+         */
+
+        const idTryout = new ObjectId(req.body.id_tryout)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        const subtryoutId = new ObjectId()
+
+        try {
+
+            await database.collection('subtryout').insertOne({
+                "_id": subtryoutId,
+                "nama": req.body.nama,
+                "jenis": req.body.jenis,
+                "waktu_pengerjaan": req.body.waktu_pengerjaan,
+                "soal": []
+            })
+
+            try {
+                await database.collection('tryout').updateOne(
+                    { "_id": idTryout.toString() },
+                    {
+                        $push: {
+                            "subtryout": subtryoutId
+                        }
+                    }
+                )
+                req.flash("message", "SubTryout berhasil ditambah!")
+                res.redirect(`/admin/subtryout/${idTryout}`)
+            } catch(err) {
+                console.log(err)
+            }
+        } catch(err) {
+            console.log(err)
         }
     })
 

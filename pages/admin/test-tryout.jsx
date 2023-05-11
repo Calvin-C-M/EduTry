@@ -32,7 +32,7 @@ const TestTryout = () => {
                         <label htmlFor="deadline">Deadline</label>
                         <input 
                             id="deadline"
-                            name="deadlines"
+                            name="deadline"
                             type="date" 
                             onChange={e => setDeadline(e.target.value)}
                         />
