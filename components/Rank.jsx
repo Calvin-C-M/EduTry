@@ -1,7 +1,7 @@
 const Rank = ({ data }) => {
     return (
 		<div className='w-full'>
-			<h1 className='flex justify-center w-full text-primary'>Ranking</h1>
+			<h1 className='flex justify-center w-full text-white'>Ranking</h1>
 			<div className='w-full bg-white px-10 py-8 my-8 rounded-lg shadow-md'>
 				<div className='overflow-auto'>
 					<table className='w-full table-auto md:table-fixed'>

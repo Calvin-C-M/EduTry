@@ -3,6 +3,7 @@ import React, {useState} from 'react'
 import Score from '@/components/Score'
 import Rank from '@/components/Rank'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
+import SquareIcon from '@mui/icons-material/Square'
 import { Doughnut } from 'react-chartjs-2'
 import Chart from 'chart.js/auto'
 import { CategoryScale } from 'chart.js'
@@ -45,11 +46,6 @@ export default function Result() {
     }
 
     const data = {
-        labels: [
-            `Benar`,
-            'Salah',
-            'Kosong'
-        ],
         datasets: [{
             label: 'Total',
             data: [dataStat.benar, dataStat.salah, dataStat.kosong],
@@ -64,7 +60,7 @@ export default function Result() {
 
   return (
     <div className='w-full px-10 md:px-28 py-28'>
-        <div className='flex items-center text-primary'>
+        <div className='flex items-center text-white'>
             <Link href='/' className='p-2 mr-3'>
                 <ArrowBackIosNewIcon />
             </Link>
@@ -85,8 +81,22 @@ export default function Result() {
         ) : (
             <div>
                 <div className='w-full my-3'>
-                    <h1 className='flex justify-center w-full text-primary'>Statistik</h1>
-                    <div className='w-full bg-white px-2 md:px-10 py-3 md:py-12 my-8 rounded-md'>
+                    <h1 className='flex justify-center w-full text-white'>Statistik</h1>
+                    <div className='md:grid md:grid-cols-3 place-items-center gap-5 w-full h-[475px] md:h-[512px] bg-white px-10 pt-5 pb-40 md:py-12 my-8 rounded-md'>
+                        <div>
+                            <div className='flex items-center mx-2 md:mx-5 mt-3 md:my-3'>
+                                <SquareIcon className='text-green' fontSize='large' />
+                                <p className='px-1 md:px-3'>Benar <span className='font-medium'>{dataStat.benar}</span></p>
+                            </div>
+                            <div className='flex items-center mx-2 md:mx-5 mt-3 md:my-3'>
+                                <SquareIcon className='text-red' fontSize='large' />
+                                <p className='px-1 md:px-3'>Salah <span className='font-medium'>{dataStat.salah}</span></p>
+                            </div>
+                            <div className='flex items-center mx-2 md:mx-5 mt-3 md:my-3'>
+                                <SquareIcon className='text-blue-dark' fontSize='large' />
+                                <p className='px-1 md:px-3'>Tidak Dijawab <span className='font-medium'>{dataStat.kosong}</span></p>
+                            </div>
+                        </div>
                         <Doughnut data={data} className='w-full md:w-4/5' options={{ maintainAspectRatio: false }} />
                     </div>
                 </div>
