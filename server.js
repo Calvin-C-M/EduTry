@@ -223,11 +223,13 @@ app.prepare()
             res.redirect('/admin/tryout')
         } else {
             await database.collection('tryout').insertOne({
-                nama: inputData.nama,
-                created_at: new Date().toJSON().slice(0, 10),
-                deadline: inputData.deadline,
-                harga: inputData.harga,
-                subtryout: []
+                "nama": inputData.nama,
+                "created_at": new Date().toJSON().slice(0, 10),
+                "deadline": inputData.deadline,
+                "harga": inputData.harga,
+                "status": "CLOSED",
+                "link_forum": "",
+                "subtryout": []
             })
 
             req.flash('message', 'Tryout berhasil dibuat!')
