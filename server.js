@@ -64,6 +64,10 @@ app.prepare()
         return app.render(req, res, '/purchase', req.query)
     })
 
+    server.get('/payment', (req, res) => {
+        return app.render(req, res, '/payment', req.query)
+    })
+
     server.get('/admin/tryout', (req, res) => {
         return app.render(req, res, '/admin/tryout', req.query)
     })

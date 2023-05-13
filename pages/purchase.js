@@ -18,7 +18,7 @@ export default function Purchase() {
   return (
     <div className='w-full px-10 md:px-28 pt-36 pb-20'>
         <h1 className='text-white'>Pembelian</h1>
-        <div className='md:grid grid-cols-3 gap-3 w-full py-5 md:py-8'>
+        <div className='md:grid grid-cols-3 gap-8 w-full py-5 md:py-8'>
             <div className='col-start-1 col-end-3'>
                 <ProductCard data={dataProduk} />
                 <div className='md:hidden mt-4'>
@@ -31,7 +31,7 @@ export default function Purchase() {
                     </button>
                 </Link>
             </div>
-            <div className='hidden md:flex'>
+            <div className='hidden md:flex h-fit'>
                 <PaymentMethod handle={handlePayment} />
             </div>
         </div>
