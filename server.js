@@ -64,6 +64,10 @@ app.prepare()
         return app.render(req, res, '/admin/pembayaran', req.query)
     })
 
+    server.get('/admin/profile', (req, res) => {
+        return app.render(req, res, '/admin/profile', req.query)
+    })
+
     // API Calls
     server.get('/api/users ', async (req, res) => {
         const client = await clientPromise

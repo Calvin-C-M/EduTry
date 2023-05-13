@@ -9,7 +9,7 @@ const Button = ({ children, href, className }) => {
         );        
     }
     return (
-        <button className={"bg-white font-bold text-primary flex items-center justify-center px-8 py-1 w-fit rounded-md" + className}>
+        <button className={"bg-white font-bold text-primary flex items-center justify-center px-8 py-1 w-fit rounded-md " + className}>
             {children}
         </button>
     );
