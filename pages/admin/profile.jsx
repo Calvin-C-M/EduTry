@@ -7,8 +7,8 @@ const Profile = () => {
     return (
         <>
             <section>
-                <h1>Profile Saya</h1>
-                <section className="flex flex-col gap-2 bg-white p-5">
+                <h1 className="mb-3">Profile Saya</h1>
+                <section className="flex flex-col gap-2 bg-white p-10">
                     <section className="flex justify-center items-center">
                         <div className="relative">
                             <Image 
