@@ -8,8 +8,7 @@ const Sidebar = () => {
     const navLinks = [
         { id: 1, name: "Pembayaran", href: "/admin/pembayaran" },
         { id: 2, name: "Tryout", href: "/admin/tryout" },
-        { id: 3, name: "Konsultasi", href: "/admin/konsultasi" },
-        { id: 4, name: "Profile", href: "/admin/profile" },
+        { id: 3, name: "Profile", href: "/admin/profile" },
     ]
 
     const pathname = getPathname()
@@ -34,7 +33,15 @@ const Sidebar = () => {
             </div>
             <div className="flex flex-col">
                 {
-                    navLinks.map(links => LinkList(links.name, links.href))
+                    navLinks.map(links => (
+                        <Link
+                            key={links.id}
+                            href={links.href}
+                            className={"px-3 py-2 hover:font-bold rounded-md transition-all duration-100 " + ((pathname.includes(name.toLowerCase())) ? "font-bold" : "")}
+                        >
+                            {links.name}
+                        </Link>
+                    ))
                 }
             </div>
             <Button className="bg-white font-bold text-primary flex items-center justify-center px-8 py-1 w-full">

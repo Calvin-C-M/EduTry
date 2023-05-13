@@ -22,7 +22,7 @@ const Profile = () => {
                     </section>
                     <section className="grid grid-cols-2">
                         <section>
-                            <h2>Data Pribadi</h2>
+                            <h2 className="mb-3">Data Pribadi</h2>
                             <section className="flex flex-col gap-2">
                                 <section>
                                     <h3>Username</h3>
@@ -43,7 +43,7 @@ const Profile = () => {
                             </section>
                         </section>
                         <section>
-                            <h2>Data Pekerjaan</h2>
+                            <h2 className="mb-3">Data Pekerjaan</h2>
                             <section className="flex flex-col gap-2">
                                 <section>
                                     <h3>Pekerjaan</h3>
