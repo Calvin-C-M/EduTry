@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const Button = ({ children, href, className }) => {
+const Button = ({ children, href, className, onClick }) => {
     if(href) {
         return (
             <Link href={href} className={className + " bg-primary font-bold text-white flex items-center justify-center px-8 py-1 w-fit hover:brightness-110 transition-all duration-100"}>
@@ -9,7 +9,7 @@ const Button = ({ children, href, className }) => {
         );        
     }
     return (
-        <button className={className + " bg-primary font-bold text-white flex items-center justify-center px-8 py-1 w-fit hover:brightness-110 transition-all duration-100"}>
+        <button className={className + " bg-primary font-bold text-white flex items-center justify-center px-8 py-1 w-fit hover:brightness-110 transition-all duration-100"} onClick={onClick}>
             {children}
         </button>
     );
