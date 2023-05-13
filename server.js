@@ -56,6 +56,10 @@ app.prepare()
         return app.render(req, res, '/questions', req.query)
     })
 
+    server.get('/answer', (req, res) => {
+        return app.render(req, res, '/answer', req.query)
+    })
+
     server.get('/admin/tryout', (req, res) => {
         return app.render(req, res, '/admin/tryout', req.query)
     })
