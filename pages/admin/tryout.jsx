@@ -3,15 +3,18 @@ import SearchBar from "@/components/Admin/SearchBar";
 import { useState, useEffect } from "react";
 import TestImage from "@/public/pict.png"
 import axios from "axios";
+import getUrl from "@/utils/getUrl";
 
 const Tryout = () => {
     const [searchText, setSearchText] = useState("")
     const [tryouts, setTryouts] = useState([])
 
+    const url = getUrl()
+
     const getTryouts = () => {
         axios({
             method: "get",
-            url: "http://localhost:3000/api/tryouts",
+            url: `${url}/api/tryouts`,
         }).then(res => {
             const tryout = res.data
             setTryouts(tryout)
