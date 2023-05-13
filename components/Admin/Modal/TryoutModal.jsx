@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Button from "../Button";
+import Button from "../../Button";
 
 const TryoutModal = ({ id, nama, deadline, harga, status, setShowModal }) => {
     const [namaForm, setNama] = useState(nama || "")

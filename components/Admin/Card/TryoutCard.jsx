@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Button from "./Button";
+import Button from "../Button";
 
 const TryoutCard = ({ image, title, date, href }) => {
     return (

@@ -1,6 +1,6 @@
 import SearchBar from "@/components/Admin/SearchBar";
 import SubTryoutLayout from "@/components/Admin/SubTryoutLayout";
-import SubTryoutCard from "@/components/Admin/SubTryoutCard";
+import SubTryoutCard from "@/components/Admin/Card/SubTryoutCard";
 import Button from "@/components/Button";
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from "react";
@@ -13,7 +13,7 @@ const SubTryout = ({ data }) => {
         <>
             <SearchBar setText={setSearchText} />
             <div>
-                <h1 className="mb-3">Sub Tryout - Tryout #3</h1>
+                <h1 className="mb-3">{data.nama} {'>'} Sub Tryout</h1>
                 <Button className="bg-green mb-3">
                     <AddIcon />
                     Create

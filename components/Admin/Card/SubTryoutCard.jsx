@@ -1,4 +1,4 @@
-import Button from "../Button";
+import Button from "../../Button";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
