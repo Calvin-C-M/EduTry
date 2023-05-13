@@ -4,20 +4,26 @@ import SubTryoutCard from "@/components/Admin/Card/SubTryoutCard";
 import Button from "@/components/Button";
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from "react";
+import SubTryoutModal from "@/components/Admin/Modal/SubTryoutModal";
 
 const SubTryout = ({ data }) => {
     const [searchText, setSearchText] = useState("")
-    console.log(data)
-
+    const [showModalForm, setShowModalForm] = useState(false)
+    
     return (
         <>
             <SearchBar setText={setSearchText} />
             <div>
                 <h1 className="mb-3">{data.nama} {'>'} Sub Tryout</h1>
-                <Button className="bg-green mb-3">
+                <Button className="bg-green mb-3" onClick={() => setShowModalForm(!showModalForm)}>
                     <AddIcon />
                     Create
                 </Button>
+                {
+                    (showModalForm) 
+                    ? <SubTryoutModal idTryout={data.id} setShowModal={() => setShowModalForm(false)} /> 
+                    : ""
+                }
                 <section className="flex flex-col items-center gap-5 p-5 bg-white">
                     <section>
                         <h2 className="text-center mb-2">TPS</h2>
@@ -45,7 +51,7 @@ const SubTryout = ({ data }) => {
     );
 }
 
-export const getServerSideProps = async ({ res }) => {
+export const getServerSideProps = async ({ req, res }) => {
     const data = res.tryout
 
     return {

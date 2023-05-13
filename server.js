@@ -80,11 +80,12 @@ app.prepare()
         const tryoutData = await database.collection('tryout').find({ _id: id }).toArray()
 
         res.tryout = {
-            nama: tryoutData[0].nama,
-            harga: tryoutData[0].harga,
-            created_at: tryoutData[0].created_at,
-            deadline: tryoutData[0].deadline,
-            subtryouts: tryoutData[0].subtryout
+            "id": id.toString(),
+            "nama": tryoutData[0].nama,
+            "harga": tryoutData[0].harga,
+            "created_at": tryoutData[0].created_at,
+            "deadline": tryoutData[0].deadline,
+            "subtryouts": tryoutData[0].subtryout
         }
 
         return app.render(req, res, '/admin/subtryout', req.query)
