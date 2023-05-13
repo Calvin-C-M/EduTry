@@ -21,10 +21,10 @@ const SubTryoutCard = ({ judul, waktu, soal }) => {
                 </div>
             </div>
             <div className="flex items-center gap-2">
-                <Button className="px-1 bg-yellow-400">
+                <Button className="px-[10px] bg-yellow-400">
                     <EditIcon />
                 </Button>
-                <Button className="px-1 bg-red">
+                <Button className="px-[10px] bg-red">
                     <DeleteIcon />
                 </Button>
             </div>
