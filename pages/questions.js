@@ -16,6 +16,7 @@ export default function Questions() {
 
   const [index, setIndex] = useState(0)
   const [select, setSelect] = useState('')
+  const [numCard, setNumCard] = useState(false)
 
   const handleSelect = (newSelect) => {
     setSelect(newSelect)
@@ -26,17 +27,30 @@ export default function Questions() {
     setSelect('')
   }
 
+  const handleNumCard = () => {
+    setNumCard(!numCard)
+  }
+
   return (
     <div className='w-full px-10 md:px-28 pt-36 pb-20'>
       <h1 className='text-white'>{Tryout} : {subTryout}</h1>
-      <div className='grid grid-cols-3 gap-3 w-full py-8'>
+      <div className='flex md:hidden justify-end w-full pt-5 pb-3'>
+        <TimerCard waktu={2} />
+      </div>
+      <div className='md:grid grid-cols-3 gap-3 w-full md:py-8'>
         <div className='col-start-1 col-end-3'>
-          <QuestionCard allData={data} data={data[index]} index={index} select={select} handleSelect={handleSelect} handleClick={handleClick} />
+          <QuestionCard allData={data} data={data[index]} index={index} select={select} handleSelect={handleSelect} handleClick={handleClick} handleNumCard={handleNumCard} />
         </div>
-        <div>
-          <TimerCard waktu={2} />
-          <NumberCard data={data} index={index} select={select} handleClick={handleClick} />
+        <div className='hidden md:flex'>
+          <div className='flex-none w-full'>
+            <TimerCard waktu={2} />
+            <NumberCard data={data} index={index} select={select} handleClick={handleClick} button={'Submit Jawaban'} />
+          </div>
         </div>
+      </div>
+      <div onClick={handleNumCard} className={numCard ? 'fixed right-0 top-0 w-full h-screen bg-black/25' : ''} />
+      <div className={numCard ? 'fixed left-1/2 bottom-0 translate-x-[-50%] translate-y-[-100%] w-[60%]' : 'hidden'}>
+        <NumberCard data={data} index={index} select={select} handleClick={handleClick} button={'Submit Jawaban'} />
       </div>
     </div>
   )
