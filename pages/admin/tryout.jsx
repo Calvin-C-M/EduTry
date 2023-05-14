@@ -31,7 +31,6 @@ const Tryout = () => {
 
     return (
         <>
-            <SearchBar setText={setSearchText} />
             <section>
                 <h1 className="mb-3">Tryout</h1>
                 <Button className="bg-green mb-3" onClick={() => setShowFormModal(!showFormModal)}>

@@ -9,10 +9,9 @@ import SubTryoutModal from "@/components/Admin/Modal/SubTryoutModal";
 const SubTryout = ({ data }) => {
     const [searchText, setSearchText] = useState("")
     const [showModalForm, setShowModalForm] = useState(false)
-    
+
     return (
         <>
-            <SearchBar setText={setSearchText} />
             <div>
                 <h1 className="mb-3">{data.nama} {'>'} Sub Tryout</h1>
                 <Button className="bg-green mb-3" onClick={() => setShowModalForm(!showModalForm)}>
