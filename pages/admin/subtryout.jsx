@@ -1,14 +1,33 @@
-import SearchBar from "@/components/Admin/SearchBar";
 import SubTryoutLayout from "@/components/Admin/SubTryoutLayout";
 import SubTryoutCard from "@/components/Admin/Card/SubTryoutCard";
 import Button from "@/components/Button";
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SubTryoutModal from "@/components/Admin/Modal/SubTryoutModal";
+import axios from "axios";
+import getBaseUrl from "@/utils/getBaseUrl";
 
 const SubTryout = ({ data }) => {
-    const [searchText, setSearchText] = useState("")
+    const [tryout, setTryout] = useState({})
     const [showModalForm, setShowModalForm] = useState(false)
+
+    const baseUrl = getBaseUrl()
+
+    const getTryoutData = () => {
+        axios({
+            method: "get",
+            url: `${baseUrl}/api/tryout/${data.id}`
+        }).then(res => {
+            const tryoutData = res.data
+            setTryout(tryoutData)
+        })
+    }
+
+    useEffect(() => {
+        getTryoutData()
+    }, [])
+
+    console.log(tryout)
 
     return (
         <>
@@ -27,21 +46,17 @@ const SubTryout = ({ data }) => {
                     <section>
                         <h2 className="text-center mb-2">TPS</h2>
                         <SubTryoutLayout>
-                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
-                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
-                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
-                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
-                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
-                            <SubTryoutCard judul={"Penalaran Umum"} waktu={20} soal={20} />
+                            {
+                                tryout.subtryout.map(subtryout => (subtryout.jenis == "TPS") ? <SubTryoutCard id={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} /> : "")
+                            }
                         </SubTryoutLayout>
                     </section>
                     <section>
                         <h2 className="text-center mb-2">Literasi & PNM</h2>
                         <SubTryoutLayout>
-                            <SubTryoutCard judul={"Literasi dalam Bahasa Indonesia"} waktu={20} soal={20} />
-                            <SubTryoutCard judul={"Literasi dalam Bahasa Indonesia"} waktu={20} soal={20} />
-                            <SubTryoutCard judul={"Literasi dalam Bahasa Indonesia"} waktu={20} soal={20} />
-                            <SubTryoutCard judul={"Literasi dalam Bahasa Indonesia"} waktu={20} soal={20} />
+                            {
+                                tryout.subtryout.map(subtryout => (subtryout.jenis == "PNM") ? <SubTryoutCard id={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} /> : "")
+                            }
                         </SubTryoutLayout>
                     </section>
                 </section>

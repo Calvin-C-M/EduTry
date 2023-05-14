@@ -1,15 +1,13 @@
 import TryoutCard from "@/components/Admin/Card/TryoutCard";
-import SearchBar from "@/components/Admin/SearchBar";
 import { useState, useEffect } from "react";
 import TestImage from "@/public/pict.png"
 import axios from "axios";
-import getUrl from "@/utils/getUrl";
+import getUrl from "@/utils/getBaseUrl";
 import Button from "@/components/Button";
 import AddIcon from '@mui/icons-material/Add';
 import TryoutModal from "@/components/Admin/Modal/TryoutModal";
 
 const Tryout = () => {
-    const [searchText, setSearchText] = useState("")
     const [tryouts, setTryouts] = useState([])
     const [showFormModal, setShowFormModal] = useState(false)
 
