@@ -91,6 +91,25 @@ app.prepare()
         return app.render(req, res, '/admin/subtryout', req.query)
     })
 
+    server.get('/admin/soal/:id', async (req, res) => {
+        loginBlocker(req, res)
+
+        const id = new ObjectId(req.params.id)
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const subtryoutData = await database.collection('subtryout').findOne({ _id: id })
+
+        res.subtryout = {
+            "id": id,
+            "nama": subtryoutData.nama,
+            "jenis": subtryoutData.jenis,
+            "waktu_pengerjaan": subtryoutData.waktu_pengerjaan,
+            "soal": subtryoutData.soal,
+        }
+
+        return app.render(req, res, '/admin/soal', req.query)
+    })
+
     server.get('/admin/pembayaran', (req, res) => {
         loginBlocker(req, res)
         return app.render(req, res, '/admin/pembayaran', req.query)
@@ -211,8 +230,6 @@ app.prepare()
     })
 
     server.post('/add/tryout', async (req, res) => {
-        const inputData = req.body
-
         const client = await clientPromise
         const database = client.db(process.env.MONGODB_NAME)
 
@@ -223,18 +240,21 @@ app.prepare()
             req.flash('message', 'Tryout already exist!')
             res.redirect('/admin/tryout')
         } else {
-            await database.collection('tryout').insertOne({
-                "nama": inputData.nama,
-                "created_at": new Date().toJSON().slice(0, 10),
-                "deadline": inputData.deadline,
-                "harga": inputData.harga,
-                "status": "CLOSED",
-                "link_forum": "",
-                "subtryout": []
-            })
+            try {
+                await database.collection('tryout').insertOne({
+                    "nama": req.body.nama,
+                    "created_at": new Date().toJSON().slice(0, 10),
+                    "deadline": req.body.deadline,
+                    "harga": req.body.harga,
+                    "status": "CLOSED",
+                    "subtryout": []
+                })
 
-            req.flash('message', 'Tryout berhasil dibuat!')
-            res.redirect('/admin/tryout')
+                req.flash('message', 'Tryout berhasil dibuat!')
+                res.redirect('/admin/tryout')
+            } catch(err) {
+                console.log(err)
+            }
         }
     })
 
@@ -256,7 +276,6 @@ app.prepare()
         const subtryoutId = new ObjectId()
 
         try {
-
             await database.collection('subtryout').insertOne({
                 "_id": subtryoutId,
                 "nama": req.body.nama,
@@ -324,7 +343,6 @@ app.prepare()
                 "pembahasan": {
                     "isi": "",
                     "link_video": "",
-                    "link_forum": ""
                 }
             })
 
@@ -372,31 +390,44 @@ app.prepare()
         res.send(result).status(200)
     })
 
-    server.get('/api/tryouts/:id', async (req, res) => {
+    server.get('/api/tryout/:id', async (req, res) => {
         const client = await clientPromise
         const database = client.db(process.env.MONGODB_NAME)
-        const id = ObjectId(req.params.id)
-        const result = await database.collection("tryout").find({ _id: id }).toArray()
+        const id = new ObjectId(req.params.id)
+        const tryoutData = await database.collection("tryout").findOne({ _id: id })
+
+        const result = {
+            "_id" : tryoutData._id,
+            "nama" : tryoutData.nama,
+            "created_by" : tryoutData.created_by,
+            "deadline" : tryoutData.deadline,
+            "harga" : tryoutData.harga,
+            "status" : tryoutData.status,
+            "subtryout" : []
+        }
+
+        for(let subtryoutId of tryoutData.subtryout) {
+            const id = new ObjectId(subtryoutId)
+            const subtryoutData = await database.collection("subtryout").findOne({ _id: id })
+
+            const subtryoutRes = {
+                "_id" : subtryoutData._id,
+                "nama" : subtryoutData.nama,
+                "jenis" : subtryoutData.jenis,
+                "waktu_pengerjaan" : subtryoutData.waktu_pengerjaan,
+                "soal" : []
+            }
+
+            for(let soalId of subtryoutData.soal) {
+                const id = new ObjectId(soalId)
+                const soalData = await database.collection("soal").findOne({ _id: id })
+                subtryoutRes.soal = [...subtryoutRes.soal, soalData]
+            }
+
+            result.subtryout = [...result.subtryout, subtryoutRes]
+        }
 
         res.send(result).status(200)
-    })
-
-    server.get('/api/subtryouts/:id', async (req, res) => {
-        const client = await clientPromise
-        const database = client.db(process.env.MONGODB_NAME)
-        const id = ObjectId(req.params.id)
-        const result = await database.collection("subtryout").find({ _id: id }).toArray()
-
-        res.send(result).status(200)    
-    })
-
-    server.get('/api/soal/:id', async (req, res) => {
-        const client = await clientPromise
-        const database = client.db(process.env.MONGODB_NAME)
-        const id = ObjectId(req.params.id)
-        const result = await database.collection("soal").find({ _id: id }).toArray()
-
-        res.send(result).status(200)    
     })
 
     // =========================================
