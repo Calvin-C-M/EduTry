@@ -25,6 +25,21 @@ app.prepare()
         return app.render(req, res, '/index', req.query)
     })
 
+    server.get('/login', (req, res) => {
+        console.log("Login")
+        return app.render(req, res, '/login', req.query)
+    })
+
+    server.get('/register', (req, res) => {
+        console.log("Register")
+        return app.render(req, res, '/register', req.query)
+    })
+
+    server.get('/profile', (req, res) => {
+        console.log("Profile")
+        return app.render(req, res, '/profile', req.query)
+    })
+
     server.get('/test', (req,res) => {
         console.log("Test")
         return app.render(req, res, '/test', req.query)
