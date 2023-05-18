@@ -2,7 +2,7 @@ import TryoutCard from "@/components/Admin/Card/TryoutCard";
 import { useState, useEffect } from "react";
 import TestImage from "@/public/pict.png"
 import axios from "axios";
-import getUrl from "@/utils/getBaseUrl";
+import getBaseUrl from "@/utils/getBaseUrl";
 import Button from "@/components/Button";
 import AddIcon from '@mui/icons-material/Add';
 import TryoutModal from "@/components/Admin/Modal/TryoutModal";
@@ -11,7 +11,7 @@ const Tryout = () => {
     const [tryouts, setTryouts] = useState([])
     const [showFormModal, setShowFormModal] = useState(false)
 
-    const url = getUrl()
+    const url = getBaseUrl()
 
     const getTryouts = () => {
         axios({

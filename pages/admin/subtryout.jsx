@@ -9,6 +9,7 @@ import getBaseUrl from "@/utils/getBaseUrl";
 
 const SubTryout = ({ data }) => {
     const [tryout, setTryout] = useState({})
+    const [subtryout, setSubtryout] = useState([])
     const [showModalForm, setShowModalForm] = useState(false)
 
     const baseUrl = getBaseUrl()
@@ -18,16 +19,14 @@ const SubTryout = ({ data }) => {
             method: "get",
             url: `${baseUrl}/api/tryout/${data.id}`
         }).then(res => {
-            const tryoutData = res.data
-            setTryout(tryoutData)
-        })
+            setTryout(res.data)
+            setSubtryout(res.data.subtryout)
+        }).catch(err => console.log(err))
     }
 
     useEffect(() => {
         getTryoutData()
     }, [])
-
-    console.log(tryout)
 
     return (
         <>
@@ -47,7 +46,7 @@ const SubTryout = ({ data }) => {
                         <h2 className="text-center mb-2">TPS</h2>
                         <SubTryoutLayout>
                             {
-                                tryout.subtryout.map(subtryout => (subtryout.jenis == "TPS") ? <SubTryoutCard id={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} /> : "")
+                                subtryout.map(subtryout => (subtryout.jenis == "TPS") ? <SubTryoutCard key={subtryout._id} id={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} /> : "")
                             }
                         </SubTryoutLayout>
                     </section>
@@ -55,7 +54,7 @@ const SubTryout = ({ data }) => {
                         <h2 className="text-center mb-2">Literasi & PNM</h2>
                         <SubTryoutLayout>
                             {
-                                tryout.subtryout.map(subtryout => (subtryout.jenis == "PNM") ? <SubTryoutCard id={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} /> : "")
+                                subtryout.map(subtryout => (subtryout.jenis == "PNM") ? <SubTryoutCard key={subtryout._id} id={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} /> : "")
                             }
                         </SubTryoutLayout>
                     </section>
