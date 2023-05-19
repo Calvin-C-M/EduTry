@@ -39,14 +39,14 @@ export default function Answer() {
   }, [])
 
   return (
-    <div className='w-full px-10 md:px-28 pt-36 pb-20'>
+    <div className='w-full px-10 md:px-28 pt-3 md:pt-8 pb-20'>
       <h1 className='text-white'>{Tryout} : {subTryout}</h1>
       <div className='md:grid grid-cols-3 gap-3 w-full py-5 md:py-8'>
         <div className='col-start-1 col-end-3'>
           <AnswerCard allData={data} data={data[index]} index={index} handleIndex={handleIndex} handleNumCard={handleNumCard} />
           <div className={scroll ? 'fixed md:hidden left-1/2 translate-x-[-50%] bottom-[-10%] w-4/5 mt-3 ease-in duration-200' : 'fixed md:hidden left-1/2 translate-x-[-50%] bottom-8 w-4/5 mt-3 ease-in duration-200'}>
-            <Link href={''}>
-              <button className='bg-primary font-bold text-white flex items-center justify-between w-full h-fit px-3 py-2 text-sm hover:brightness-110 transition-all duration-100'>
+            <Link href={'/discuss'}>
+              <button className='bg-primary font-bold text-white shadow-lg flex items-center justify-between w-full h-fit px-3 py-2 text-sm hover:brightness-110 transition-all duration-100'>
                 <p>Konsultasi Soal</p>
                 <ArrowForwardIosIcon />
               </button>
@@ -56,7 +56,7 @@ export default function Answer() {
         <div className='hidden md:flex'>
           <div className='flex-none w-full'>
             <NumberCard data={data} index={index} handleClick={handleIndex} button={'Konsultasi Soal'} onClick={''} href={''} />
-            <Link href={''}>
+            <Link href={'/discuss'}>
               <button className='hidden md:flex justify-between w-full h-fit bg-white font-bold text-primary text-center px-5 py-3 mt-2 rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>
                 <p>Konsultasi Soal</p>
                 <ArrowForwardIosIcon />

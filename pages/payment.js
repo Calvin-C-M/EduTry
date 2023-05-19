@@ -10,8 +10,8 @@ export default function Payment() {
         status:'pending', waktu:2, method:'mandiri', logo:'https://bankmandiri.co.id/image/layout_set_logo?img_id=31567&t=1683824600225', kode:'sgdfkhewifbnekwlnfel', qr:QR, user:'Deani PV', paket:'Tryout #2 SNBT', harga:12000, diskon:7000, admin:4000, instrc:'Lorem ipsum dolor sit amet consectetur. Viverra ultricies ultricies hendrerit metus orci. Id ipsum in fames vitae euismod gravida tortor pulvinar condimentum. Turpis nisi interdum nisl ullamcorper. Enim arcu eget nisl sed adipiscing scelerisque duis. Mauris consequat leo sociis et tempus. Dui nibh vehicula eros sit proin. Et nisl egestas sagittis dignissim eros odio amet. Magna vitae eget nisl ornare scelerisque pulvinar lorem posuere. Pharetra cursus sit integer sit.',
     }
   return (
-    <div className='w-full px-10 md:px-28 pt-36 pb-20'>
-        <Link href='/' className='flex items-center text-white p-2'>
+    <div className='w-full px-10 md:px-28 pt-1 md:pt-6 pb-20'>
+        <Link href='/purchase' className='flex items-center text-white p-2'>
             <ArrowBackIosNewIcon className='mr-5' />
             <h1>Pembayaran</h1>
         </Link>

@@ -32,7 +32,7 @@ export default function Questions() {
   }
 
   return (
-    <div className='w-full px-10 md:px-28 pt-36 pb-20'>
+    <div className='w-full px-10 md:px-28 pt-3 md:pt-8 pb-20'>
       <h1 className='text-white'>{Tryout} : {subTryout}</h1>
       <div className='flex md:hidden justify-end w-full pt-5 pb-3'>
         <TimerCard waktu={2} />
