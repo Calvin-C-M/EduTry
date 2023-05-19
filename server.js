@@ -90,19 +90,8 @@ app.prepare()
     server.get('/admin/soal/:id', async (req, res) => {
         loginBlocker(req, res)
 
-        const id = new ObjectId(req.params.id)
-        const client = await clientPromise
-        const database = client.db(process.env.MONGODB_NAME)
-        const subtryoutData = await database.collection('subtryout').findOne({ _id: id })
-
-        res.subtryout = {
-            "id": id.toString(),
-            "nama": subtryoutData.nama,
-            "jenis": subtryoutData.jenis,
-            "waktu_pengerjaan": subtryoutData.waktu_pengerjaan,
-            "soal": subtryoutData.soal,
-        }
-
+        const id = new ObjectId(req.params.id) 
+        req.session.tryout.subtryout = req.session.tryout.subtryout.filter(data => (data._id) == id)
         return app.render(req, res, '/admin/soal', req.query)
     })
 
