@@ -11,6 +11,7 @@ const next = require("next");
 
 const port = process.env.PORT
 const hostname = process.env.HOSTNAME
+const baseUrl = `http://${hostname}:${port}`
 
 const dev = process.env.ENVIRONMENT !== "production"
 const app = next({ dev })
@@ -68,6 +69,7 @@ app.prepare()
 
     server.get('/admin/tryout', (req, res) => {
         loginBlocker(req, res)
+        req.session.tryout = {}
         return app.render(req, res, '/admin/tryout', req.query)
     })
 
@@ -75,20 +77,14 @@ app.prepare()
         loginBlocker(req, res)
 
         const id = new ObjectId(req.params.id)
-        const client = await clientPromise
-        const database = client.db(process.env.MONGODB_NAME)
-        const tryoutData = await database.collection('tryout').find({ _id: id }).toArray()
 
-        res.tryout = {
-            "id": id.toString(),
-            "nama": tryoutData[0].nama,
-            "harga": tryoutData[0].harga,
-            "created_at": tryoutData[0].created_at,
-            "deadline": tryoutData[0].deadline,
-            "subtryouts": tryoutData[0].subtryout
-        }
-
-        return app.render(req, res, '/admin/subtryout', req.query)
+        fetch(`${baseUrl}/api/tryout/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.tryout = data
+                return app.render(req, res, '/admin/subtryout', req.query)
+            })
+            .catch(err => console.log(err))
     })
 
     server.get('/admin/soal/:id', async (req, res) => {
@@ -100,7 +96,7 @@ app.prepare()
         const subtryoutData = await database.collection('subtryout').findOne({ _id: id })
 
         res.subtryout = {
-            "id": id,
+            "id": id.toString(),
             "nama": subtryoutData.nama,
             "jenis": subtryoutData.jenis,
             "waktu_pengerjaan": subtryoutData.waktu_pengerjaan,

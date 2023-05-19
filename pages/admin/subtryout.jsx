@@ -2,31 +2,14 @@ import SubTryoutLayout from "@/components/Admin/SubTryoutLayout";
 import SubTryoutCard from "@/components/Admin/Card/SubTryoutCard";
 import Button from "@/components/Button";
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SubTryoutModal from "@/components/Admin/Modal/SubTryoutModal";
-import axios from "axios";
 import getBaseUrl from "@/utils/getBaseUrl";
 
 const SubTryout = ({ data }) => {
-    const [tryout, setTryout] = useState({})
-    const [subtryout, setSubtryout] = useState([])
     const [showModalForm, setShowModalForm] = useState(false)
 
-    const baseUrl = getBaseUrl()
-
-    const getTryoutData = () => {
-        axios({
-            method: "get",
-            url: `${baseUrl}/api/tryout/${data.id}`
-        }).then(res => {
-            setTryout(res.data)
-            setSubtryout(res.data.subtryout)
-        }).catch(err => console.log(err))
-    }
-
-    useEffect(() => {
-        getTryoutData()
-    }, [])
+    console.log(data)
 
     return (
         <>
@@ -46,7 +29,7 @@ const SubTryout = ({ data }) => {
                         <h2 className="text-center mb-2">TPS</h2>
                         <SubTryoutLayout>
                             {
-                                subtryout.map(subtryout => (subtryout.jenis == "TPS") ? <SubTryoutCard key={subtryout._id} id={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} /> : "")
+                                data.subtryout.map(subtryout => (subtryout.jenis == "TPS") ? <SubTryoutCard key={subtryout._id} id={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} /> : "")
                             }
                         </SubTryoutLayout>
                     </section>
@@ -54,7 +37,7 @@ const SubTryout = ({ data }) => {
                         <h2 className="text-center mb-2">Literasi & PNM</h2>
                         <SubTryoutLayout>
                             {
-                                subtryout.map(subtryout => (subtryout.jenis == "PNM") ? <SubTryoutCard key={subtryout._id} id={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} /> : "")
+                                data.subtryout.map(subtryout => (subtryout.jenis == "PNM") ? <SubTryoutCard key={subtryout._id} id={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} /> : "")
                             }
                         </SubTryoutLayout>
                     </section>
@@ -65,7 +48,7 @@ const SubTryout = ({ data }) => {
 }
 
 export const getServerSideProps = async ({ req, res }) => {
-    const data = res.tryout
+    const data = req.session.tryout
 
     return {
         props: { data }
