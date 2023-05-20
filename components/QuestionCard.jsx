@@ -19,14 +19,14 @@ const QuestionCard = ({ key, allData, data, index, select, handleSelect, handleC
         <div className='flex justify-between items-center w-full mt-6 mb-3'>
             {index > 0 ? (
                 <div className='flex justify-start w-full'>
-                    <button onClick={() => handleClick(index-1)} className='w-fit p-1 md:p-2 bg-white text-primary rounded-full hover:bg-blue-100 transition-all duration-100'>
+                    <button onClick={() => handleClick(index-1, select)} className='w-fit p-1 md:p-2 bg-white text-primary rounded-full hover:bg-blue-100 transition-all duration-100'>
                         <ArrowBackIosNewIcon />
                     </button>
                 </div>
             ) : ''}
             {index < allData?.length - 1 ? (
                 <div className='flex justify-end w-full'>
-                    <button onClick={() => handleClick(index+1)} className='w-fit p-1 md:p-2 bg-white text-primary rounded-full hover:bg-blue-100 transition-all duration-100'>
+                    <button onClick={() => handleClick(index+1, select)} className='w-fit p-1 md:p-2 bg-white text-primary rounded-full hover:bg-blue-100 transition-all duration-100'>
                         <ArrowForwardIosIcon />
                     </button>
                 </div>
