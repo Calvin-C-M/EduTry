@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 
 const PaymentCard = ({ data }) => {
     const [timeLeft, setTimeLeft] = useState(data.waktu * 60 * 60) //waktu dijadikan detik, misal data waktu dalam jam
@@ -32,7 +33,10 @@ const PaymentCard = ({ data }) => {
             <p className='text-base md:text-lg font-bold'>Pembayaran</p>
             <div className='flex justify-between items-center my-2'>
                 <p>Kode Bayar</p>
-                <p className='font-bold text-base md:text-lg'>{data.kode}</p>
+                <div className='flex items-center'>
+                    <p className='font-bold text-base md:text-lg'>{data.kode}</p>
+                    <button onClick={() => navigator.clipboard.writeText(data.kode)} className='ml-1'><ContentCopyIcon fontSize='small' /></button>
+                </div>
             </div>
             <div className='flex justify-between items-center my-2'>
                 <p>Atas Nama</p>

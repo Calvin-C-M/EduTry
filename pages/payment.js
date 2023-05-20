@@ -27,6 +27,11 @@ export default function Payment() {
                 <button onClick='' className='bg-white font-bold text-primary flex items-center justify-center w-full h-fit p-3 my-6 text-sm md:text-base rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>
                     Batalkan Transaksi
                 </button>
+                <Link href='/upload-payment'>
+                    <button onClick='' className='bg-white font-bold text-primary flex items-center justify-center w-full h-fit p-3 my-6 text-sm md:text-base rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>
+                        Upload Bukti Bayar
+                    </button>
+                </Link>
             </div>
             <div className='hidden md:grid h-fit'>
                 <PaymentInstructions data={data} />
