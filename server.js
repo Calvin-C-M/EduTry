@@ -140,38 +140,6 @@ app.prepare()
         loginBlocker(req, res)
         return app.render(req, res, '/admin/pembayaran', req.query)
     })
-
-    server.get('/login', (req, res) => {
-        console.log(req.flash('message'))
-        return app.render(req, res, '/test-login', req.query)
-    })
-
-    server.get('/register', (req, res) => {
-        console.log(req.flash('message'))
-        return app.render(req, res, '/test-register', req.query)
-    })
-
-    server.get('/admin/test-tryout', (req, res) => {
-        return app.render(req, res, '/admin/test-tryout', req.query)
-    })
-
-    server.get('/admin/test-subtryout/:id', async (req, res) => {
-        const id = new ObjectId(req.params.id)
-        const client = await clientPromise
-        const database = client.db(process.env.MONGODB_NAME)
-        const tryoutData = await database.collection('tryout').find({ _id: id }).toArray()
-
-        res.tryout = {
-            _id: id.toString(),
-            nama: tryoutData[0].nama,
-            harga: tryoutData[0].harga,
-            created_at: tryoutData[0].created_at,
-            deadline: tryoutData[0].deadline,
-            subtryouts: tryoutData[0].subtryout
-        }
-
-        return app.render(req, res, '/admin/test-subtryout', req.query)
-    })
     
     // Contollers
     server.post('/control/login', async (req, res) => {
