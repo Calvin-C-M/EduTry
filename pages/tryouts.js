@@ -13,14 +13,20 @@ export default function Tryouts() {
   ]
 
   return (
-    <div>
-      <div className='w-full px-10 md:px-28 pt-3 md:pt-8'>
-        <h1 className='text-white'>Paket Tryout</h1>
+    <div className='w-full min-h-screen'>
+      <div className='w-full px-10 md:px-28 pt-36'>
+        <h1 className='text-primary'>Paket Tryout</h1>
       </div>
       <div className='w-full px-10 md:px-28 py-8 pb-20'>
-        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-auto place-items-center gap-3 md:gap-5'>
-          {tryoutsData.map((data) => <TryoutCard key={data.id} pict={data.pict} nama={data.nama} harga={data.harga} href={data.href} />)}
-        </div>
+        {tryoutsData?.length == 0 ? (
+          <div className='flex w-full justify-center text-center py-2'>
+            <p>Belum ada tryout yang terdaftar</p>
+          </div>
+        ) : (
+          <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-auto place-items-center gap-3 md:gap-5'>
+            {tryoutsData.map((data) => <TryoutCard key={data.id} pict={data.pict} nama={data.nama} harga={data.harga} href={data.href} />)}
+          </div>
+        )}
       </div>
     </div>
   )
