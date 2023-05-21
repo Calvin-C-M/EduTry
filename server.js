@@ -65,6 +65,9 @@ app.prepare()
         loginBlocker(req, res)
         return app.render(req, res, '/discuss', req.query)
     })
+  
+    server.get('/result', (req, res) => {
+        return app.render(req, res, '/result', req.query)
 
     server.get('/questions', (req, res) => {
         return app.render(req, res, '/questions', req.query)
