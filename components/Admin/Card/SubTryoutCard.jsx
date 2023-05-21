@@ -1,10 +1,21 @@
-import Button from "../Button";
+import Button from "../../Button";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import TextSnippetOutlinedIcon from '@mui/icons-material/TextSnippetOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import axios from "axios";
+import getBaseUrl from "@/utils/getBaseUrl";
 
-const SubTryoutCard = ({ judul, waktu, soal }) => {
+const SubTryoutCard = ({ id, judul, waktu, soal }) => {
+    const baseUrl = getBaseUrl()
+
+    const deleteSubTryout = () => {
+        axios({
+            method: "delete",
+            url: `${baseUrl}/api/subtryout/${id}`
+        })
+    }
+
     return (
         <div className="border-2 border-blue-dark rounded-md px-5 py-2 flex items-center justify-between gap-24">
             <div>
@@ -21,10 +32,10 @@ const SubTryoutCard = ({ judul, waktu, soal }) => {
                 </div>
             </div>
             <div className="flex items-center gap-2">
-                <Button className="px-2 bg-yellow-400">
+                <Button className="px-[10px] bg-yellow-400" href={`/admin/soal/${id}`} >
                     <EditIcon />
                 </Button>
-                <Button className="px-2 bg-red">
+                <Button className="px-[10px] bg-red" onClick={deleteSubTryout}>
                     <DeleteIcon />
                 </Button>
             </div>
