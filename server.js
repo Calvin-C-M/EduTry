@@ -62,8 +62,7 @@ app.prepare()
         return app.render(req, res, '/dashboard', req.query)
     })
 
-    server.get('/intro-tryout', (req, res) => {
-        loginBlocker(req, res)
+    server.get('/intro-tryout/:id', (req, res) => {
         return app.render(req, res, '/intro-tryout', req.query)
     })
 
@@ -419,6 +418,22 @@ app.prepare()
             }
 
             result.subtryout = [...result.subtryout, subtryoutRes]
+        }
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/mytryout/:id', async (req, res) => {
+        const id = new ObjectId(req.params.id)
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const myTryoutData = await database.collection("mytryout").findOne({ "_id": id })
+
+        const result = {
+            "_id": myTryoutData._id,
+            "id_tryout": myTryoutData.id_tryout,
+            "status": myTryoutData.status,
+            "hasil": myTryoutData.hasil,
         }
 
         res.send(result).status(200)
