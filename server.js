@@ -84,6 +84,7 @@ app.prepare()
   
     server.get('/result', (req, res) => {
         return app.render(req, res, '/result', req.query)
+    })
 
     server.get('/questions', (req, res) => {
         return app.render(req, res, '/questions', req.query)
