@@ -16,10 +16,10 @@ export default function Dashboard() {
   return (
     <div>
       <Banner />
-      <div className='w-full px-10 md:px-28 pt-8 md:pt-16'>
-        <h1>Tryout Terbaru</h1>
+      <div className='w-full px-6 md:px-28 pt-8 md:pt-16'>
+        <h1 className='text-white'>Tryout Terbaru</h1>
       </div>
-      <div className='w-full px-10 md:px-28 py-8 pb-20'>
+      <div className='w-full px-6 md:px-28 py-5 md:py-8 pb-20'>
         <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-auto place-items-center gap-3 md:gap-5'>
           {tryoutsData.map(data => <TryoutCard key={data.id} pict={data.pict} nama={data.nama} harga={data.harga} href={data.href} />)}
         </div>
