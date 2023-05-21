@@ -63,7 +63,29 @@ app.prepare()
     })
 
     server.get('/intro-tryout/:id', (req, res) => {
-        return app.render(req, res, '/intro-tryout', req.query)
+        const id = req.params.id
+
+        fetch(`${baseUrl}/api/mytryout/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.mytryout = data
+                fetch(`${baseUrl}/api/tryout/${data.id_tryout}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        req.session.tryout = data
+                        return app.render(req, res, '/intro-tryout', req.query)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        req.flash("error_message", "Ada kesalahan dalam fetch API")
+                        res.redirect('/my-tryouts')                                
+                    })
+            })
+            .catch(err => {
+                console.log(err)
+                req.flash("error_message", "Ada kesalahan dalam fetch API")
+                res.redirect('/my-tryouts')
+            })
     })
 
     server.get('/tryouts', (req, res) => {
@@ -392,7 +414,7 @@ app.prepare()
         const result = {
             "_id" : tryoutData._id,
             "nama" : tryoutData.nama,
-            "created_by" : tryoutData.created_by,
+            "created_at" : tryoutData.created_at,
             "deadline" : tryoutData.deadline,
             "harga" : tryoutData.harga,
             "status" : tryoutData.status,
