@@ -16,8 +16,8 @@ export default function Dashboard() {
   return (
     <div className='w-full min-h-screen'>
       <Banner />
-      <div className='w-full px-10 md:px-28 pt-8 md:pt-16'>
-        <h1>Tryout Terbaru</h1>
+      <div className='w-full px-6 md:px-28 pt-8 md:pt-16'>
+        <h1 className='text-white'>Tryout Terbaru</h1>
       </div>
       <div className='w-full px-10 md:px-28 py-8 pb-20'>
         {tryoutsData?.length == 0 ? (
