@@ -76,7 +76,8 @@ app.prepare()
     server.get('/admin/subtryout/:id', async (req, res) => {
         loginBlocker(req, res)
 
-        const id = new ObjectId(req.params.id)
+        const id = req.params.id
+        console.log(id)
 
         fetch(`${baseUrl}/api/tryout/${id}`)
             .then(res => res.json())
@@ -90,8 +91,13 @@ app.prepare()
     server.get('/admin/soal/:id', async (req, res) => {
         loginBlocker(req, res)
 
-        const id = new ObjectId(req.params.id) 
-        req.session.tryout.subtryout = req.session.tryout.subtryout.filter(data => (data._id) == id)
+        const id = req.params.id
+        // console.log(req.session.tryout)
+        // req.session.tryout.subtryout = req.session.tryout.subtryout.filter(data => {
+        //     if(data._id == id) {
+        //         return data
+        //     }
+        // })
         return app.render(req, res, '/admin/soal', req.query)
     })
 
@@ -299,18 +305,16 @@ app.prepare()
          *      pilihan_3: String,
          *      pilihan_4: String,
          *      pilihan_5: String,
-         *      pembahasan: Object
          *      id_subtryout: String
          * }
          */
 
-        const subtryoutId = new ObjectId(req.body.id_subtryout)
+        const subtryoutId = new ObjectId(req.body.id)
         const pilihan = [
             req.body.pilihan_1,
             req.body.pilihan_2,
             req.body.pilihan_3,
             req.body.pilihan_4,
-            req.body.pilihan_5,
         ]
 
         const client = await clientPromise
@@ -340,6 +344,8 @@ app.prepare()
                         }
                     }
                 )
+                req.flash('message', 'Soal berhasil ditambah!')
+                res.redirect(`/admin/soal/${subtryoutId}`)
             } catch(err) {
                 console.log(err)
             }
