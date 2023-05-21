@@ -13,15 +13,15 @@ export default function MyTryouts() {
   const [status, setStatus] = useState(true)
 
   return (
-    <div className='w-full px-10 md:px-28 pt-36 pb-20'>
-      <h1 className='text-primary'>Tryout Saya</h1>
-      <div className='flex w-full justify-center px-10 py-8'>
+    <div className='w-full px-6 md:px-28 pt-3 md:pt-8 pb-8 md:pb-20'>
+      <h1 className='text-white'>Tryout Saya</h1>
+      <div className='flex w-full justify-center py-8'>
         <div className='w-fit h-fit bg-white p-5 rounded-xl'>
           <Link onClick={()=>setStatus(true)} href='' className={status ? 'bg-blue-dark font-medium text-white w-fit h-fit p-3 mr-3 rounded-xl' : 'bg-blue text-primary w-fit h-fit p-3 mr-3 rounded-xl'}>Belum dikerjakan</Link>
           <Link onClick={()=>setStatus(false)} href='' className={status ? 'bg-blue text-primary w-fit h-fit p-3 rounded-xl' : 'bg-blue-dark font-medium text-white w-fit h-fit p-3 rounded-xl'}>Sudah dikerjakan</Link>
         </div>
       </div>
-      <div className='w-full bg-white px-10 py-8 my-3'>
+      <div className='w-full bg-white px-6 md:px-10 py-8 my-3'>
         <div className='grid grid-cols-1 md:grid-cols-myto place-items-center gap-5 md:gap-7'>
           {myTryoutsData.map((data) => {
             return(

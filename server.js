@@ -66,6 +66,22 @@ app.prepare()
         return app.render(req, res, '/discuss', req.query)
     })
 
+    server.get('/questions', (req, res) => {
+        return app.render(req, res, '/questions', req.query)
+    })
+
+    server.get('/answer', (req, res) => {
+        return app.render(req, res, '/answer', req.query)
+    })
+
+    server.get('/purchase', (req, res) => {
+        return app.render(req, res, '/purchase', req.query)
+    })
+
+    server.get('/payment', (req, res) => {
+        return app.render(req, res, '/payment', req.query)
+    })
+
     server.get('/admin/tryout', (req, res) => {
         loginBlocker(req, res)
         return app.render(req, res, '/admin/tryout', req.query)
