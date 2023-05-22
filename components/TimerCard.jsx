@@ -3,7 +3,7 @@ const TimerCard = ({ timeLeft }) => {
   const minutes = Math.floor((timeLeft % 3600) / 60)
   const seconds = timeLeft % 60
 
-  const setTimeText = (satuan) => (satuan > 10) ? satuan : `0${satuan}`
+  const setTimeText = (satuan) => (satuan >= 10) ? satuan : `0${satuan}`
 
   return (
     <div className='w-28 md:w-full p-2 md:p-5 md:mb-4 bg-white rounded-lg shadow-md'>
