@@ -37,15 +37,15 @@ app.prepare()
         return app.render(req, res, '/index', req.query)
     })
 
-    server.get('/login', (req, res) => {
-        console.log("Login")
-        return app.render(req, res, '/login', req.query)
-    })
+    // server.get('/login', (req, res) => {
+    //     console.log("Login")
+    //     return app.render(req, res, '/login', req.query)
+    // })
 
-    server.get('/register', (req, res) => {
-        console.log("Register")
-        return app.render(req, res, '/register', req.query)
-    })
+    // server.get('/register', (req, res) => {
+    //     console.log("Register")
+    //     return app.render(req, res, '/register', req.query)
+    // })
 
     server.get('/profile', (req, res) => {
         console.log("Profile")
@@ -107,7 +107,31 @@ app.prepare()
         return app.render(req, res, '/result', req.query)
     })
 
-    server.get('/questions', (req, res) => {
+    server.get('/questions/:id', (req, res) => {
+        req.session.soal = []
+
+        let index = 0
+
+        for(let soal of req.session.tryout.subtryout[0].soal) {
+            const tempSoal = {
+                "id": index++,
+                "isi": soal.isi,
+                "jawaban": "",
+                "pilihan": []
+            }
+
+            let indexPilihan = 0
+            for(let pilihan of soal.pilihan) {
+                const tempPilihan = {
+                    "index": String.fromCharCode(65+(indexPilihan++)),
+                    "isi": pilihan,
+                }
+                tempSoal.pilihan = [...tempSoal.pilihan, tempPilihan]
+            }
+
+            req.session.soal = [...req.session.soal, tempSoal]
+        }
+
         return app.render(req, res, '/questions', req.query)
     })
 
@@ -121,6 +145,14 @@ app.prepare()
 
     server.get('/payment', (req, res) => {
         return app.render(req, res, '/payment', req.query)
+    })
+
+    server.get('/login', (req, res) => {
+        return app.render(req, res, '/test-login', req.query)
+    })
+
+    server.get('/register', (req, res) => {
+        return app.render(req, res, '/test-register', req.query)
     })
 
     server.get('/admin/tryout', (req, res) => {
