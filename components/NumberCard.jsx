@@ -10,7 +10,7 @@ const NumberCard = ({ data, select, index, handleClick, button, onClick, href })
             )}
         </div>
         <Link href={href}>
-          <button onClick={''} className='flex md:hidden justify-center w-full h-fit bg-primary font-bold text-white text-center p-3 mt-2 rounded-lg'>{button}</button>
+          <button onClick={onClick} className='flex md:hidden justify-center w-full h-fit bg-primary font-bold text-white text-center p-3 mt-2 rounded-lg'>{button}</button>
         </Link>
     </div>
   )
