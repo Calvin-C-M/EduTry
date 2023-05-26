@@ -2,10 +2,13 @@ import Button from "@/components/Button"
 import { useState } from "react"
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import PersonIcon from '@mui/icons-material/Person';
 export default function Login(){
     const [showPassword, setShowPassword]=useState(false)
-    const [email, setEmail]=useState("")
+    const [username, setUser]=useState("")
     const [password, setPassword]=useState("")
+    const [errorModal, setErrorModal]=useState(false)
     return(
         <div className="flex ">
         <div className="w-1/2 h-[100vh] bg-[url('/banner-1.png')]">
@@ -20,10 +23,8 @@ export default function Login(){
                 <a className="text-white " href="/register">sign up</a>
             </div>
             <div className="relative mt-10">
-                <input onChange={(e)=> setEmail(e.target.value)} value={email} type="email" className="w-full bg-white rounded-sm pl-9 py-2" placeholder="Email"/>
-                <svg className="absolute top-2 left-2" width="21" height="19" viewBox="0 0 23 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M2.71355 20.2285C2.11959 20.2285 1.61113 19.9859 1.18816 19.5007C0.765195 19.0156 0.553711 18.4323 0.553711 17.751V2.88659C0.553711 2.2053 0.765195 1.62208 1.18816 1.13692C1.61113 0.651759 2.11959 0.40918 2.71355 0.40918H19.9922C20.5862 0.40918 21.0947 0.651759 21.5176 1.13692C21.9406 1.62208 22.1521 2.2053 22.1521 2.88659V17.751C22.1521 18.4323 21.9406 19.0156 21.5176 19.5007C21.0947 19.9859 20.5862 20.2285 19.9922 20.2285H2.71355ZM11.3529 11.5575L2.71355 5.364V17.751H19.9922V5.364L11.3529 11.5575ZM11.3529 9.08011L19.9922 2.88659H2.71355L11.3529 9.08011ZM2.71355 5.364V2.88659V17.751V5.364Z" fill="#1C1B1F"/>
-                </svg>
+                <input onChange={(e)=> setUser(e.target.value)} value={username} type="username" className="w-full bg-white rounded-sm pl-9 py-2" placeholder="Username"/>
+                <PersonIcon className="absolute left-2 top-2"/>
 
             </div>
             <div className="relative mt-5">
@@ -40,6 +41,21 @@ export default function Login(){
             <a className="text-center w-full block mt-5 text-white font-extralight text-sm" href="/forget"> Forget Password?</a>
         </div>
         </div>
+        {<div id="popup-modal" tabindex="-1" class="fixed flex items-center justify-center top-0 left-0 right-0 z-50 p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative w-full max-w-md max-h-full">
+                <div class="relative bg-white rounded-lg shadow dark:bg-white">
+                    <button type="button" class="absolute top-3 right-2.5 text-black bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="popup-modal">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                    <div class="p-6 text-center">
+                        <CancelOutlinedIcon className="text-red text-5xl"/>
+                        <h3 class="mb-5 text-lg font-normal text-black dark:text-black">User tidak ditemukan!</h3>
+                    </div>
+                </div>
+            </div>
+        </div>}
+
         </div>
         
     )
