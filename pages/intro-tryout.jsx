@@ -27,9 +27,11 @@ const IntroTryout = ({ data }) => {
         return (
             (data.mytryout.status == "PENDING")
             ||
-            (isDone != undefined)
+            (isDone != undefined && data.mytryout.status != "DONE")
         )
     }
+
+    const tryoutIsFinished = (id) => (data.mytryout.status == "DONE") ? `/answer/${id}` : `/questions/${id}`
 
     return (
         <>
@@ -92,11 +94,11 @@ const IntroTryout = ({ data }) => {
                     {
                         (tryoutSet == "tps") ? <section className="grid grid-cols-2 gap-5 mt-5">
                             {
-                                data.tryout.subtryout.map(subtryout => (subtryout.jenis == "TPS") ? <SubTryoutCard key={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} href={`/questions/${subtryout._id}`} disabled={subtryoutIsDisabled(subtryout._id)} /> : "Tidak ada data")
+                                data.tryout.subtryout.map(subtryout => (subtryout.jenis == "TPS") ? <SubTryoutCard key={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} href={tryoutIsFinished(subtryout._id)} disabled={subtryoutIsDisabled(subtryout._id)} /> : "Tidak ada data")
                             }
                         </section> : <section className="grid grid-cols-2 gap-5 mt-5">
                             {
-                                data.tryout.subtryout.map(subtryout => (subtryout.jenis == "PNM") ? <SubTryoutCard key={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} href={`/questions/${subtryout._id}`} disabled={subtryoutIsDisabled(subtryout._id)} /> : "Tidak ada data")
+                                data.tryout.subtryout.map(subtryout => (subtryout.jenis == "PNM") ? <SubTryoutCard key={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} href={tryoutIsFinished(subtryout._id)} disabled={subtryoutIsDisabled(subtryout._id)} /> : "Tidak ada data")
                             }
                         </section>
                     }
