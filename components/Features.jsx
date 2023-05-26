@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 const Features = () => {
   return (
-    <div id='features' className='text-black w-full px-10 md:px-28 py-3 md:py-8'>
+    <div id='features' className='bg-secondary text-black w-full px-10 md:px-28 py-3 md:py-8'>
         <div>
             <h1 className='mt-6 mb-6 md:mb-12'>Fitur-Fitur EduTry</h1>
         </div>
