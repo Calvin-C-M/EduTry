@@ -143,6 +143,7 @@ app.prepare()
     })
 
     server.get('/answer', (req, res) => {
+
         return app.render(req, res, '/answer', req.query)
     })
 

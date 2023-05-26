@@ -22,6 +22,15 @@ const IntroTryout = ({ data }) => {
         return (totalJam > 0) ? totalJam : "00"
     }
 
+    const subtryoutIsDisabled = (id) => {
+        const isDone = data.mytryout.hasil.find(obj => obj.id_subtryout == id)
+        return (
+            (data.mytryout.status == "PENDING")
+            ||
+            (isDone != undefined)
+        )
+    }
+
     return (
         <>
             <div className="flex flex-col gap-3 mx-20">
@@ -35,9 +44,16 @@ const IntroTryout = ({ data }) => {
                         <p className="max-w-md">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium ad repellat provident perspiciatis aliquid optio, earum dolores, aspernatur iusto vero expedita rerum harum omnis amet molestias eos esse magnam iure!
                         </p>
-                        <Button href={`/questions/${data.tryout.subtryout[0]._id}`}>
-                            Mulai
-                        </Button>
+                        {
+                            (data.mytryout.status == "OPEN") ? 
+                            <Button href={`/questions/${data.tryout.subtryout[0]._id}`}>
+                                Mulai
+                            </Button>
+                            : 
+                            <Button disabled={true}>
+                                Pending
+                            </Button>
+                        }
                     </section>
                     <section className="text-center flex flex-col items-center justify-between gap-3">
                         <section className="flex flex-col gap-3">
@@ -76,11 +92,11 @@ const IntroTryout = ({ data }) => {
                     {
                         (tryoutSet == "tps") ? <section className="grid grid-cols-2 gap-5 mt-5">
                             {
-                                data.tryout.subtryout.map(subtryout => (subtryout.jenis == "TPS") ? <SubTryoutCard key={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} href={`/questions/${subtryout._id}`} /> : "Tidak ada data")
+                                data.tryout.subtryout.map(subtryout => (subtryout.jenis == "TPS") ? <SubTryoutCard key={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} href={`/questions/${subtryout._id}`} disabled={subtryoutIsDisabled(subtryout._id)} /> : "Tidak ada data")
                             }
                         </section> : <section className="grid grid-cols-2 gap-5 mt-5">
                             {
-                                data.tryout.subtryout.map(subtryout => (subtryout.jenis == "PNM") ? <SubTryoutCard key={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} href={`/questions/${subtryout._id}`} /> : "Tidak ada data")
+                                data.tryout.subtryout.map(subtryout => (subtryout.jenis == "PNM") ? <SubTryoutCard key={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} href={`/questions/${subtryout._id}`} disabled={subtryoutIsDisabled(subtryout._id)} /> : "Tidak ada data")
                             }
                         </section>
                     }
