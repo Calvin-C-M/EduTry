@@ -108,6 +108,11 @@ app.prepare()
     })
 
     server.get('/questions/:id', (req, res) => {
+        if(req.session.tryout == null) {
+            req.flash("message", "Buka tryoutnya terlebih dahulu")
+            res.redirect("/my-tryouts")
+        }
+
         req.session.soal = []
 
         let index = 0
@@ -116,6 +121,8 @@ app.prepare()
             const tempSoal = {
                 "id": index++,
                 "isi": soal.isi,
+                "bobot": soal.bobot,
+                "jawaban_asli": soal.jawaban,
                 "jawaban": "",
                 "pilihan": []
             }
@@ -273,6 +280,61 @@ app.prepare()
             
             req.flash('message', 'Pendaftaran berhasil!')
             res.redirect('/login')
+        }
+    })
+
+    server.post('/control/submit', async (req, res) => {
+        /**
+         * [{"id":0,"isi":"Siapakah presiden ke-7 Indonesia","jawaban":"D","pilihan":[{"index":"A","isi":"Soekarno"},{"index":"B","isi":"Megawati"},{"index":"C","isi":"Jokowi"},{"index":"D","isi":"Soeharto"},{"index":"E","isi":"Puan"}]},{"id":1,"isi":"1+1","jawaban":"","pilihan":[{"index":"A","isi":"3"},{"index":"B","isi":"2"},{"index":"C","isi":"1"},{"index":"D","isi":"0"},{"index":"E","isi":null}]}]
+         */
+        /**
+         * req.body = [{
+         *  "id": int
+         *  "isi": string
+         *  "jawaban": string (index),
+         *  "pilihan": [{
+         *      "index": string,
+         *      "isi": string
+         *  }]
+         * }]
+         */
+
+        const hasil = {
+            "id_subtryout": req.body.id_subtryout,
+            "kerjaan": []
+        }
+
+        for(let soal of JSON.parse(req.body.selection)) {
+            const terpilih = soal.pilihan.find(pil => pil.index == soal.jawaban)
+            
+            const tempSoal = {
+                "id": soal.id,
+                "isi": soal.isi,
+                "terpilih": terpilih,
+                "pilihan": soal.pilihan,
+                "skor": (soal.jawaban_asli == terpilih.isi) ? parseFloat(soal.bobot) : 0,
+            }
+
+            hasil.kerjaan = [...hasil.kerjaan, tempSoal]
+        }
+
+        const id = new ObjectId(req.session.mytryout._id)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        try {
+            await database.collection("mytryout").updateOne(
+                { "_id": id },
+                {
+                    $push: {
+                        "hasil": hasil
+                    }
+                } 
+            )
+            res.redirect(`/intro-tryout/${id}`)
+        } catch(err) {
+            console.log(err)
         }
     })
 

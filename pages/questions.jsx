@@ -5,8 +5,6 @@ import NumberCard from '@/components/NumberCard'
 
 export default function Questions({ data }) {
   const soal = data.soal
-  console.log(soal)
-
   const Tryout = data.tryout.nama
   const subTryout = data.tryout.subtryout[0].nama
   const waktu = data.tryout.subtryout[0].waktu_pengerjaan / 60
@@ -64,13 +62,25 @@ export default function Questions({ data }) {
           <div className='flex-none w-full'>
             <TimerCard timeLeft={timeLeft} setTimeLeft={setTimeLeft} />
             <NumberCard data={dataSoal} index={index} select={select} handleClick={handleClick} button={'Submit Jawaban'} onClick={''} href={''} />
-            <button onClick={''} className='hidden md:flex justify-center w-full h-fit bg-white font-bold text-primary text-center p-3 mt-2 rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>Submit Jawaban</button>
+            <form action="/control/submit" method="post">
+              <input 
+                type="hidden" 
+                name="id_subtryout" 
+                value={data.id_subtryout}
+              />
+              <input 
+                type="hidden" 
+                name="selection" 
+                value={JSON.stringify(dataSoal)}
+              />
+              <button type="submit" className='hidden md:flex justify-center w-full h-fit bg-white font-bold text-primary text-center p-3 mt-2 rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>Submit Jawaban</button>
+            </form>
           </div>
         </div>
       </div>
       <div onClick={handleNumCard} className={numCard ? 'md:hidden fixed right-0 top-0 w-full h-screen bg-black/25' : ''} />
       <div className={numCard ? 'md:hidden fixed left-1/2 bottom-0 translate-x-[-50%] translate-y-[-100%] w-[60%]' : 'hidden'}>
-        <NumberCard data={dataSoal} index={index} handleClick={handleClick} button={'Submit Jawaban'} onClick={''} href={''} />
+        <NumberCard data={dataSoal} index={index} handleClick={handleClick} button={'Submit Jawaban'} href={''} />
       </div>
     </div>
   )
@@ -79,7 +89,8 @@ export default function Questions({ data }) {
 export const getServerSideProps = ({ req, res }) => {
   const data = {
     "tryout": req.session.tryout,
-    "soal": req.session.soal
+    "soal": req.session.soal,
+    "id_subtryout": req.params.id
   }
 
   return {
