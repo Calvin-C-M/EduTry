@@ -47,12 +47,15 @@ const IntroTryout = ({ data }) => {
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium ad repellat provident perspiciatis aliquid optio, earum dolores, aspernatur iusto vero expedita rerum harum omnis amet molestias eos esse magnam iure!
                         </p>
                         {
-                            (data.mytryout.status == "OPEN") ? 
-                            <Button href={`/questions/${data.tryout.subtryout[0]._id}`}>
+                            (data.mytryout.status == "OPEN") 
+                            ? <Button href={`/questions/${data.tryout.subtryout[0]._id}`}>
                                 Mulai
                             </Button>
-                            : 
-                            <Button disabled={true}>
+                            : (data.mytryout.status == "DONE")
+                            ? <Button href={`/result/${data.mytryout._id}`}>
+                                Hasil
+                            </Button>
+                            : <Button disabled={true}>
                                 Pending
                             </Button>
                         }
