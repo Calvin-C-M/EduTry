@@ -123,6 +123,7 @@ app.prepare()
                 "isi": soal.isi,
                 "bobot": soal.bobot,
                 "jawaban_asli": soal.jawaban,
+                "pembahasan": soal.pembahasan,
                 "jawaban": "",
                 "pilihan": []
             }
@@ -142,7 +143,15 @@ app.prepare()
         return app.render(req, res, '/questions', req.query)
     })
 
-    server.get('/answer', (req, res) => {
+    server.get('/answer/:id', (req, res) => {
+        const id = new ObjectId(req.params.id)
+
+        if(req.session.mytryout == null || req.session.mytryout == undefined) {
+            req.flash("message", "Buka tryoutnya terlebih dahulu")
+            res.redirect('/my-tryouts')
+        }
+
+        req.session.hasil = req.session.mytryout.hasil.find(obj => obj.id_subtryout == id)
 
         return app.render(req, res, '/answer', req.query)
     })
@@ -312,6 +321,8 @@ app.prepare()
                 "id": soal.id,
                 "isi": soal.isi,
                 "terpilih": terpilih,
+                "jawaban_asli": soal.jawaban_asli,
+                "pembahasan": soal.pembahasan,
                 "pilihan": soal.pilihan,
                 "skor": (soal.jawaban_asli == terpilih.isi) ? parseFloat(soal.bobot) : 0,
             }
