@@ -102,10 +102,6 @@ app.prepare()
         loginBlocker(req, res)
         return app.render(req, res, '/discuss', req.query)
     })
-  
-    server.get('/result', (req, res) => {
-        return app.render(req, res, '/result', req.query)
-    })
 
     server.get('/questions/:id', (req, res) => {
         if(req.session.tryout == null) {
@@ -154,6 +150,42 @@ app.prepare()
         req.session.hasil = req.session.mytryout.hasil.find(obj => obj.id_subtryout == id)
 
         return app.render(req, res, '/answer', req.query)
+    })
+  
+    server.get('/result/:id', (req, res) => {
+        if(req.session.mytryout == null || req.session.mytryout == undefined) {
+            req.flash("message", "Buka tryoutnya terlebih dahulu")
+            res.redirect('/my-tryouts')
+        }
+
+        req.session.statistik = []
+        let i = 0
+
+        for(let hasil of req.session.mytryout.hasil) {
+            const subtryout = req.session.tryout.subtryout.find(obj => hasil.id_subtryout == obj._id)
+            const dataStatistik = {
+                "id": i++,
+                "nama": subtryout.nama,
+                "jenis": subtryout.jenis,
+                "stat": {
+                    "benar": 0,
+                    "salah": 0,
+                    "kosong": 0,
+                    "score": 0
+                }
+            }
+
+            for(let kerjaan of hasil.kerjaan) {
+                dataStatistik.stat.benar += (kerjaan.skor > 0) ? 1 : 0
+                dataStatistik.stat.salah += (kerjaan.skor == 0) ? 1 : 0
+                dataStatistik.stat.kosong += (kerjaan.skor < 0) ? 1 : 0
+                dataStatistik.stat.score += (kerjaan.skor >= 0) ? kerjaan.skor : 0
+            }
+
+            req.session.statistik = [...req.session.statistik, dataStatistik]
+        }
+
+        return app.render(req, res, '/result', req.query)
     })
 
     server.get('/purchase', (req, res) => {

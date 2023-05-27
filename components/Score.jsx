@@ -25,10 +25,10 @@ const Score = ({ name, data }) => {
                     ) : (data.map((data) => 
                         <tr key={data.id}>
                             <td className='p-2 md:p-3 text-sm md:text-base text-left'>{data.nama}</td>
-                            <td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.benar}</td>
-                            <td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.salah}</td>
-                            <td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.kosong}</td>
-                            <td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.score}</td>
+                            <td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.stat.benar}</td>
+                            <td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.stat.salah}</td>
+                            <td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.stat.kosong}</td>
+                            <td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.stat.score}</td>
                         </tr>
                     ))}
                 </tbody>
