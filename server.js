@@ -612,6 +612,7 @@ app.prepare()
 
     server.listen(port, (err) => {
         if(err) throw err
-        console.log(`Server running on https://${hostname}:${port}`)
     })
 })
+
+module.exports = app
