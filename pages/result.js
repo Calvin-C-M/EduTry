@@ -10,7 +10,9 @@ import { CategoryScale } from 'chart.js'
 
 Chart.register(CategoryScale)
 
-export default function Result() {
+export default function Result({ data }) {
+    console.log(data.statistik)
+
     const [status, setStatus] = useState(true)
 
     const dataTPS = [
@@ -45,7 +47,7 @@ export default function Result() {
         id:1, benar:504, salah:424, kosong:327,
     }
 
-    const data = {
+    const dataChart = {
         datasets: [{
             label: 'Total',
             data: [dataStat.benar, dataStat.salah, dataStat.kosong],
@@ -59,12 +61,14 @@ export default function Result() {
     }
 
   return (
-    <div className='w-full px-10 md:px-28 pb-28'>
-        <Link href='/my-tryouts' className='flex items-center text-white p-2'>
-            <ArrowBackIosNewIcon className='mr-5' />
+    <div className='w-full px-10 md:px-28 py-28'>
+        <div className='flex items-center text-white'>
+            <Link href='/' className='p-2 mr-3'>
+                <ArrowBackIosNewIcon />
+            </Link>
             <h1>Hasil Tryout</h1>
-        </Link>
-        <div className='flex w-full justify-center px-0 md:px-10 my-6 md:my-8'>
+        </div>
+        <div className='flex w-full justify-center px-0 md:px-10 py-5 md:py-8'>
             <div className='w-fit h-fit bg-white p-4 rounded-xl'>
                 <button onClick={()=>setStatus(true)} className={status ? 'bg-blue-dark font-medium text-white w-24 h-fit p-2 mr-3 rounded-xl' : 'bg-blue text-primary w-24 h-fit p-2 mr-3 rounded-xl'}>Nilai</button>
                 <button onClick={()=>setStatus(false)} className={status ? 'bg-blue text-primary w-24 h-fit p-2 rounded-xl' : 'bg-blue-dark font-medium text-white w-24 h-fit p-2 rounded-xl'}>Ranking</button>
@@ -73,43 +77,29 @@ export default function Result() {
 
         {status ? (
             <div className='w-full bg-white px-5 md:px-10 py-3 md:py-5 my-3 rounded-lg shadow-md'>
-                <Score name={'TPS'} data={dataTPS} />
-                <Score name={'Literasi & PNM'} data={dataLPNM} />
+                <Score name={'TPS'} data={data.statistik.filter(obj => obj.jenis == "TPS")} />
+                <Score name={'Literasi & PNM'} data={data.statistik.filter(obj => obj.jenis == "LNM")} />
             </div>
         ) : (
             <div>
                 <div className='w-full my-3'>
                     <h1 className='flex justify-center w-full text-white'>Statistik</h1>
                     <div className='md:grid md:grid-cols-3 place-items-center gap-5 w-full h-[475px] md:h-[512px] bg-white px-10 pt-5 pb-40 md:py-12 my-8 rounded-md'>
-                        <div className='hidden md:grid'>
-                            <div className='flex items-center mx-5 mt-3 my-3'>
+                        <div>
+                            <div className='flex items-center mx-2 md:mx-5 mt-3 md:my-3'>
                                 <SquareIcon className='text-green' fontSize='large' />
-                                <p className='px-3'>Benar <span className='font-medium'>{dataStat.benar}</span></p>
+                                <p className='px-1 md:px-3'>Benar <span className='font-medium'>{dataStat.benar}</span></p>
                             </div>
-                            <div className='flex items-center mx-5 mt-3 my-3'>
+                            <div className='flex items-center mx-2 md:mx-5 mt-3 md:my-3'>
                                 <SquareIcon className='text-red' fontSize='large' />
-                                <p className='px-3'>Salah <span className='font-medium'>{dataStat.salah}</span></p>
+                                <p className='px-1 md:px-3'>Salah <span className='font-medium'>{dataStat.salah}</span></p>
                             </div>
-                            <div className='flex items-center mx-5 mt-3 my-3'>
+                            <div className='flex items-center mx-2 md:mx-5 mt-3 md:my-3'>
                                 <SquareIcon className='text-blue-dark' fontSize='large' />
-                                <p className='px-3'>Tidak Dijawab <span className='font-medium'>{dataStat.kosong}</span></p>
+                                <p className='px-1 md:px-3'>Tidak Dijawab <span className='font-medium'>{dataStat.kosong}</span></p>
                             </div>
                         </div>
-                        <Doughnut data={data} className='w-full md:w-4/5' options={{ maintainAspectRatio: false }} />
-                        <div className='md:hidden'>
-                            <div className='flex items-center mx-2 mt-3'>
-                                <SquareIcon className='text-green' fontSize='large' />
-                                <p className='px-1'>Benar <span className='font-medium'>{dataStat.benar}</span></p>
-                            </div>
-                            <div className='flex items-center mx-2 mt-3'>
-                                <SquareIcon className='text-red' fontSize='large' />
-                                <p className='px-1'>Salah <span className='font-medium'>{dataStat.salah}</span></p>
-                            </div>
-                            <div className='flex items-center mx-2 mt-3'>
-                                <SquareIcon className='text-blue-dark' fontSize='large' />
-                                <p className='px-1'>Tidak Dijawab <span className='font-medium'>{dataStat.kosong}</span></p>
-                            </div>
-                        </div>
+                        <Doughnut data={dataChart} className='w-full md:w-4/5' options={{ maintainAspectRatio: false }} />
                     </div>
                 </div>
                 <Rank data={dataRank} />
@@ -117,4 +107,15 @@ export default function Result() {
         )}
     </div>
   )
+}
+
+export const getServerSideProps = ({ req,res }) => {
+    const data = {
+        "mytryout": req.session.mytryout,
+        "statistik": req.session.statistik
+    }
+
+    return {
+        props: { data }
+    }
 }
