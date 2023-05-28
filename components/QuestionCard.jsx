@@ -1,20 +1,20 @@
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 
-const QuestionCard = ({ key, allData, data, index, select, handleSelect, handleClick, handleNumCard }) => {
+const QuestionCard = ({ key, noSoal, allData, data, index, select, handleSelect, handleClick, handleNumCard }) => {
     return (
     <div key={key} className='w-full h-fit bg-white px-8 py-5 rounded-lg shadow-md'>
         <div className='flex justify-between md:justify-start items-center w-full my-2'>
-            <p className='text-primary font-bold text-lg md:text-xl'>{data.judul}</p>
+            <p className='text-primary font-bold text-lg md:text-xl'>Soal {noSoal}</p>
             <button onClick={handleNumCard} className='flex md:hidden items-center w-fit h-full bg-primary px-3 py-1 font-medium text-sm text-white'>Nomor Soal</button>
         </div>
-        <p className='w-full text-black text-justify my-4'>{data.soal}</p>
+        <p className='w-full text-black text-justify my-4'>{data.isi}</p>
         <div className='w-full my-1'>
-            <button onClick={() => handleSelect('A')} className={select == data.pilihan[0].id ? 'w-full bg-blue-dark border-2 border-blue-dark text-white px-3 py-2 my-1 text-left hover:brightness-110 transition-all duration-100' : 'w-full border-2 bg-white border-primary text-primary px-3 py-2 my-1 text-left hover:bg-blue-100 transition-all duration-100'}>{data.pilihan[0].id}. {data.pilihan[0].name}</button>
-            <button onClick={() => handleSelect('B')} className={select == data.pilihan[1].id ? 'w-full bg-blue-dark border-2 border-blue-dark text-white px-3 py-2 my-1 text-left hover:brightness-110 transition-all duration-100' : 'w-full border-2 bg-white border-primary text-primary px-3 py-2 my-1 text-left hover:bg-blue-100 transition-all duration-100'}>{data.pilihan[1].id}. {data.pilihan[1].name}</button>
-            <button onClick={() => handleSelect('C')} className={select == data.pilihan[2].id ? 'w-full bg-blue-dark border-2 border-blue-dark text-white px-3 py-2 my-1 text-left hover:brightness-110 transition-all duration-100' : 'w-full border-2 bg-white border-primary text-primary px-3 py-2 my-1 text-left hover:bg-blue-100 transition-all duration-100'}>{data.pilihan[2].id}. {data.pilihan[2].name}</button>
-            <button onClick={() => handleSelect('D')} className={select == data.pilihan[3].id ? 'w-full bg-blue-dark border-2 border-blue-dark text-white px-3 py-2 my-1 text-left hover:brightness-110 transition-all duration-100' : 'w-full border-2 bg-white border-primary text-primary px-3 py-2 my-1 text-left hover:bg-blue-100 transition-all duration-100'}>{data.pilihan[3].id}. {data.pilihan[3].name}</button>
-            <button onClick={() => handleSelect('E')} className={select == data.pilihan[4].id ? 'w-full bg-blue-dark border-2 border-blue-dark text-white px-3 py-2 my-1 text-left hover:brightness-110 transition-all duration-100' : 'w-full border-2 bg-white border-primary text-primary px-3 py-2 my-1 text-left hover:bg-blue-100 transition-all duration-100'}>{data.pilihan[4].id}. {data.pilihan[4].name}</button>
+            <button onClick={() => handleSelect('A')} className={select == data.pilihan[0].index ? 'w-full bg-blue-dark border-2 border-blue-dark text-white px-3 py-2 my-1 text-left hover:brightness-110 transition-all duration-100' : 'w-full border-2 bg-white border-primary text-primary px-3 py-2 my-1 text-left hover:bg-blue-100 transition-all duration-100'}>{data.pilihan[0].index}. {data.pilihan[0].isi}</button>
+            <button onClick={() => handleSelect('B')} className={select == data.pilihan[1].index ? 'w-full bg-blue-dark border-2 border-blue-dark text-white px-3 py-2 my-1 text-left hover:brightness-110 transition-all duration-100' : 'w-full border-2 bg-white border-primary text-primary px-3 py-2 my-1 text-left hover:bg-blue-100 transition-all duration-100'}>{data.pilihan[1].index}. {data.pilihan[1].isi}</button>
+            <button onClick={() => handleSelect('C')} className={select == data.pilihan[2].index ? 'w-full bg-blue-dark border-2 border-blue-dark text-white px-3 py-2 my-1 text-left hover:brightness-110 transition-all duration-100' : 'w-full border-2 bg-white border-primary text-primary px-3 py-2 my-1 text-left hover:bg-blue-100 transition-all duration-100'}>{data.pilihan[2].index}. {data.pilihan[2].isi}</button>
+            <button onClick={() => handleSelect('D')} className={select == data.pilihan[3].index ? 'w-full bg-blue-dark border-2 border-blue-dark text-white px-3 py-2 my-1 text-left hover:brightness-110 transition-all duration-100' : 'w-full border-2 bg-white border-primary text-primary px-3 py-2 my-1 text-left hover:bg-blue-100 transition-all duration-100'}>{data.pilihan[3].index}. {data.pilihan[3].isi}</button>
+            <button onClick={() => handleSelect('E')} className={select == data.pilihan[4].index ? 'w-full bg-blue-dark border-2 border-blue-dark text-white px-3 py-2 my-1 text-left hover:brightness-110 transition-all duration-100' : 'w-full border-2 bg-white border-primary text-primary px-3 py-2 my-1 text-left hover:bg-blue-100 transition-all duration-100'}>{data.pilihan[4].index}. {data.pilihan[4].isi}</button>
         </div>
         <div className='flex justify-between items-center w-full mt-6 mb-3'>
             {index > 0 ? (

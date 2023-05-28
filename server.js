@@ -37,15 +37,15 @@ app.prepare()
         return app.render(req, res, '/index', req.query)
     })
 
-    server.get('/login', (req, res) => {
-        console.log("Login")
-        return app.render(req, res, '/login', req.query)
-    })
+    // server.get('/login', (req, res) => {
+    //     console.log("Login")
+    //     return app.render(req, res, '/login', req.query)
+    // })
 
-    server.get('/register', (req, res) => {
-        console.log("Register")
-        return app.render(req, res, '/register', req.query)
-    })
+    // server.get('/register', (req, res) => {
+    //     console.log("Register")
+    //     return app.render(req, res, '/register', req.query)
+    // })
 
     server.get('/profile', (req, res) => {
         console.log("Profile")
@@ -62,9 +62,30 @@ app.prepare()
         return app.render(req, res, '/dashboard', req.query)
     })
 
-    server.get('/intro-tryout', (req, res) => {
-        loginBlocker(req, res)
-        return app.render(req, res, '/intro-tryout', req.query)
+    server.get('/intro-tryout/:id', (req, res) => {
+        const id = req.params.id
+
+        fetch(`${baseUrl}/api/mytryout/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.mytryout = data
+                fetch(`${baseUrl}/api/tryout/${data.id_tryout}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        req.session.tryout = data
+                        return app.render(req, res, '/intro-tryout', req.query)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        req.flash("error_message", "Ada kesalahan dalam fetch API")
+                        res.redirect('/my-tryouts')                                
+                    })
+            })
+            .catch(err => {
+                console.log(err)
+                req.flash("error_message", "Ada kesalahan dalam fetch API")
+                res.redirect('/my-tryouts')
+            })
     })
 
     server.get('/tryouts', (req, res) => {
@@ -81,17 +102,90 @@ app.prepare()
         loginBlocker(req, res)
         return app.render(req, res, '/discuss', req.query)
     })
-  
-    server.get('/result', (req, res) => {
-        return app.render(req, res, '/result', req.query)
-    })
 
-    server.get('/questions', (req, res) => {
+    server.get('/questions/:id', (req, res) => {
+        if(req.session.tryout == null) {
+            req.flash("message", "Buka tryoutnya terlebih dahulu")
+            res.redirect("/my-tryouts")
+        }
+
+        req.session.soal = []
+
+        let index = 0
+
+        for(let soal of req.session.tryout.subtryout[0].soal) {
+            const tempSoal = {
+                "id": index++,
+                "isi": soal.isi,
+                "bobot": soal.bobot,
+                "jawaban_asli": soal.jawaban,
+                "pembahasan": soal.pembahasan,
+                "jawaban": "",
+                "pilihan": []
+            }
+
+            let indexPilihan = 0
+            for(let pilihan of soal.pilihan) {
+                const tempPilihan = {
+                    "index": String.fromCharCode(65+(indexPilihan++)),
+                    "isi": pilihan,
+                }
+                tempSoal.pilihan = [...tempSoal.pilihan, tempPilihan]
+            }
+
+            req.session.soal = [...req.session.soal, tempSoal]
+        }
+
         return app.render(req, res, '/questions', req.query)
     })
 
-    server.get('/answer', (req, res) => {
+    server.get('/answer/:id', (req, res) => {
+        const id = new ObjectId(req.params.id)
+
+        if(req.session.mytryout == null || req.session.mytryout == undefined) {
+            req.flash("message", "Buka tryoutnya terlebih dahulu")
+            res.redirect('/my-tryouts')
+        }
+
+        req.session.hasil = req.session.mytryout.hasil.find(obj => obj.id_subtryout == id)
+
         return app.render(req, res, '/answer', req.query)
+    })
+  
+    server.get('/result/:id', (req, res) => {
+        if(req.session.mytryout == null || req.session.mytryout == undefined) {
+            req.flash("message", "Buka tryoutnya terlebih dahulu")
+            res.redirect('/my-tryouts')
+        }
+
+        req.session.statistik = []
+        let i = 0
+
+        for(let hasil of req.session.mytryout.hasil) {
+            const subtryout = req.session.tryout.subtryout.find(obj => hasil.id_subtryout == obj._id)
+            const dataStatistik = {
+                "id": i++,
+                "nama": subtryout.nama,
+                "jenis": subtryout.jenis,
+                "stat": {
+                    "benar": 0,
+                    "salah": 0,
+                    "kosong": 0,
+                    "score": 0
+                }
+            }
+
+            for(let kerjaan of hasil.kerjaan) {
+                dataStatistik.stat.benar += (kerjaan.skor > 0) ? 1 : 0
+                dataStatistik.stat.salah += (kerjaan.skor == 0) ? 1 : 0
+                dataStatistik.stat.kosong += (kerjaan.skor < 0) ? 1 : 0
+                dataStatistik.stat.score += (kerjaan.skor >= 0) ? kerjaan.skor : 0
+            }
+
+            req.session.statistik = [...req.session.statistik, dataStatistik]
+        }
+
+        return app.render(req, res, '/result', req.query)
     })
 
     server.get('/purchase', (req, res) => {
@@ -102,6 +196,14 @@ app.prepare()
         return app.render(req, res, '/payment', req.query)
     })
 
+    server.get('/login', (req, res) => {
+        return app.render(req, res, '/test-login', req.query)
+    })
+
+    server.get('/register', (req, res) => {
+        return app.render(req, res, '/test-register', req.query)
+    })
+  
     server.get('/upload-payment-proof', (req, res) => {
         return app.render(req, res, '/payment', req.query)
     })
@@ -224,6 +326,63 @@ app.prepare()
             
             req.flash('message', 'Pendaftaran berhasil!')
             res.redirect('/login')
+        }
+    })
+
+    server.post('/control/submit', async (req, res) => {
+        /**
+         * [{"id":0,"isi":"Siapakah presiden ke-7 Indonesia","jawaban":"D","pilihan":[{"index":"A","isi":"Soekarno"},{"index":"B","isi":"Megawati"},{"index":"C","isi":"Jokowi"},{"index":"D","isi":"Soeharto"},{"index":"E","isi":"Puan"}]},{"id":1,"isi":"1+1","jawaban":"","pilihan":[{"index":"A","isi":"3"},{"index":"B","isi":"2"},{"index":"C","isi":"1"},{"index":"D","isi":"0"},{"index":"E","isi":null}]}]
+         */
+        /**
+         * req.body = [{
+         *  "id": int
+         *  "isi": string
+         *  "jawaban": string (index),
+         *  "pilihan": [{
+         *      "index": string,
+         *      "isi": string
+         *  }]
+         * }]
+         */
+
+        const hasil = {
+            "id_subtryout": req.body.id_subtryout,
+            "kerjaan": []
+        }
+
+        for(let soal of JSON.parse(req.body.selection)) {
+            const terpilih = soal.pilihan.find(pil => pil.index == soal.jawaban)
+            
+            const tempSoal = {
+                "id": soal.id,
+                "isi": soal.isi,
+                "terpilih": terpilih,
+                "jawaban_asli": soal.jawaban_asli,
+                "pembahasan": soal.pembahasan,
+                "pilihan": soal.pilihan,
+                "skor": (soal.jawaban_asli == terpilih.isi) ? parseFloat(soal.bobot) : 0,
+            }
+
+            hasil.kerjaan = [...hasil.kerjaan, tempSoal]
+        }
+
+        const id = new ObjectId(req.session.mytryout._id)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        try {
+            await database.collection("mytryout").updateOne(
+                { "_id": id },
+                {
+                    $push: {
+                        "hasil": hasil
+                    }
+                } 
+            )
+            res.redirect(`/intro-tryout/${id}`)
+        } catch(err) {
+            console.log(err)
         }
     })
 
@@ -397,7 +556,7 @@ app.prepare()
         const result = {
             "_id" : tryoutData._id,
             "nama" : tryoutData.nama,
-            "created_by" : tryoutData.created_by,
+            "created_at" : tryoutData.created_at,
             "deadline" : tryoutData.deadline,
             "harga" : tryoutData.harga,
             "status" : tryoutData.status,
@@ -423,6 +582,22 @@ app.prepare()
             }
 
             result.subtryout = [...result.subtryout, subtryoutRes]
+        }
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/mytryout/:id', async (req, res) => {
+        const id = new ObjectId(req.params.id)
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const myTryoutData = await database.collection("mytryout").findOne({ "_id": id })
+
+        const result = {
+            "_id": myTryoutData._id,
+            "id_tryout": myTryoutData.id_tryout,
+            "status": myTryoutData.status,
+            "hasil": myTryoutData.hasil,
         }
 
         res.send(result).status(200)

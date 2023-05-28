@@ -1,39 +1,44 @@
-import Navbar from "@/components/Navbar";
 import Button from "@/components/Button";
 import GroupsIcon from '@mui/icons-material/Groups';
 import TimeBubble from "@/components/TimeBubble";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SubTryoutCard from "@/components/SubTryoutCard";
 
-const IntroTryout = () => {
-    const [tryout,setTryout] = useState("tps")
+const IntroTryout = ({ data }) => {
+    const [tryoutSet, setTryoutSet] = useState("tps")
 
-    const testTpsData = [
-        { id: 1, judul: "Penalaran Induktif", soal: 10, waktu: 20, href: "" },
-        { id: 2, judul: "Penalaran Induktif", soal: 10, waktu: 20, href: ""  },
-        { id: 3, judul: "Penalaran Induktif", soal: 10, waktu: 20, href: ""  },
-        { id: 4, judul: "Penalaran Induktif", soal: 10, waktu: 20, href: ""  },
-        { id: 5, judul: "Penalaran Induktif", soal: 10, waktu: 20, href: ""  },
-        { id: 6, judul: "Penalaran Induktif", soal: 10, waktu: 20, href: ""  },
+    const getMenitPengerjaan = () => {
+        let totalWaktu = 0
+        for(let subtryout of data.tryout.subtryout) {
+            totalWaktu += subtryout.waktu_pengerjaan
+        }
+        return totalWaktu % 60
+    }
 
-    ]
+    const getJamPengerjaan = () => {
+        const totalMenit = getMenitPengerjaan()
+        const totalJam = Math.floor(totalMenit / 60)
 
-    const testLiterasiData = [
-        { id: 1, judul: "Bahasa", soal: 10, waktu: 20, href: ""  },
-        { id: 2, judul: "Bahasa", soal: 10, waktu: 20, href: ""  },
-        { id: 3, judul: "Bahasa", soal: 10, waktu: 20, href: ""  },
-        { id: 4, judul: "Bahasa", soal: 10, waktu: 20, href: ""  },
-        { id: 5, judul: "Bahasa", soal: 10, waktu: 20, href: ""  },
-        { id: 6, judul: "Bahasa", soal: 10, waktu: 20, href: ""  },
-    ]
+        return (totalJam > 0) ? totalJam : "00"
+    }
+
+    const subtryoutIsDisabled = (id) => {
+        const isDone = data.mytryout.hasil.find(obj => obj.id_subtryout == id)
+        return (
+            (data.mytryout.status == "PENDING")
+            ||
+            (isDone != undefined && data.mytryout.status != "DONE")
+        )
+    }
+
+    const tryoutIsFinished = (id) => (data.mytryout.status == "DONE") ? `/answer/${id}` : `/questions/${id}`
 
     return (
         <>
-            {/* <Navbar /> */}
             <div className="flex flex-col gap-3 mx-20">
                 <section className="flex justify-between gap-10 bg-white rounded-lg px-14 py-12">
                     <section className="flex flex-col gap-3">
-                        <h1 className="text-primary">Tryout #1</h1>
+                        <h1 className="text-primary">{data.tryout.nama}</h1>
                         <span className="flex items-center gap-2 font-light">
                             <GroupsIcon />
                             EduTry System
@@ -41,20 +46,30 @@ const IntroTryout = () => {
                         <p className="max-w-md">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium ad repellat provident perspiciatis aliquid optio, earum dolores, aspernatur iusto vero expedita rerum harum omnis amet molestias eos esse magnam iure!
                         </p>
-                        <Button>
-                            Mulai
-                        </Button>
+                        {
+                            (data.mytryout.status == "OPEN") 
+                            ? <Button href={`/questions/${data.tryout.subtryout[0]._id}`}>
+                                Mulai
+                            </Button>
+                            : (data.mytryout.status == "DONE")
+                            ? <Button href={`/result/${data.mytryout._id}`}>
+                                Hasil
+                            </Button>
+                            : <Button disabled={true}>
+                                Pending
+                            </Button>
+                        }
                     </section>
                     <section className="text-center flex flex-col items-center justify-between gap-3">
                         <section className="flex flex-col gap-3">
                             <h3>Masa Pengerjaan</h3>
-                            <span>dd/mm/yyyy - dd/mm/yyyy</span>
+                            <span>{data.tryout.created_at} - {data.tryout.deadline}</span>
                         </section>
                         <section className="flex flex-col gap-3">
                             <h3>Durasi Pengerjaan</h3>
                             <section className="flex items-center gap-3">
-                                <TimeBubble satuan="Jam" nilai="00" />
-                                <TimeBubble satuan="Menit" nilai="00" />
+                                <TimeBubble satuan="Jam" nilai={getJamPengerjaan()} />
+                                <TimeBubble satuan="Menit" nilai={getMenitPengerjaan()} />
                                 <TimeBubble satuan="Detik" nilai="00" />
                             </section>
                         </section>
@@ -66,39 +81,45 @@ const IntroTryout = () => {
                             className={
                                 "text-primary w-64 border-b-2 px-10 hover:font-bold hover:border-b-primary hover:cursor-pointer transition-all duration-100 " 
                                 +
-                                ((tryout == "tps") ? "border-b-primary" : "font-normal")
+                                ((tryoutSet == "tps") ? "border-b-primary" : "font-normal")
                             }
-                            onClick={() => setTryout("tps")}
+                            onClick={() => setTryoutSet("tps")}
                         >TPS</h2>
                         <h2 
                             className={
                                 "text-primary w-64 font-normal border-b-2 px-10 hover:font-bold hover:border-b-primary hover:cursor-pointer transition-all duration-100 "
                                 +
-                                ((tryout == "literasi") ? "border-b-primary" : "font-normal")
+                                ((tryoutSet == "literasi") ? "border-b-primary" : "font-normal")
                             }
-                            onClick={() => setTryout("literasi")}
+                            onClick={() => setTryoutSet("literasi")}
                         >Literasi & PNM</h2>
                     </div>
                     {
-                        (tryout == "tps") ? <section className="grid grid-cols-2 gap-5 mt-5">
+                        (tryoutSet == "tps") ? <section className="grid grid-cols-2 gap-5 mt-5">
                             {
-                                testTpsData.map(data => <SubTryoutCard key={data.id} judul={data.judul} waktu={data.waktu} soal={data.soal} href="" />)
+                                data.tryout.subtryout.map(subtryout => (subtryout.jenis == "TPS") ? <SubTryoutCard key={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} href={tryoutIsFinished(subtryout._id)} disabled={subtryoutIsDisabled(subtryout._id)} /> : "Tidak ada data")
                             }
                         </section> : <section className="grid grid-cols-2 gap-5 mt-5">
                             {
-                                testLiterasiData.map(data => <SubTryoutCard key={data.id} judul={data.judul} waktu={data.waktu} soal={data.soal} href=""  />)
+                                data.tryout.subtryout.map(subtryout => (subtryout.jenis == "PNM") ? <SubTryoutCard key={subtryout._id} judul={subtryout.nama} waktu={subtryout.waktu_pengerjaan} soal={subtryout.soal.length} href={tryoutIsFinished(subtryout._id)} disabled={subtryoutIsDisabled(subtryout._id)} /> : "Tidak ada data")
                             }
                         </section>
                     }
-                    {/* <section className="grid grid-cols-2 gap-5 mt-5">
-                        <SubTryoutCard judul="Penalaran Umum" waktu="20" soal="20" href="" />
-                        <SubTryoutCard judul="Penalaran Umum" waktu="20" soal="20" href="" />
-                        <SubTryoutCard judul="Penalaran Umum" waktu="20" soal="20" href="" />
-                    </section> */}
                 </section>
             </div>
         </>
     );
+}
+
+export const getServerSideProps = ({ req, res }) => {
+    const data = {
+        "mytryout": req.session.mytryout,
+        "tryout": req.session.tryout
+    }
+
+    return {
+        props: { data }
+    }
 }
  
 export default IntroTryout;
