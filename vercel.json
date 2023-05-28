@@ -1,7 +1,9 @@
 {
     "version": 2,
-    "rewrites": {
-        "source": "/pages/(.*)",
-        "destination": "/"
-    }
+    "rewrites": [
+        {
+            "source": "/pages/(.*)",
+            "destination": "/"
+        }
+    ]
 }
