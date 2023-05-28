@@ -20,7 +20,7 @@ const Navbar = () => {
     <div className='fixed w-full h-20 px-10 md:px-16 shadow-md bg-white'>
         <div className='flex justify-between items-center h-full'>
             <div className='flex justify-between items-center'>
-                <Link href=''>
+                <Link href='/'>
                     <Image src={Logo} alt='edutry logo' className='w-[86px] h-[27px] md:w-[96px] md:h-[37px]' />
                 </Link>
                 <form className='hidden md:hidden w-96 px-8'>
@@ -34,20 +34,20 @@ const Navbar = () => {
             </div>
             <div className='hidden md:flex items-center'>
                 <ul className='flex items-center font-medium text-gray-dark mx-3'>
-                    <Link href='#about' className='flex-none py-1 mx-7'>
+                    <Link href='/#about' className='flex-none my-1 mx-7'>
                         <li className={router.asPath == '/' || router.asPath == '/#about' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Tentang Edutry</li>
                     </Link>
-                    <Link href='#features' className='py-1 mx-7'>
+                    <Link href='/#features' className='my-1 mx-7'>
                         <li className={router.asPath == '/#features' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Fitur</li>
                     </Link>
-                    <Link href='#contact' className='py-1 mx-7'>
+                    <Link href='/#contact' className='my-1 mx-7'>
                         <li className={router.asPath == '/#contact' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Kontak</li>
                     </Link>
                     <div className='flex-none'>
-                        <Link href='/'>
+                        <Link href='/login'>
                             <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>Login</button>
                         </Link>
-                        <Link href='/'>
+                        <Link href='/register'>
                             <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>Sign Up</button>
                         </Link>
                     </div>
@@ -55,16 +55,16 @@ const Navbar = () => {
             </div>
             <div className='hidden md:hidden items-center'>
                 <ul className='flex items-center font-medium text-gray-dark mx-3'>
-                    <Link href='/dashboard' className='py-1 mx-7'>
+                    <Link href='/dashboard' className='my-1 mx-7'>
                         <li className={router.asPath == '/dashboard' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Dashboard</li>
                     </Link>
-                    <Link href='/tryouts' className='py-1 mx-7'>
+                    <Link href='/tryouts' className='my-1 mx-7'>
                         <li className={router.asPath == '/tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Paket TO</li>
                     </Link>
-                    <Link href='/my-tryouts' className='py-1 mx-7'>
+                    <Link href='/my-tryouts' className='my-1 mx-7'>
                         <li className={router.asPath == '/my-tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>My Tryout</li>
                     </Link>
-                    <div className='flex-none pl-6'>
+                    <div className='flex-none ml-6'>
                         <Link href='/profile'>
                             <Image src={Profile} alt='Profile Picture' className='w-12 h-12 rounded-full' />
                         </Link>
@@ -85,19 +85,19 @@ const Navbar = () => {
             </div>
             <div className='flex justify-end m-5'>
                 <ul className='font-medium text-gray-dark'>
-                    <Link href='#about' className='flex justify-end py-5'>
+                    <Link href='/#about' className='flex justify-end my-5'>
                         <li className={router.asPath == '/' || router.asPath == '/#about' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Tentang Edutry</li>
                     </Link>
-                    <Link href='#features' className='flex justify-end py-5'>
+                    <Link href='/#features' className='flex justify-end my-5'>
                         <li className={router.asPath == '/#features' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Fitur</li>
                     </Link>
-                    <Link href='#contact' className='flex justify-end py-5'>
+                    <Link href='/#contact' className='flex justify-end my-5'>
                         <li className={router.asPath == '/#contact' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Kontak</li>
                     </Link>
-                    <Link href='/' className='flex justify-end pt-3'>
+                    <Link href='/login' className='flex justify-end mt-3'>
                         <button className='bg-blue-light px-7 py-[6px] font-medium text-primary'>Login</button>
                     </Link>
-                    <Link href='/' className='flex justify-end pt-3'>
+                    <Link href='/register' className='flex justify-end mt-3'>
                         <button className='bg-blue-light px-7 py-[6px] font-medium text-primary'>Sign Up</button>
                     </Link>
                 </ul>

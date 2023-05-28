@@ -1,5 +1,6 @@
 import React from 'react'
 import QR from '@/public/qr.png'
+import Image from 'next/image'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew'
 import Link from 'next/link'
 import PaymentInstructions from '@/components/PaymentInstructions'
@@ -21,14 +22,14 @@ export default function Payment() {
                 <div className='md:hidden mt-4'>
                     <PaymentInstructions data={data} />
                     <div className='w-full mt-6'>
-                        <img src={QR} width='100%' alt='QR Code' />
+                        <Image src={QR} alt='QR Code' />
                     </div>
                 </div>
-                <button onClick='' className='bg-white font-bold text-primary flex items-center justify-center w-full h-fit p-3 my-6 text-sm md:text-base rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>
+                <button onClick='' className='bg-white font-bold text-primary flex items-center justify-center w-full h-fit p-3 mt-6 mb-4 text-sm md:text-base rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>
                     Batalkan Transaksi
                 </button>
-                <Link href='/upload-payment'>
-                    <button onClick='' className='bg-white font-bold text-primary flex items-center justify-center w-full h-fit p-3 my-6 text-sm md:text-base rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>
+                <Link href='/upload-payment-proof'>
+                    <button className='bg-white font-bold text-primary flex items-center justify-center w-full h-fit p-3 text-sm md:text-base rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>
                         Upload Bukti Bayar
                     </button>
                 </Link>
