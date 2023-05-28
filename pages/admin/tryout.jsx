@@ -11,19 +11,19 @@ const Tryout = () => {
     const [tryouts, setTryouts] = useState([])
     const [showFormModal, setShowFormModal] = useState(false)
 
-    const url = getBaseUrl()
-
-    const getTryouts = () => {
-        axios({
-            method: "get",
-            url: `${url}/api/tryouts`,
-        }).then(res => {
-            const tryout = res.data
-            setTryouts(tryout)
-        }).catch(err => console.log(err))
-    }
-
     useEffect(() => {
+        const url = getBaseUrl()
+
+        const getTryouts = () => {
+            axios({
+                method: "get",
+                url: `${url}/api/tryouts`,
+            }).then(res => {
+                const tryout = res.data
+                setTryouts(tryout)
+            }).catch(err => console.log(err))
+        }
+
         getTryouts()
     }, [])
 

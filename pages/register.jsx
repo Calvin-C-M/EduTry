@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Button from "@/components/Button"
 import { useState } from "react"
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
@@ -15,9 +16,9 @@ export default function Register(){
         <div className='w-1/2 px-10 md:px-28 pt-8 md:pt-20 bg-primary h-[100vh] flex justify-center items-center'>
         <div className="px-[50px] bg-blue-dark py-[25px] w-3/5 rounded">
             <div className="flex justify-between">
-                <a className="text-white" href="/login">
+                <Link className="text-white" href="/login">
                     Login
-                </a>
+                </Link>
                 <p className="border-b-2 px-2 text-white font-bold">sign up</p>
             </div>
             <div className="relative mt-10">
@@ -46,7 +47,9 @@ export default function Register(){
             <Button className="w-full mt-5">
                 Sign Up
             </Button>
-            <a className="text-center w-full block mt-5 text-white font-extralight text-sm" href="/login"> Have an account? Login</a>
+            <Link className="text-center w-full block mt-5 text-white font-extralight text-sm" href="/login"> 
+                Have an account? Login
+            </Link>
         </div>
         </div>
         </div>

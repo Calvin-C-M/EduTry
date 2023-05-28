@@ -24,7 +24,7 @@ const Rank = ({ data }) => {
 									<td className='p-2 md:p-3 text-sm md:text-base text-center'>-</td>
 								</tr>
 							) : (data.map((data) => 
-								<tr>
+								<tr key={data.id}>
 									<td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.id}</td>
 									<td className='p-2 md:p-3 text-sm md:text-base text-left'>{data.nama}</td>
 									<td className='p-2 md:p-3 text-sm md:text-base text-center'>{data.pilihan}</td>

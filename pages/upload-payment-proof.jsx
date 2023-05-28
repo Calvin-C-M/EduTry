@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
@@ -42,7 +43,7 @@ export default function UploadPaymentProof() {
           <h2 className='text-primary'>Upload Gambar</h2>
           {selectedImage && (
             <div>
-              <img src={selectedImage} alt='Bukti Pembayaran' className='my-6 md:my-10' />
+              <Image src={selectedImage} alt='Bukti Pembayaran' className='my-6 md:my-10' />
             </div>
           )}
 

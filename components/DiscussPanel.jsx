@@ -22,7 +22,7 @@ const DiscussPanel = ({ data, handle }) => {
         </div>
         {comment ? (
             <div className='w-full h-fit'>
-                {data.comments.map((comment) => <DiscussCard username={comment.username} message={comment.message} />)}
+                {data.comments.map((comment) => <DiscussCard key={comment.id} username={comment.username} message={comment.message} />)}
             </div>
         ) : ('')}
     </div>

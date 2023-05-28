@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import React, { useState, useEffect } from 'react'
 import ContentCopyIcon from '@mui/icons-material/ContentCopy'
 
@@ -27,7 +28,7 @@ const PaymentCard = ({ data }) => {
                 <p>Sisa Waktu Pembayaran</p>
                 <p className='font-bold mt-1 md:mt-2'>{hours}:{minutes}:{seconds}</p>
             </div>
-            <img src={data.logo} alt='Payment Method Logo' className='w-[30%] md:w-32' />
+            <Image src={data.logo} alt='Payment Method Logo' className='w-[30%] md:w-32' />
         </div>
         <div className='w-full p-3 border-b-2 border-black'>
             <p className='text-base md:text-lg font-bold'>Pembayaran</p>

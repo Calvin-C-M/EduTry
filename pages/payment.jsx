@@ -37,7 +37,11 @@ export default function Payment() {
             <div className='hidden md:grid h-fit'>
                 <PaymentInstructions data={data} />
                 <div className='w-full mt-6'>
-                    <img src={QR} width='100%' alt='QR Code' />
+                    <Image 
+                        src={QR}
+                        width='100%'
+                        alt="QR CODE"
+                    />
                 </div>
             </div>
         </div>

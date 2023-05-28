@@ -33,7 +33,7 @@ export default function Discuss() {
             }
         }
         window.addEventListener('scroll', handleScroll)
-    }, [])
+    }, [scroll])
 
   return (
     <>
@@ -49,7 +49,7 @@ export default function Discuss() {
                     Tanya Soal
                 </button>
             </div>
-            {discussData.map((data) => <DiscussPanel data={data} handle={handleComment} />)}
+            {discussData.map((data) => <DiscussPanel key={data.id} data={data} handle={handleComment} />)}
             <div className={scroll ? 'fixed md:hidden left-1/2 translate-x-[-50%] bottom-[-10%] w-4/5 mt-3 ease-in duration-200' : 'fixed md:hidden left-1/2 translate-x-[-50%] bottom-8 w-4/5 mt-3 ease-in duration-200'}>
                 <button onClick={handleModal} className='bg-blue-dark font-bold text-white shadow-lg flex items-center justify-center w-full h-fit px-3 md:px-5 py-2 text-sm md:text-base hover:bg-blue-100 transition-all duration-100'>
                     Tanya Soal

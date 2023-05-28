@@ -1,7 +1,9 @@
+import Link from "next/link";
 import Button from "@/components/Button"
 import { useState } from "react"
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+
 export default function Login(){
     const [showPassword, setShowPassword]=useState(false)
     const [email, setEmail]=useState("")
@@ -17,7 +19,9 @@ export default function Login(){
                 <p className="border-b-2 px-2 text-white font-bold">
                     Login
                 </p>
-                <a className="text-white " href="/register">sign up</a>
+                <Link className="text-white" href="/register">
+                    Sign Up
+                </Link>
             </div>
             <div className="relative mt-10">
                 <input onChange={(e)=> setEmail(e.target.value)} value={email} type="email" className="w-full bg-white rounded-sm pl-9 py-2" placeholder="Email"/>
@@ -37,7 +41,9 @@ export default function Login(){
             <Button className="w-full mt-5">
                 Login
             </Button>
-            <a className="text-center w-full block mt-5 text-white font-extralight text-sm" href="/forget"> Forget Password?</a>
+            <Link className="text-center w-full block mt-5 text-white font-extralight text-sm" href="/forget">
+                Forgot Password?
+            </Link>
         </div>
         </div>
         </div>

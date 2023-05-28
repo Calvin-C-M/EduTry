@@ -36,7 +36,7 @@ export default function Answer({ data }) {
       }
     }
     window.addEventListener('scroll', handleScroll)
-  }, [])
+  }, [scroll])
 
   return (
     <div className='w-full px-10 md:px-28 pt-3 md:pt-8 pb-20'>

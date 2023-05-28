@@ -1,5 +1,3 @@
-import SearchBar from "@/components/Admin/SearchBar";
-import { useState } from "react";
 import Image from "next/image";
 import TestPhoto from "@/public/pict.png"
 import Button from "@/components/Button";
@@ -7,8 +5,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const KonfirmasiPembayaran = () => {
-    const [searchText, setSearchText] = useState("")
-
     const testData = [
         { id: 1, username: "testing", namaPaket: "Tryout #3", jenisPembayaran: "Gopay", nominal: 15000 },
         { id: 2, username: "testing", namaPaket: "Tryout #3", jenisPembayaran: "Gopay", nominal: 15000 },
@@ -22,7 +18,6 @@ const KonfirmasiPembayaran = () => {
 
     return (
         <>
-            <SearchBar setText={setSearchText} />
             <section>
                 <h1 className="mb-3">Konfirmasi Pembayaran</h1>
                 <section className="p-5 bg-white">
@@ -40,7 +35,7 @@ const KonfirmasiPembayaran = () => {
                         </thead>
                         <tbody>
                             {
-                                testData.map(data => <tr className="odd:bg-blue-light">
+                                testData.map(data => <tr key={data.id} className="odd:bg-blue-light">
                                     <td className="font-bold">{data.id}</td>
                                     <td>{data.username}</td>
                                     <td>{data.namaPaket}</td>

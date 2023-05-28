@@ -29,6 +29,7 @@ const Sidebar = () => {
                 <Image 
                     src={Profile}
                     className="rounded-full w-16 h-16"
+                    alt="Profile"
                 />
                 <span>Admin</span>
             </div>
