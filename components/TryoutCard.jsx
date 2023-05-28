@@ -14,7 +14,7 @@ const TryoutCard = ({ key, pict, nama, harga, href }) => {
             </Link>
             <p className='text-gray-dark text-base'>Rp. {harga}</p>
         </div>
-        <Link href={href} className='flex items-end grow px-4 md:px-5 pt-2 pb-4'>
+        <Link href={href} className='flex items-end grow mx-4 md:mx-5 mt-2 mb-4'>
             <button className='w-full h-8 bg-primary font-medium text-white rounded-full'>Beli</button>
         </Link>
     </div>

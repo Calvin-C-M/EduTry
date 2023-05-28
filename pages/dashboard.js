@@ -4,13 +4,13 @@ import TryoutCard from '../components/TryoutCard'
 
 export default function Dashboard() {
   const tryoutsData = [
-    {id:7, nama:"Tryout UTBK #5", harga:20000, pict:Pict, href:""},
-    {id:6, nama:"Tryout Mandiri #4", harga:20000, pict:Pict, href:""},
-    {id:5, nama:"Tryout Mandiri #3", harga:15000, pict:Pict, href:""},
-    {id:4, nama:"Tryout UTBK #4", harga:20000, pict:Pict, href:""},
-    {id:3, nama:"Tryout UTBK #3", harga:20000, pict:Pict, href:""},
-    {id:2, nama:"Tryout UTBK #2", harga:15000, pict:Pict, href:""},
-    {id:1, nama:"Tryout Mandiri #2", harga:15000, pict:Pict, href:""},
+    {id:7, nama:"Tryout UTBK #5", harga:20000, pict:Pict, href:"/purchase"},
+    {id:6, nama:"Tryout Mandiri #4", harga:20000, pict:Pict, href:"/purchase"},
+    {id:5, nama:"Tryout Mandiri #3", harga:15000, pict:Pict, href:"/purchase"},
+    {id:4, nama:"Tryout UTBK #4", harga:20000, pict:Pict, href:"/purchase"},
+    {id:3, nama:"Tryout UTBK #3", harga:20000, pict:Pict, href:"/purchase"},
+    {id:2, nama:"Tryout UTBK #2", harga:15000, pict:Pict, href:"/purchase"},
+    {id:1, nama:"Tryout Mandiri #2", harga:15000, pict:Pict, href:"/purchase"},
   ]
 
   return (

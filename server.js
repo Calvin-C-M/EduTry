@@ -102,6 +102,10 @@ app.prepare()
         return app.render(req, res, '/payment', req.query)
     })
 
+    server.get('/upload-payment-proof', (req, res) => {
+        return app.render(req, res, '/payment', req.query)
+    })
+
     server.get('/admin/tryout', (req, res) => {
         loginBlocker(req, res)
         req.session.tryout = {}
