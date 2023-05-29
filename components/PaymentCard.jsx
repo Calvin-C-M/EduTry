@@ -28,7 +28,13 @@ const PaymentCard = ({ data }) => {
                 <p>Sisa Waktu Pembayaran</p>
                 <p className='font-bold mt-1 md:mt-2'>{hours}:{minutes}:{seconds}</p>
             </div>
-            <Image src={data.logo} alt='Payment Method Logo' className='w-[30%] md:w-32' />
+            <Image 
+                src={data.logo} 
+                alt='Payment Method Logo' 
+                className='w-[30%] md:w-32' 
+                width={350}
+                height={200}
+                />
         </div>
         <div className='w-full p-3 border-b-2 border-black'>
             <p className='text-base md:text-lg font-bold'>Pembayaran</p>

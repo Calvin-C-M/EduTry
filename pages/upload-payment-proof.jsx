@@ -7,6 +7,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import DangerousOutlinedIcon from '@mui/icons-material/DangerousOutlined'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 import CloseIcon from '@mui/icons-material/Close'
+import PlaceholderImg from "@/public/placeholder-img.png"
 
 export default function UploadPaymentProof() {
   const router = useRouter()
@@ -43,7 +44,7 @@ export default function UploadPaymentProof() {
           <h2 className='text-primary'>Upload Gambar</h2>
           {selectedImage && (
             <div>
-              <Image src={selectedImage} alt='Bukti Pembayaran' className='my-6 md:my-10' />
+              <Image src={PlaceholderImg} alt='Bukti Pembayaran' className='my-6 md:my-10' />
             </div>
           )}
 
