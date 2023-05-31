@@ -25,11 +25,16 @@ export default function Purchase({ data }) {
                     <PaymentMethod handle={handlePayment} />
                 </div>
                 <PriceCard data={data} subTotal={subTotal} />
-                <Link href={(payment != '') ? `/payment/${payment}` : "#"}>
+                <form method='post' action="/control/payment">
+                    <input 
+                        type="hidden" 
+                        name="method" 
+                        value={payment}
+                        />
                     <button className='bg-white font-bold text-primary flex items-center justify-center w-full h-fit p-3 text-sm md:text-base rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>
                         Bayar Sekarang
                     </button>
-                </Link>
+                </form>
             </div>
             <div className='hidden md:flex h-fit'>
                 <PaymentMethod handle={handlePayment} />

@@ -203,9 +203,23 @@ app.prepare()
             })
     })
 
-    server.get('/payment/:method', (req, res) => {
-        
-        return app.render(req, res, '/payment', req.query)
+    server.get('/payment/:id', async (req, res) => {
+        loginBlocker(req, res)
+
+        const id = req.params.id
+
+        fetch(`${baseUrl}/api/mytryout/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.transaksi = data
+                return app.render(req, res, '/payment', req.query)
+            })
+            .catch(err => {
+                console.log(err)
+                req.flash('message', "Ada kesalahan dalam fetch API")
+                res.redirect('/tryouts')
+            })
+
     })
 
     server.get('/login', (req, res) => {
@@ -276,11 +290,12 @@ app.prepare()
                 case "USER":
                     const userData = await database.collection("user").find({ id_account: accountData[0]._id.toString() }).toArray()
                     req.session.user = {
-                        nama: userData[0].nama,
-                        email: userData[0].email,
-                        kontak: userData[0].kontak,
-                        tryouts: userData[0].tryouts,
-                        pilihan: userData[0].pilihan,
+                        "_id": userData[0]._id,
+                        "nama": userData[0].nama,
+                        "email": userData[0].email,
+                        "kontak": userData[0].kontak,
+                        "tryouts": userData[0].tryouts,
+                        "pilihan": userData[0].pilihan,
                     }
                     res.redirect('/dashboard')
                     break;
@@ -393,6 +408,44 @@ app.prepare()
                 } 
             )
             res.redirect(`/intro-tryout/${id}`)
+        } catch(err) {
+            console.log(err)
+        }
+    })
+
+    server.post('/control/payment', async (req, res) => {
+        req.session.method = req.body.method
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        const transaksiId = new ObjectId()
+
+        try {
+            await database.collection('mytryout').insertOne({
+                "_id": transaksiId,
+                "id_tryout": req.session.tryout._id,
+                "status": "PENDING",
+                "bukti_bayar": "",
+                "hasil": []
+            })
+
+            try {
+                const userId = new ObjectId(req.session.user._id)
+            
+                await database.collection('user').updateOne(
+                    { "_id": userId },
+                    {
+                        $push: {
+                            "tryouts": transaksiId.toHexString()
+                        }
+                    }
+                )
+
+                res.redirect(`/payment/${transaksiId}`)
+            } catch(err) {
+                console.log(err)
+            }
         } catch(err) {
             console.log(err)
         }
