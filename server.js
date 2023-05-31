@@ -188,11 +188,23 @@ app.prepare()
         return app.render(req, res, '/result', req.query)
     })
 
-    server.get('/purchase', (req, res) => {
-        return app.render(req, res, '/purchase', req.query)
+    server.get('/purchase/:id', (req, res) => {
+        const id = req.params.id
+        fetch(`${baseUrl}/api/tryout/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.tryout = data
+                return app.render(req, res, '/purchase', req.query)
+            })
+            .catch(err => {
+                console.log(err)
+                req.flash("message", "Ada kesalahan dalam melakukan fetch")
+                res.redirect('/tryouts')
+            })
     })
 
-    server.get('/payment', (req, res) => {
+    server.get('/payment/:method', (req, res) => {
+        
         return app.render(req, res, '/payment', req.query)
     })
 
