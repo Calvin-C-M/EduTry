@@ -8,29 +8,48 @@ import DangerousOutlinedIcon from '@mui/icons-material/DangerousOutlined'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 import CloseIcon from '@mui/icons-material/Close'
 import PlaceholderImg from "@/public/placeholder-img.png"
+import axios from 'axios'
+import getBaseUrl from '@/utils/getBaseUrl'
 
-export default function UploadPaymentProof() {
+export default function UploadPaymentProof({ data }) {
   const router = useRouter()
+  const [image, setImage] = useState(null)
   const [selectedImage, setSelectedImage] = useState('/placeholder-img.png')
   const [uploaded, setUploaded] = useState()
   const [modalStatus, setModalStatus] = useState(false)
+  const [imageUrl, setImageUrl] = useState('')
+  const baseUrl = getBaseUrl()
 
   const changeImage = (e) => {
+    setImage(e.target.files[0])
     setSelectedImage(URL.createObjectURL(e.target.files[0]))
   }
 
-  const onSubmit = (e) => {
-    e.preventDefault()
-    // setUploaded(true) //jika bukti berhasil terupload
-    setUploaded(false) //jika bukti gagal terupload
+  const handleSubmit = () => {
+    const body = new FormData()
+    body.set('key', data.API_KEY)
+    body.append('image', image)
+
+    axios({
+      method: "POST",
+      url: 'https://api.imgbb.com/1/upload',
+      data: body
+    }).then(res => {
+      console.log(res.data.data)
+      setImageUrl(res.data.data.display_url)
+      setUploaded(true)
+    }).catch(err => {
+      console.log(err)
+      setUploaded(false)
+    })
     setModalStatus(true)
   }
 
   const handleModal = () => {
     setModalStatus(!modalStatus);
-    uploaded ? (
-      router.push('/payment')
-    ) : ('')
+    // uploaded ? (
+    //   router.push(`/payment/${data.transaksi._id}`)
+    // ) : ('')
   }
 
   return (
@@ -48,14 +67,25 @@ export default function UploadPaymentProof() {
             </div>
           )}
 
-          <form onSubmit={onSubmit} className='grid place-items-center'>
-            <label for='file-upload' className='bg-primary font-bold text-white flex items-center justify-center w-fit h-fit px-3 md:px-5 py-2 text-sm md:text-base hover:brightness-110 transition-all duration-100 rounded-[5px] my-3'>
+          {/* <form onSubmit={onSubmit} className='grid place-items-center'>
+            <label htmlFor='file-upload' className='bg-primary font-bold text-white flex items-center justify-center w-fit h-fit px-3 md:px-5 py-2 text-sm md:text-base hover:brightness-110 transition-all duration-100 rounded-[5px] my-3'>
               <AddPhotoAlternateIcon />
               Pilih Gambar
             </label>
             <input id='file-upload' type='file' name='payment-proof' onChange={changeImage} accept='image/*' hidden />
             <button type='submit' className='bg-primary font-bold text-white flex items-center justify-center w-fit h-fit px-5 md:px-8 py-2 text-sm md:text-base hover:brightness-110 transition-all duration-100'>Kirim Bukti Bayar</button>
-          </form>
+          </form> */}
+          <div className='grid place-items-center'>
+            <label htmlFor='file-upload' className='bg-primary font-bold text-white flex items-center justify-center w-fit h-fit px-3 md:px-5 py-2 text-sm md:text-base hover:brightness-110 transition-all duration-100 rounded-[5px] my-3'>
+              <AddPhotoAlternateIcon />
+              Pilih Gambar
+            </label>
+            <input id='file-upload' type='file' name='payment-proof' onChange={changeImage} accept='image/*' hidden />
+            <button 
+              className='bg-primary font-bold text-white flex items-center justify-center w-fit h-fit px-5 md:px-8 py-2 text-sm md:text-base hover:brightness-110 transition-all duration-100'
+              onClick={handleSubmit}
+            >Kirim Bukti Bayar</button>
+          </div>
         </div>
       </div>
 
@@ -67,6 +97,10 @@ export default function UploadPaymentProof() {
               <div>
                 <CheckCircleIcon className='flex justify-center w-full h-3/5 text-green px-8 pb-2' />
                 <p className='flex justify-center w-full font-bold text-center text-lg md:text-2xl'>Bukti Pembayaran Terkirim</p>
+                <form method='post' action="/control/confirm-payment">
+                  <input type="hidden" name="confirm_image" value={imageUrl} />
+                  <button type="submit">Ok</button>
+                </form>
               </div>
             ) : (
               <div>
@@ -75,11 +109,22 @@ export default function UploadPaymentProof() {
               </div>
             )}
           </div>
-          <div onClick={handleModal} className='absolute p-2 right-1 top-1 rounded-full'>
+          {/* <div onClick={handleModal} className='absolute p-2 right-1 top-1 rounded-full'>
             <CloseIcon className='flex items-center cursor-pointer' />
-          </div>
+          </div> */}
         </div>
       </div>
     </>
   )
+}
+
+export const getServerSideProps = ({ req, res }) => {
+  const data = {
+    'API_KEY': req.flash('api_key')[0],
+    'transaksi': req.session.transaksi
+  }
+
+  return {
+    props: { data }
+  }
 }

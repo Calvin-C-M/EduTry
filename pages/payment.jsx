@@ -13,7 +13,7 @@ export default function Payment({ data }) {
 
     const waktu = 2
     const method = {
-        "nama": data.method,
+        "nama": data.transaksi.method,
         "logo": 'https://bankmandiri.co.id/image/layout_set_logo?img_id=31567&t=1683824600225', 
         "kode": '141704120120',
         "instructions": 'Lorem ipsum dolor sit amet consectetur. Viverra ultricies ultricies hendrerit metus orci. Id ipsum in fames vitae euismod gravida tortor pulvinar condimentum. Turpis nisi interdum nisl ullamcorper. Enim arcu eget nisl sed adipiscing scelerisque duis. Mauris consequat leo sociis et tempus. Dui nibh vehicula eros sit proin. Et nisl egestas sagittis dignissim eros odio amet. Magna vitae eget nisl ornare scelerisque pulvinar lorem posuere. Pharetra cursus sit integer sit.',
@@ -62,7 +62,6 @@ export default function Payment({ data }) {
 export const getServerSideProps = ({ req, res }) => {
     const data = {
         "transaksi": req.session.transaksi,
-        "method": req.session.method,
         "tryout": req.session.tryout,
         "user": req.session.user
     }

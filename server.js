@@ -212,7 +212,13 @@ app.prepare()
             .then(res => res.json())
             .then(data => {
                 req.session.transaksi = data
-                return app.render(req, res, '/payment', req.query)
+
+                fetch(`${baseUrl}/api/tryout/${data.id_tryout}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        req.session.tryout = data
+                        return app.render(req, res, '/payment', req.query)
+                    })
             })
             .catch(err => {
                 console.log(err)
@@ -231,7 +237,9 @@ app.prepare()
     })
   
     server.get('/upload-payment-proof', (req, res) => {
-        return app.render(req, res, '/payment', req.query)
+        req.flash('api_key', process.env.IMBB_API_KEY)
+
+        return app.render(req, res, '/upload-payment-proof', req.query)
     })
 
     server.get('/admin/tryout', (req, res) => {
@@ -414,8 +422,6 @@ app.prepare()
     })
 
     server.post('/control/payment', async (req, res) => {
-        req.session.method = req.body.method
-
         const client = await clientPromise
         const database = client.db(process.env.MONGODB_NAME)
 
@@ -427,6 +433,7 @@ app.prepare()
                 "id_tryout": req.session.tryout._id,
                 "status": "PENDING",
                 "bukti_bayar": "",
+                "method": req.body.method,
                 "hasil": []
             })
 
@@ -446,6 +453,29 @@ app.prepare()
             } catch(err) {
                 console.log(err)
             }
+        } catch(err) {
+            console.log(err)
+        }
+    })
+
+    server.post('/control/confirm-payment', async (req, res) => {
+        console.log(req.body)
+        const confirmationImageLink = req.body.confirm_image
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        const transaksiId = new ObjectId(req.session.transaksi._id)
+        
+        try {
+            await database.collection('mytryout').updateOne(
+                { "_id": transaksiId },
+                { $set: {
+                    "bukti_bayar": confirmationImageLink
+                } }
+            )
+
+            res.redirect('/dashboard')
         } catch(err) {
             console.log(err)
         }
