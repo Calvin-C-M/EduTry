@@ -433,6 +433,7 @@ app.prepare()
                 "id_tryout": req.session.tryout._id,
                 "status": "PENDING",
                 "bukti_bayar": "",
+                "harga": req.session.tryout.harga,
                 "method": req.body.method,
                 "hasil": []
             })
@@ -479,6 +480,29 @@ app.prepare()
         } catch(err) {
             console.log(err)
         }
+    })
+
+    server.post('/control/change-payment-status', async (req, res) => {
+        // console.log(req.body)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        try {
+            await database.collection("mytryout").updateOne(
+                { "_id": req.body.transaksi._id },
+                {
+                    $set: {
+                        "status": req.body.status
+                    }
+                }
+            )
+            res.send("success").status(200)
+        } catch(err) {
+            console.log(err)
+            res.send("failed").status(400)
+        }
+
+        res.send(req.body).status(200)
     })
 
     server.post('/add/tryout', async (req, res) => {
@@ -693,6 +717,33 @@ app.prepare()
             "id_tryout": myTryoutData.id_tryout,
             "status": myTryoutData.status,
             "hasil": myTryoutData.hasil,
+        }
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/mytryouts', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const myTryoutData = await database.collection("mytryout").find({}).toArray()
+
+        let result = []
+
+        for(let mytryout of myTryoutData) {
+            const temp = {
+                "_id": mytryout._id,
+                "id_tryout": mytryout.id_tryout,
+                "status": mytryout.status,
+                "bukti_bayar": mytryout.bukti_bayar,
+                "harga": mytryout.harga,
+                "method": mytryout.method,
+            }
+            const tryoutId = new ObjectId(temp.id_tryout)
+
+            const tryoutData = await database.collection('tryout').findOne({ "_id": tryoutId })
+            temp.nama_tryout = tryoutData.nama
+
+            result = [...result, temp]
         }
 
         res.send(result).status(200)
