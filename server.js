@@ -37,15 +37,11 @@ app.prepare()
         return app.render(req, res, '/index', req.query)
     })
 
-    // server.get('/login', (req, res) => {
-    //     console.log("Login")
-    //     return app.render(req, res, '/login', req.query)
-    // })
-
-    // server.get('/register', (req, res) => {
-    //     console.log("Register")
-    //     return app.render(req, res, '/register', req.query)
-    // })
+    server.get('/autentikasi', (req, res) => {
+        req.query.message = req.flash("message")
+        console.log(req.query)
+        return app.render(req, res, '/autentikasi', req.query)
+    })
 
     server.get('/profile', (req, res) => {
         console.log("Profile")
@@ -308,7 +304,7 @@ app.prepare()
 
         if(accountData.length < 1 || inputData.password != accountData[0].password) {
             req.flash('message', 'Invalid Login!')
-            res.redirect('/login')
+            res.redirect('/autentikasi')
         } else {
             req.session.isLoggedIn = true
             switch(accountData[0].role) {
@@ -354,10 +350,10 @@ app.prepare()
 
         if(accountData.length > 0) {
             req.flash('message', 'Username is taken!')
-            res.redirect('/register')
+            res.redirect('/autentikasi#register')
         } else if(userData.length > 0) {
             req.flash('message', 'Email is already registered!')
-            res.redirect('/register')
+            res.redirect('/autentikasi#register')
         } else {
             await database.collection('account').insertOne({
                 username: inputData.username,
@@ -377,7 +373,7 @@ app.prepare()
             })
             
             req.flash('message', 'Pendaftaran berhasil!')
-            res.redirect('/login')
+            res.redirect('/autentikasi')
         }
     })
 
