@@ -188,12 +188,44 @@ app.prepare()
         return app.render(req, res, '/result', req.query)
     })
 
-    server.get('/purchase', (req, res) => {
-        return app.render(req, res, '/purchase', req.query)
+    server.get('/purchase/:id', (req, res) => {
+        const id = req.params.id
+        fetch(`${baseUrl}/api/tryout/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.tryout = data
+                return app.render(req, res, '/purchase', req.query)
+            })
+            .catch(err => {
+                console.log(err)
+                req.flash("message", "Ada kesalahan dalam melakukan fetch")
+                res.redirect('/tryouts')
+            })
     })
 
-    server.get('/payment', (req, res) => {
-        return app.render(req, res, '/payment', req.query)
+    server.get('/payment/:id', async (req, res) => {
+        loginBlocker(req, res)
+
+        const id = req.params.id
+
+        fetch(`${baseUrl}/api/mytryout/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.transaksi = data
+
+                fetch(`${baseUrl}/api/tryout/${data.id_tryout}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        req.session.tryout = data
+                        return app.render(req, res, '/payment', req.query)
+                    })
+            })
+            .catch(err => {
+                console.log(err)
+                req.flash('message', "Ada kesalahan dalam fetch API")
+                res.redirect('/tryouts')
+            })
+
     })
 
     server.get('/login', (req, res) => {
@@ -205,7 +237,9 @@ app.prepare()
     })
   
     server.get('/upload-payment-proof', (req, res) => {
-        return app.render(req, res, '/payment', req.query)
+        req.flash('api_key', process.env.IMBB_API_KEY)
+
+        return app.render(req, res, '/upload-payment-proof', req.query)
     })
 
     server.get('/admin/tryout', (req, res) => {
@@ -264,11 +298,12 @@ app.prepare()
                 case "USER":
                     const userData = await database.collection("user").find({ id_account: accountData[0]._id.toString() }).toArray()
                     req.session.user = {
-                        nama: userData[0].nama,
-                        email: userData[0].email,
-                        kontak: userData[0].kontak,
-                        tryouts: userData[0].tryouts,
-                        pilihan: userData[0].pilihan,
+                        "_id": userData[0]._id,
+                        "nama": userData[0].nama,
+                        "email": userData[0].email,
+                        "kontak": userData[0].kontak,
+                        "tryouts": userData[0].tryouts,
+                        "pilihan": userData[0].pilihan,
                     }
                     res.redirect('/dashboard')
                     break;
@@ -384,6 +419,90 @@ app.prepare()
         } catch(err) {
             console.log(err)
         }
+    })
+
+    server.post('/control/payment', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        const transaksiId = new ObjectId()
+
+        try {
+            await database.collection('mytryout').insertOne({
+                "_id": transaksiId,
+                "id_tryout": req.session.tryout._id,
+                "status": "PENDING",
+                "bukti_bayar": "",
+                "harga": req.session.tryout.harga,
+                "method": req.body.method,
+                "hasil": []
+            })
+
+            try {
+                const userId = new ObjectId(req.session.user._id)
+            
+                await database.collection('user').updateOne(
+                    { "_id": userId },
+                    {
+                        $push: {
+                            "tryouts": transaksiId.toHexString()
+                        }
+                    }
+                )
+
+                res.redirect(`/payment/${transaksiId}`)
+            } catch(err) {
+                console.log(err)
+            }
+        } catch(err) {
+            console.log(err)
+        }
+    })
+
+    server.post('/control/confirm-payment', async (req, res) => {
+        console.log(req.body)
+        const confirmationImageLink = req.body.confirm_image
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        const transaksiId = new ObjectId(req.session.transaksi._id)
+        
+        try {
+            await database.collection('mytryout').updateOne(
+                { "_id": transaksiId },
+                { $set: {
+                    "bukti_bayar": confirmationImageLink
+                } }
+            )
+
+            res.redirect('/dashboard')
+        } catch(err) {
+            console.log(err)
+        }
+    })
+
+    server.post('/control/change-payment-status', async (req, res) => {
+        // console.log(req.body)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        try {
+            await database.collection("mytryout").updateOne(
+                { "_id": req.body.transaksi._id },
+                {
+                    $set: {
+                        "status": req.body.status
+                    }
+                }
+            )
+            res.send("success").status(200)
+        } catch(err) {
+            console.log(err)
+            res.send("failed").status(400)
+        }
+
+        res.send(req.body).status(200)
     })
 
     server.post('/add/tryout', async (req, res) => {
@@ -598,6 +717,33 @@ app.prepare()
             "id_tryout": myTryoutData.id_tryout,
             "status": myTryoutData.status,
             "hasil": myTryoutData.hasil,
+        }
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/mytryouts', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const myTryoutData = await database.collection("mytryout").find({}).toArray()
+
+        let result = []
+
+        for(let mytryout of myTryoutData) {
+            const temp = {
+                "_id": mytryout._id,
+                "id_tryout": mytryout.id_tryout,
+                "status": mytryout.status,
+                "bukti_bayar": mytryout.bukti_bayar,
+                "harga": mytryout.harga,
+                "method": mytryout.method,
+            }
+            const tryoutId = new ObjectId(temp.id_tryout)
+
+            const tryoutData = await database.collection('tryout').findOne({ "_id": tryoutId })
+            temp.nama_tryout = tryoutData.nama
+
+            result = [...result, temp]
         }
 
         res.send(result).status(200)
