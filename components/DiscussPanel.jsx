@@ -7,11 +7,11 @@ const DiscussPanel = ({ data, handle }) => {
   return (
     <div className='w-full h-fit bg-white px-8 py-5 my-3 rounded-xl shadow-md'>
         <div className='w-full h-fit'>
-            <DiscussCard username={data.username} message={data.message} />
+            <DiscussCard username={data.nama} message={data.isi} />
         </div>
         <div className='flex-none md:flex w-full h-fit justify-between my-2'>
             <div className='font-bold text-sm md:text-base my-1 md:my-0'>
-                <p>{data.comments?.length} Komentar</p>
+                <p>{data.komentar?.length} Komentar</p>
             </div>
             <div className='flex-none md:flex font-light'>
                 <button onClick={handle} className='hover:text-primary hover:font-medium text-sm md:text-base my-1 md:my-0'>Tambahkan Komentar</button>
@@ -22,7 +22,7 @@ const DiscussPanel = ({ data, handle }) => {
         </div>
         {comment ? (
             <div className='w-full h-fit'>
-                {data.comments.map((comment) => <DiscussCard username={comment.username} message={comment.message} />)}
+                {data.komentar.map((komen, index) => <DiscussCard key={index} username={komen.nama} message={komen.isi} />)}
             </div>
         ) : ('')}
     </div>

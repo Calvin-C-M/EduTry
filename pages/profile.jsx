@@ -1,8 +1,10 @@
+import Image from "next/image";
 import Button from "@/components/Button"
 import EditIcon from '@mui/icons-material/Edit';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 import GroupsIcon from '@mui/icons-material/Groups';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
+
 export default function Profile(){
     return(
         <div className='w-full px-10 md:px-28 pt-8 md:pt-20 bg-primary min-h-[100vh]'>
@@ -11,7 +13,7 @@ export default function Profile(){
             <div className="w-full bg-white py-8 px-20">
                 <div className="w-full flex justify-center ">
                     <div className="relative">
-                    <img className="aspect-square w-[200px] rounded-full my-auto" src="/profile.jpg" alt="" />
+                    <Image className="aspect-square w-[200px] rounded-full my-auto" src="/profile.jpg" alt="" />
                     <button className="p-1 bg-primary h-fit rounded-full absolute right-0 top-8">
                     <EditIcon className="text-white"/>
                     </button>
@@ -68,7 +70,7 @@ export default function Profile(){
             <div className="w-1/2 border-r border-black">
             <p className="text-center font-medium">Pilihan Pertama</p>
             <div className="w-[180px] aspect-square mx-auto mt-16">
-                <img className="" src="/unpad.png" alt="" />
+                <Image className="" src="/unpad.png" alt="" />
             </div>
             <select className="bg-white mx-auto border-2 block p-3 border-primary rounded-md w-1/2 font-medium" name="" id="">
                 <option value="">Universitas Padjajaran</option>
@@ -103,7 +105,7 @@ export default function Profile(){
             <div className="w-1/2 border-l border-black">
             <p className="text-center font-medium">Pilihan Kedua</p>
             <div className="w-[180px] aspect-square mx-auto mt-16">
-                <img className="" src="/unpad.png" alt="" />
+                <Image className="" src="/unpad.png" alt="" />
             </div>
             <select className="bg-white mx-auto border-2 block p-3 border-primary rounded-md w-1/2 font-medium" name="" id="">
                 <option value="">Universitas Padjajaran</option>

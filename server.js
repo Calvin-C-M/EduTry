@@ -43,11 +43,6 @@ app.prepare()
         return app.render(req, res, '/autentikasi', req.query)
     })
 
-    server.get('/register', (req, res) => {
-        console.log("Register")
-        return app.render(req, res, '/register', req.query)
-    })
-
     server.get('/profile', (req, res) => {
         console.log("Profile")
         return app.render(req, res, '/profile', req.query)
@@ -63,9 +58,30 @@ app.prepare()
         return app.render(req, res, '/dashboard', req.query)
     })
 
-    server.get('/intro-tryout', (req, res) => {
-        loginBlocker(req, res)
-        return app.render(req, res, '/intro-tryout', req.query)
+    server.get('/intro-tryout/:id', (req, res) => {
+        const id = req.params.id
+
+        fetch(`${baseUrl}/api/mytryout/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.mytryout = data
+                fetch(`${baseUrl}/api/tryout/${data.id_tryout}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        req.session.tryout = data
+                        return app.render(req, res, '/intro-tryout', req.query)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        req.flash("error_message", "Ada kesalahan dalam fetch API")
+                        res.redirect('/my-tryouts')                                
+                    })
+            })
+            .catch(err => {
+                console.log(err)
+                req.flash("error_message", "Ada kesalahan dalam fetch API")
+                res.redirect('/my-tryouts')
+            })
     })
 
     server.get('/tryouts', (req, res) => {
@@ -78,29 +94,165 @@ app.prepare()
         return app.render(req, res, '/my-tryouts', req.query)
     })
     
-    server.get('/discuss', (req, res) => {
+    server.get('/discuss/:id', (req, res) => {
         loginBlocker(req, res)
-        return app.render(req, res, '/discuss', req.query)
-    })
-  
-    server.get('/result', (req, res) => {
-        return app.render(req, res, '/result', req.query)
+
+        // if(req.session.tryout == null) {
+        //     req.flash("message", "Buka tryoutnya terlebih dahulu")
+        //     res.redirect("/my-tryouts")
+        // }
+
+        // return app.render(req, res, '/discuss', req.query)
+        const id = req.params.id
+
+        fetch(`${baseUrl}/api/discussion/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.discuss = data
+                return app.render(req, res, '/discuss', req.query)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     })
 
-    server.get('/questions', (req, res) => {
+    server.get('/questions/:id', (req, res) => {
+        if(req.session.tryout == null) {
+            req.flash("message", "Buka tryoutnya terlebih dahulu")
+            res.redirect("/my-tryouts")
+        }
+
+        req.session.soal = []
+
+        let index = 0
+
+        for(let soal of req.session.tryout.subtryout[0].soal) {
+            const tempSoal = {
+                "id": index++,
+                "isi": soal.isi,
+                "bobot": soal.bobot,
+                "jawaban_asli": soal.jawaban,
+                "pembahasan": soal.pembahasan,
+                "jawaban": "",
+                "pilihan": []
+            }
+
+            let indexPilihan = 0
+            for(let pilihan of soal.pilihan) {
+                const tempPilihan = {
+                    "index": String.fromCharCode(65+(indexPilihan++)),
+                    "isi": pilihan,
+                }
+                tempSoal.pilihan = [...tempSoal.pilihan, tempPilihan]
+            }
+
+            req.session.soal = [...req.session.soal, tempSoal]
+        }
+
         return app.render(req, res, '/questions', req.query)
     })
 
-    server.get('/answer', (req, res) => {
+    server.get('/answer/:id', (req, res) => {
+        const id = new ObjectId(req.params.id)
+
+        if(req.session.mytryout == null || req.session.mytryout == undefined) {
+            req.flash("message", "Buka tryoutnya terlebih dahulu")
+            res.redirect('/my-tryouts')
+        }
+
+        req.session.hasil = req.session.mytryout.hasil.find(obj => obj.id_subtryout == id)
+
         return app.render(req, res, '/answer', req.query)
     })
+  
+    server.get('/result/:id', (req, res) => {
+        if(req.session.mytryout == null || req.session.mytryout == undefined) {
+            req.flash("message", "Buka tryoutnya terlebih dahulu")
+            res.redirect('/my-tryouts')
+        }
 
-    server.get('/purchase', (req, res) => {
-        return app.render(req, res, '/purchase', req.query)
+        req.session.statistik = []
+        let i = 0
+
+        for(let hasil of req.session.mytryout.hasil) {
+            const subtryout = req.session.tryout.subtryout.find(obj => hasil.id_subtryout == obj._id)
+            const dataStatistik = {
+                "id": i++,
+                "nama": subtryout.nama,
+                "jenis": subtryout.jenis,
+                "stat": {
+                    "benar": 0,
+                    "salah": 0,
+                    "kosong": 0,
+                    "score": 0
+                }
+            }
+
+            for(let kerjaan of hasil.kerjaan) {
+                dataStatistik.stat.benar += (kerjaan.skor > 0) ? 1 : 0
+                dataStatistik.stat.salah += (kerjaan.skor == 0) ? 1 : 0
+                dataStatistik.stat.kosong += (kerjaan.skor < 0) ? 1 : 0
+                dataStatistik.stat.score += (kerjaan.skor >= 0) ? kerjaan.skor : 0
+            }
+
+            req.session.statistik = [...req.session.statistik, dataStatistik]
+        }
+
+        return app.render(req, res, '/result', req.query)
     })
 
-    server.get('/payment', (req, res) => {
-        return app.render(req, res, '/payment', req.query)
+    server.get('/purchase/:id', (req, res) => {
+        const id = req.params.id
+        fetch(`${baseUrl}/api/tryout/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.tryout = data
+                return app.render(req, res, '/purchase', req.query)
+            })
+            .catch(err => {
+                console.log(err)
+                req.flash("message", "Ada kesalahan dalam melakukan fetch")
+                res.redirect('/tryouts')
+            })
+    })
+
+    server.get('/payment/:id', async (req, res) => {
+        loginBlocker(req, res)
+
+        const id = req.params.id
+
+        fetch(`${baseUrl}/api/mytryout/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.transaksi = data
+
+                fetch(`${baseUrl}/api/tryout/${data.id_tryout}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        req.session.tryout = data
+                        return app.render(req, res, '/payment', req.query)
+                    })
+            })
+            .catch(err => {
+                console.log(err)
+                req.flash('message', "Ada kesalahan dalam fetch API")
+                res.redirect('/tryouts')
+            })
+
+    })
+
+    server.get('/login', (req, res) => {
+        return app.render(req, res, '/test-login', req.query)
+    })
+
+    server.get('/register', (req, res) => {
+        return app.render(req, res, '/test-register', req.query)
+    })
+  
+    server.get('/upload-payment-proof', (req, res) => {
+        req.flash('api_key', process.env.IMBB_API_KEY)
+
+        return app.render(req, res, '/upload-payment-proof', req.query)
     })
 
     server.get('/admin/tryout', (req, res) => {
@@ -159,11 +311,12 @@ app.prepare()
                 case "USER":
                     const userData = await database.collection("user").find({ id_account: accountData[0]._id.toString() }).toArray()
                     req.session.user = {
-                        nama: userData[0].nama,
-                        email: userData[0].email,
-                        kontak: userData[0].kontak,
-                        tryouts: userData[0].tryouts,
-                        pilihan: userData[0].pilihan,
+                        "_id": userData[0]._id,
+                        "nama": userData[0].nama,
+                        "email": userData[0].email,
+                        "kontak": userData[0].kontak,
+                        "tryouts": userData[0].tryouts,
+                        "pilihan": userData[0].pilihan,
                     }
                     res.redirect('/dashboard')
                     break;
@@ -222,6 +375,147 @@ app.prepare()
             req.flash('message', 'Pendaftaran berhasil!')
             res.redirect('/autentikasi')
         }
+    })
+
+    server.post('/control/submit', async (req, res) => {
+        /**
+         * [{"id":0,"isi":"Siapakah presiden ke-7 Indonesia","jawaban":"D","pilihan":[{"index":"A","isi":"Soekarno"},{"index":"B","isi":"Megawati"},{"index":"C","isi":"Jokowi"},{"index":"D","isi":"Soeharto"},{"index":"E","isi":"Puan"}]},{"id":1,"isi":"1+1","jawaban":"","pilihan":[{"index":"A","isi":"3"},{"index":"B","isi":"2"},{"index":"C","isi":"1"},{"index":"D","isi":"0"},{"index":"E","isi":null}]}]
+         */
+        /**
+         * req.body = [{
+         *  "id": int
+         *  "isi": string
+         *  "jawaban": string (index),
+         *  "pilihan": [{
+         *      "index": string,
+         *      "isi": string
+         *  }]
+         * }]
+         */
+
+        const hasil = {
+            "id_subtryout": req.body.id_subtryout,
+            "kerjaan": []
+        }
+
+        for(let soal of JSON.parse(req.body.selection)) {
+            const terpilih = soal.pilihan.find(pil => pil.index == soal.jawaban)
+            
+            const tempSoal = {
+                "id": soal.id,
+                "isi": soal.isi,
+                "terpilih": terpilih,
+                "jawaban_asli": soal.jawaban_asli,
+                "pembahasan": soal.pembahasan,
+                "pilihan": soal.pilihan,
+                "skor": (soal.jawaban_asli == terpilih.isi) ? parseFloat(soal.bobot) : 0,
+            }
+
+            hasil.kerjaan = [...hasil.kerjaan, tempSoal]
+        }
+
+        const id = new ObjectId(req.session.mytryout._id)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        try {
+            await database.collection("mytryout").updateOne(
+                { "_id": id },
+                {
+                    $push: {
+                        "hasil": hasil
+                    }
+                } 
+            )
+            res.redirect(`/intro-tryout/${id}`)
+        } catch(err) {
+            console.log(err)
+        }
+    })
+
+    server.post('/control/payment', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        const transaksiId = new ObjectId()
+
+        try {
+            await database.collection('mytryout').insertOne({
+                "_id": transaksiId,
+                "id_tryout": req.session.tryout._id,
+                "status": "PENDING",
+                "bukti_bayar": "",
+                "harga": req.session.tryout.harga,
+                "method": req.body.method,
+                "hasil": []
+            })
+
+            try {
+                const userId = new ObjectId(req.session.user._id)
+            
+                await database.collection('user').updateOne(
+                    { "_id": userId },
+                    {
+                        $push: {
+                            "tryouts": transaksiId.toHexString()
+                        }
+                    }
+                )
+
+                res.redirect(`/payment/${transaksiId}`)
+            } catch(err) {
+                console.log(err)
+            }
+        } catch(err) {
+            console.log(err)
+        }
+    })
+
+    server.post('/control/confirm-payment', async (req, res) => {
+        console.log(req.body)
+        const confirmationImageLink = req.body.confirm_image
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        const transaksiId = new ObjectId(req.session.transaksi._id)
+        
+        try {
+            await database.collection('mytryout').updateOne(
+                { "_id": transaksiId },
+                { $set: {
+                    "bukti_bayar": confirmationImageLink
+                } }
+            )
+
+            res.redirect('/dashboard')
+        } catch(err) {
+            console.log(err)
+        }
+    })
+
+    server.post('/control/change-payment-status', async (req, res) => {
+        // console.log(req.body)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        try {
+            await database.collection("mytryout").updateOne(
+                { "_id": req.body.transaksi._id },
+                {
+                    $set: {
+                        "status": req.body.status
+                    }
+                }
+            )
+            res.send("success").status(200)
+        } catch(err) {
+            console.log(err)
+            res.send("failed").status(400)
+        }
+
+        res.send(req.body).status(200)
     })
 
     server.post('/add/tryout', async (req, res) => {
@@ -359,6 +653,63 @@ app.prepare()
 
     })
 
+    server.post('/add/discuss/topik', async (req, res) => {
+        const data = {
+            "nama": req.session.user.nama,
+            "isi": req.body.isi,
+            "komentar": []
+        }
+        const tryoutId = new ObjectId(req.body.id_tryout)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        try {
+            await database.collection("tryout").updateOne(
+                { "_id": tryoutId },
+                {
+                    $push: {
+                        "discussion": data
+                    }
+                }
+            )
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        } catch(err) {
+            console.log(err)
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        }
+    })
+
+    server.post('/add/discuss/komentar', async (req, res) => {
+        const data = {
+            "nama": req.session.user.nama,
+            "isi": req.body.isi
+        }
+        const index = req.body.topik_index
+        const tryoutId = new ObjectId(req.body.id_tryout)
+        // const topik = req.session.discuss[index]
+        // topik.komentar = [...topik.komentar, data]
+        req.session.discuss.discussion[index].komentar = [...req.session.discuss.discussion[index].komentar, data]
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        try {
+            await database.collection("tryout").updateOne(
+                { "_id": tryoutId },
+                {
+                    $set: {
+                        "discussion": req.session.discuss.discussion
+                    }
+                },
+            )
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        } catch(err) {
+            console.log(err)
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        }
+    })
+
     // API Calls
     server.get('/api/users ', async (req, res) => {
         const client = await clientPromise
@@ -394,7 +745,7 @@ app.prepare()
         const result = {
             "_id" : tryoutData._id,
             "nama" : tryoutData.nama,
-            "created_by" : tryoutData.created_by,
+            "created_at" : tryoutData.created_at,
             "deadline" : tryoutData.deadline,
             "harga" : tryoutData.harga,
             "status" : tryoutData.status,
@@ -425,6 +776,65 @@ app.prepare()
         res.send(result).status(200)
     })
 
+    server.get('/api/mytryout/:id', async (req, res) => {
+        const id = new ObjectId(req.params.id)
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const myTryoutData = await database.collection("mytryout").findOne({ "_id": id })
+
+        const result = {
+            "_id": myTryoutData._id,
+            "id_tryout": myTryoutData.id_tryout,
+            "status": myTryoutData.status,
+            "hasil": myTryoutData.hasil,
+        }
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/mytryouts', async (req, res) => {
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const myTryoutData = await database.collection("mytryout").find({}).toArray()
+
+        let result = []
+
+        for(let mytryout of myTryoutData) {
+            const temp = {
+                "_id": mytryout._id,
+                "id_tryout": mytryout.id_tryout,
+                "status": mytryout.status,
+                "bukti_bayar": mytryout.bukti_bayar,
+                "harga": mytryout.harga,
+                "method": mytryout.method,
+            }
+            const tryoutId = new ObjectId(temp.id_tryout)
+
+            const tryoutData = await database.collection('tryout').findOne({ "_id": tryoutId })
+            temp.nama_tryout = tryoutData.nama
+
+            result = [...result, temp]
+        }
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/discussion/:id', async (req, res) => {
+        const id = new ObjectId(req.params.id)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const tryoutData = await database.collection('tryout').findOne({ "_id": id })
+
+        const result = {
+            "_id": id,
+            "nama": tryoutData.nama,
+            "discussion": tryoutData.discussion,
+        }
+
+        res.send(result).status(200)
+    })
+
     // =========================================
 
     // Untuk handle route halaman
@@ -434,6 +844,7 @@ app.prepare()
 
     server.listen(port, (err) => {
         if(err) throw err
-        console.log(`Server running on https://${hostname}:${port}`)
     })
 })
+
+module.exports = app

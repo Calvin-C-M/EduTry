@@ -10,7 +10,9 @@ import { CategoryScale } from 'chart.js'
 
 Chart.register(CategoryScale)
 
-export default function Result() {
+export default function Result({ data }) {
+    console.log(data.statistik)
+
     const [status, setStatus] = useState(true)
 
     const dataTPS = [
@@ -45,7 +47,7 @@ export default function Result() {
         id:1, benar:504, salah:424, kosong:327,
     }
 
-    const data = {
+    const dataChart = {
         datasets: [{
             label: 'Total',
             data: [dataStat.benar, dataStat.salah, dataStat.kosong],
@@ -75,8 +77,8 @@ export default function Result() {
 
         {status ? (
             <div className='w-full bg-white px-5 md:px-10 py-3 md:py-5 my-3 rounded-lg shadow-md'>
-                <Score name={'TPS'} data={dataTPS} />
-                <Score name={'Literasi & PNM'} data={dataLPNM} />
+                <Score name={'TPS'} data={data.statistik.filter(obj => obj.jenis == "TPS")} />
+                <Score name={'Literasi & PNM'} data={data.statistik.filter(obj => obj.jenis == "LNM")} />
             </div>
         ) : (
             <div>
@@ -97,7 +99,7 @@ export default function Result() {
                                 <p className='px-1 md:px-3'>Tidak Dijawab <span className='font-medium'>{dataStat.kosong}</span></p>
                             </div>
                         </div>
-                        <Doughnut data={data} className='w-full md:w-4/5' options={{ maintainAspectRatio: false }} />
+                        <Doughnut data={dataChart} className='w-full md:w-4/5' options={{ maintainAspectRatio: false }} />
                     </div>
                 </div>
                 <Rank data={dataRank} />
@@ -105,4 +107,15 @@ export default function Result() {
         )}
     </div>
   )
+}
+
+export const getServerSideProps = ({ req,res }) => {
+    const data = {
+        "mytryout": req.session.mytryout,
+        "statistik": req.session.statistik
+    }
+
+    return {
+        props: { data }
+    }
 }

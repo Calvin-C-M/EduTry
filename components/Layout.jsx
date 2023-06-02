@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
   return (
     <>
         <Navbar />
-        <main className='pt-28'>
+        <main className='min-h-screen pt-28'>
           { children }
         </main>
     </>
