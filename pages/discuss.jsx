@@ -59,8 +59,8 @@ export default function Discuss({ data }) {
                 </button>
             </div>
         </div>
-        <QuestionBox send={''} handle={handleModal} modalStatus={modal} name={'Tanya Soal'} placeholder={'Masukkan Pertanyaan'} />
-        <QuestionBox send={''} handle={handleComment} modalStatus={comment} name={'Tambah Komentar'} placeholder={'Masukkan Komentar'} />
+        <QuestionBox send="topik" handle={handleModal} modalStatus={modal} name={'Tanya Soal'} placeholder={'Masukkan Pertanyaan'} tryoutId={data.discuss._id} />
+        <QuestionBox send="komentar" handle={handleComment} modalStatus={comment} name={'Tambah Komentar'} placeholder={'Masukkan Komentar'} />
     </>
   )
 }

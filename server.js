@@ -100,6 +100,13 @@ app.prepare()
     
     server.get('/discuss/:id', (req, res) => {
         loginBlocker(req, res)
+
+        // if(req.session.tryout == null) {
+        //     req.flash("message", "Buka tryoutnya terlebih dahulu")
+        //     res.redirect("/my-tryouts")
+        // }
+
+        // return app.render(req, res, '/discuss', req.query)
         const id = req.params.id
 
         fetch(`${baseUrl}/api/discussion/${id}`)
@@ -647,6 +654,37 @@ app.prepare()
         } catch(err) {
             console.log(err)
         }
+
+    })
+
+    server.post('/add/discuss/topik', async (req, res) => {
+        const data = {
+            "nama": req.session.user.nama,
+            "isi": req.body.isi,
+            "komentar": []
+        }
+        const tryoutId = new ObjectId(req.body.id_tryout)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        try {
+            await database.collection("tryout").updateOne(
+                { "_id": tryoutId },
+                {
+                    $push: {
+                        "discussion": data
+                    }
+                }
+            )
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        } catch(err) {
+            console.log(err)
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        }
+    })
+
+    server.post('/add/discuss/komentar', async (req, res) => {
 
     })
 

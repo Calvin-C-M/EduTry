@@ -11,7 +11,7 @@ const DiscussPanel = ({ data, handle }) => {
         </div>
         <div className='flex-none md:flex w-full h-fit justify-between my-2'>
             <div className='font-bold text-sm md:text-base my-1 md:my-0'>
-                <p>{data.comments?.length} Komentar</p>
+                <p>{data.komentar?.length} Komentar</p>
             </div>
             <div className='flex-none md:flex font-light'>
                 <button onClick={handle} className='hover:text-primary hover:font-medium text-sm md:text-base my-1 md:my-0'>Tambahkan Komentar</button>
