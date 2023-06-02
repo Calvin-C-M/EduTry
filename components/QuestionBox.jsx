@@ -13,7 +13,7 @@ const QuestionBox = ({ send, handle, modalStatus, name, placeholder, topikIndex,
             </div>
             <form action={"/add/discuss/" + send} method="post">
                 {
-                    (send == "komentar") && <input name="topik_index" value={topikIndex} />
+                    (send == "komentar") && <input type="hidden" name="topik_index" value={topikIndex} />
                 }
                 <textarea name='isi' id='input' rows='8' className='w-full p-3 my-4 bg-white border border-gray rounded-lg resize-none' placeholder={placeholder} />
                 <input type="hidden" name="id_tryout" value={tryoutId} />

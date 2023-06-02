@@ -13,6 +13,7 @@ export default function Discuss({ data }) {
     const [modal, setModal] = useState(false)
     const [comment, setComment] = useState(false)
     const [scroll, setScroll] = useState(false)
+    const [topikIndex, setTopikIndex] = useState(0)
 
     const handleModal = () => {
         if (!comment) {
@@ -20,7 +21,8 @@ export default function Discuss({ data }) {
         }
     }
 
-    const handleComment = () => {
+    const handleComment = (index) => {
+        setTopikIndex(index)
         setComment(!comment)
     }
 
@@ -50,7 +52,7 @@ export default function Discuss({ data }) {
                 </button>
             </div>
             {
-                data.discuss.discussion.map((d, index) => <DiscussPanel key={index} data={d} handle={handleComment} />)
+                data.discuss.discussion.map((d, index) => <DiscussPanel key={index} data={d} handle={() => handleComment(index)} />)
             }
             {/* {discussData.discussion.map((discuss, index) => <DiscussPanel key={index} data={discuss} handle={handleComment} />)} */}
             <div className={scroll ? 'fixed md:hidden left-1/2 translate-x-[-50%] bottom-[-10%] w-4/5 mt-3 ease-in duration-200' : 'fixed md:hidden left-1/2 translate-x-[-50%] bottom-8 w-4/5 mt-3 ease-in duration-200'}>
@@ -60,7 +62,7 @@ export default function Discuss({ data }) {
             </div>
         </div>
         <QuestionBox send="topik" handle={handleModal} modalStatus={modal} name={'Tanya Soal'} placeholder={'Masukkan Pertanyaan'} tryoutId={data.discuss._id} />
-        <QuestionBox send="komentar" handle={handleComment} modalStatus={comment} name={'Tambah Komentar'} placeholder={'Masukkan Komentar'} />
+        <QuestionBox send="komentar" handle={handleComment} modalStatus={comment} name={'Tambah Komentar'} placeholder={'Masukkan Komentar'} topikIndex={topikIndex} tryoutId={data.discuss._id} />
     </>
   )
 }

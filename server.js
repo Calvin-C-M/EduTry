@@ -685,7 +685,33 @@ app.prepare()
     })
 
     server.post('/add/discuss/komentar', async (req, res) => {
+        const data = {
+            "nama": req.session.user.nama,
+            "isi": req.body.isi
+        }
+        const index = req.body.topik_index
+        const tryoutId = new ObjectId(req.body.id_tryout)
+        // const topik = req.session.discuss[index]
+        // topik.komentar = [...topik.komentar, data]
+        req.session.discuss.discussion[index].komentar = [...req.session.discuss.discussion[index].komentar, data]
 
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        try {
+            await database.collection("tryout").updateOne(
+                { "_id": tryoutId },
+                {
+                    $set: {
+                        "discussion": req.session.discuss.discussion
+                    }
+                },
+            )
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        } catch(err) {
+            console.log(err)
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        }
     })
 
     // API Calls
