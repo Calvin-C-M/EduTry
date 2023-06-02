@@ -37,15 +37,11 @@ app.prepare()
         return app.render(req, res, '/index', req.query)
     })
 
-    // server.get('/login', (req, res) => {
-    //     console.log("Login")
-    //     return app.render(req, res, '/login', req.query)
-    // })
-
-    // server.get('/register', (req, res) => {
-    //     console.log("Register")
-    //     return app.render(req, res, '/register', req.query)
-    // })
+    server.get('/autentikasi', (req, res) => {
+        req.query.message = req.flash("message")
+        console.log(req.query)
+        return app.render(req, res, '/autentikasi', req.query)
+    })
 
     server.get('/profile', (req, res) => {
         console.log("Profile")
@@ -98,9 +94,26 @@ app.prepare()
         return app.render(req, res, '/my-tryouts', req.query)
     })
     
-    server.get('/discuss', (req, res) => {
+    server.get('/discuss/:id', (req, res) => {
         loginBlocker(req, res)
-        return app.render(req, res, '/discuss', req.query)
+
+        // if(req.session.tryout == null) {
+        //     req.flash("message", "Buka tryoutnya terlebih dahulu")
+        //     res.redirect("/my-tryouts")
+        // }
+
+        // return app.render(req, res, '/discuss', req.query)
+        const id = req.params.id
+
+        fetch(`${baseUrl}/api/discussion/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.discuss = data
+                return app.render(req, res, '/discuss', req.query)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     })
 
     server.get('/questions/:id', (req, res) => {
@@ -291,7 +304,7 @@ app.prepare()
 
         if(accountData.length < 1 || inputData.password != accountData[0].password) {
             req.flash('message', 'Invalid Login!')
-            res.redirect('/login')
+            res.redirect('/autentikasi')
         } else {
             req.session.isLoggedIn = true
             switch(accountData[0].role) {
@@ -337,10 +350,10 @@ app.prepare()
 
         if(accountData.length > 0) {
             req.flash('message', 'Username is taken!')
-            res.redirect('/register')
+            res.redirect('/autentikasi#register')
         } else if(userData.length > 0) {
             req.flash('message', 'Email is already registered!')
-            res.redirect('/register')
+            res.redirect('/autentikasi#register')
         } else {
             await database.collection('account').insertOne({
                 username: inputData.username,
@@ -360,7 +373,7 @@ app.prepare()
             })
             
             req.flash('message', 'Pendaftaran berhasil!')
-            res.redirect('/login')
+            res.redirect('/autentikasi')
         }
     })
 
@@ -640,6 +653,63 @@ app.prepare()
 
     })
 
+    server.post('/add/discuss/topik', async (req, res) => {
+        const data = {
+            "nama": req.session.user.nama,
+            "isi": req.body.isi,
+            "komentar": []
+        }
+        const tryoutId = new ObjectId(req.body.id_tryout)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        try {
+            await database.collection("tryout").updateOne(
+                { "_id": tryoutId },
+                {
+                    $push: {
+                        "discussion": data
+                    }
+                }
+            )
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        } catch(err) {
+            console.log(err)
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        }
+    })
+
+    server.post('/add/discuss/komentar', async (req, res) => {
+        const data = {
+            "nama": req.session.user.nama,
+            "isi": req.body.isi
+        }
+        const index = req.body.topik_index
+        const tryoutId = new ObjectId(req.body.id_tryout)
+        // const topik = req.session.discuss[index]
+        // topik.komentar = [...topik.komentar, data]
+        req.session.discuss.discussion[index].komentar = [...req.session.discuss.discussion[index].komentar, data]
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+
+        try {
+            await database.collection("tryout").updateOne(
+                { "_id": tryoutId },
+                {
+                    $set: {
+                        "discussion": req.session.discuss.discussion
+                    }
+                },
+            )
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        } catch(err) {
+            console.log(err)
+            res.redirect(`/discuss/${req.body.id_tryout}`)
+        }
+    })
+
     // API Calls
     server.get('/api/users ', async (req, res) => {
         const client = await clientPromise
@@ -744,6 +814,22 @@ app.prepare()
             temp.nama_tryout = tryoutData.nama
 
             result = [...result, temp]
+        }
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/discussion/:id', async (req, res) => {
+        const id = new ObjectId(req.params.id)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const tryoutData = await database.collection('tryout').findOne({ "_id": id })
+
+        const result = {
+            "_id": id,
+            "nama": tryoutData.nama,
+            "discussion": tryoutData.discussion,
         }
 
         res.send(result).status(200)
