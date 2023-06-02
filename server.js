@@ -98,9 +98,19 @@ app.prepare()
         return app.render(req, res, '/my-tryouts', req.query)
     })
     
-    server.get('/discuss', (req, res) => {
+    server.get('/discuss/:id', (req, res) => {
         loginBlocker(req, res)
-        return app.render(req, res, '/discuss', req.query)
+        const id = req.params.id
+
+        fetch(`${baseUrl}/api/discussion/${id}`)
+            .then(res => res.json())
+            .then(data => {
+                req.session.discuss = data
+                return app.render(req, res, '/discuss', req.query)
+            })
+            .catch(err => {
+                console.log(err)
+            })
     })
 
     server.get('/questions/:id', (req, res) => {
@@ -744,6 +754,22 @@ app.prepare()
             temp.nama_tryout = tryoutData.nama
 
             result = [...result, temp]
+        }
+
+        res.send(result).status(200)
+    })
+
+    server.get('/api/discussion/:id', async (req, res) => {
+        const id = new ObjectId(req.params.id)
+
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const tryoutData = await database.collection('tryout').findOne({ "_id": id })
+
+        const result = {
+            "_id": id,
+            "nama": tryoutData.nama,
+            "discussion": tryoutData.discussion,
         }
 
         res.send(result).status(200)
