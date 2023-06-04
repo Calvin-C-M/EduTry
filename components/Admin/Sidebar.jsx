@@ -36,7 +36,7 @@ const Sidebar = () => {
                     navLinks.map(links => LinkList(links.name, links.href))
                 }
             </div>
-            <Button className="bg-white font-bold text-primary flex items-center justify-center px-8 py-1 w-full">
+            <Button href="/autentikasi" className="bg-white font-bold text-primary flex items-center justify-center px-8 py-1 w-full">
                 Logout
             </Button>
         </nav>
