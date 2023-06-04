@@ -8,6 +8,7 @@ const SoalModal = ({ id, isi, bobot, pilihan, setShowModal }) => {
     const [pilihan2, setPilihan2] = useState("")
     const [pilihan3, setPilihan3] = useState("")
     const [pilihan4, setPilihan4] = useState("")
+    const [pilihan5, setPilihan5] = useState("")
     const [jawaban, setJawaban] = useState("")
 
     return (
@@ -73,6 +74,17 @@ const SoalModal = ({ id, isi, bobot, pilihan, setShowModal }) => {
                                         className="bg-white border-gray border-2 rounded-md px-2 py-1 focus:outline-none focus:border-primary transition-all duration-100"
                                     />
                                     <input type="radio" name="jawaban" id="jawaban-4" value={pilihan4} onChange={e => setJawaban(e.target.value)} />
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <input 
+                                        id="pilihan-5"
+                                        name="pilihan_5"
+                                        type="text" 
+                                        placeholder="E"
+                                        onChange={e => setPilihan5(e.target.value)}
+                                        className="bg-white border-gray border-2 rounded-md px-2 py-1 focus:outline-none focus:border-primary transition-all duration-100"
+                                    />
+                                    <input type="radio" name="jawaban" id="jawaban-5" value={pilihan5} onChange={e => setJawaban(e.target.value)} />
                                 </div>
                             </div>
                         </div>

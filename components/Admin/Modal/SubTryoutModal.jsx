@@ -9,7 +9,7 @@ const SubTryoutModal = ({ id, nama, jenis, waktuPengerjaan, idTryout, setShowMod
     return (
         <>
             <div className="relative flex items-center">
-                <section className="bg-white p-5 rounded-md absolute w-full z-20 mt-40">
+                <section className="bg-white p-5 rounded-md absolute w-full z-20 top-1/2">
                     <h2 className="mb-3">Create Tryout</h2>
                     <form action="/add/subtryout" method="post" className="flex flex-col gap-3">
                         <div className="flex flex-col gap-2">

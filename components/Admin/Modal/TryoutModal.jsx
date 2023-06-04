@@ -9,8 +9,8 @@ const TryoutModal = ({ id, nama, deadline, harga, status, setShowModal }) => {
 
     return (
         <>
-            <div className="relative flex items-center">
-                <section className="bg-white p-5 rounded-md absolute w-full z-20 mt-40">
+            <div className="relative flex items-center justify-center">
+                <section className="bg-white p-5 rounded-md absolute w-full z-20 top-1/2">
                     <h2 className="mb-3">Create Tryout</h2>
                     <form action="/add/tryout" method="post" className="flex flex-col gap-3">
                         <div className="flex flex-col gap-2">
