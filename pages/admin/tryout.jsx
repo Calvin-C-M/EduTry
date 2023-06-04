@@ -30,8 +30,8 @@ const Tryout = () => {
     return (
         <>
             <section>
-                <h1 className="mb-3">Tryout</h1>
-                <Button className="bg-green mb-3" onClick={() => setShowFormModal(!showFormModal)}>
+                <h1 className="mb-3 text-white">Tryout</h1>
+                <Button className="bg-red mb-3" onClick={() => setShowFormModal(!showFormModal)}>
                     <AddIcon />
                     Create
                 </Button>

@@ -8,17 +8,6 @@ import getBaseUrl from "@/utils/getBaseUrl";
 import axios from "axios";
 
 const KonfirmasiPembayaran = () => {
-    const testData = [
-        { id: 1, username: "testing", namaPaket: "Tryout #3", jenisPembayaran: "Gopay", nominal: 15000 },
-        { id: 2, username: "testing", namaPaket: "Tryout #3", jenisPembayaran: "Gopay", nominal: 15000 },
-        { id: 3, username: "testing", namaPaket: "Tryout #3", jenisPembayaran: "Gopay", nominal: 15000 },
-        { id: 4, username: "testing", namaPaket: "Tryout #3", jenisPembayaran: "Gopay", nominal: 15000 },
-        { id: 5, username: "testing", namaPaket: "Tryout #3", jenisPembayaran: "Gopay", nominal: 15000 },
-        { id: 6, username: "testing", namaPaket: "Tryout #3", jenisPembayaran: "Gopay", nominal: 15000 },
-        { id: 7, username: "testing", namaPaket: "Tryout #3", jenisPembayaran: "Gopay", nominal: 15000 },
-
-    ]
-
     const statuses = [
         "PENDING", // Untuk yang belum bayar
         "ACCEPT", // Untuk selesai pembayaran tapi belum mengerjakan
@@ -61,7 +50,7 @@ const KonfirmasiPembayaran = () => {
     return (
         <>
             <section>
-                <h1 className="mb-3">Konfirmasi Pembayaran</h1>
+                <h1 className="mb-3 text-white">Konfirmasi Pembayaran</h1>
                 <section className="p-5 bg-white">
                     <table className="table-auto w-full text-center border-2 border-primary rounded-md">
                         <thead>
