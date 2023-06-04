@@ -10,7 +10,7 @@ import TryoutModal from "@/components/Admin/Modal/TryoutModal";
 const Tryout = () => {
     const [tryouts, setTryouts] = useState([])
     const [showFormModal, setShowFormModal] = useState(false)
-
+    
     useEffect(() => {
         const url = getBaseUrl()
 
