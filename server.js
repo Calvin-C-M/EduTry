@@ -11,7 +11,7 @@ const next = require("next");
 
 const port = process.env.PORT
 const hostname = process.env.HOSTNAME
-const baseUrl = `http://${hostname}:${port}`
+const baseUrl = `http://${hostname}`
 
 const dev = process.env.ENVIRONMENT !== "production"
 const app = next({ dev })
