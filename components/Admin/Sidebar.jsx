@@ -8,8 +8,6 @@ const Sidebar = () => {
     const navLinks = [
         { id: 1, name: "Pembayaran", href: "/admin/pembayaran" },
         { id: 2, name: "Tryout", href: "/admin/tryout" },
-        { id: 3, name: "Konsultasi", href: "/admin/konsultasi" },
-        { id: 4, name: "Profile", href: "/admin/profile" },
     ]
 
     const pathname = getPathname()

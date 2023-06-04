@@ -14,8 +14,8 @@ const Soal = ({ data }) => {
     return (
         <>
             <section>
-                <h1 className="mb-3">{data.nama + " > " + subtryout.nama + " > Soal"} </h1>
-                <Button className="bg-green mb-3" onClick={() => setShowModalForm(!showModalForm)}>
+                <h1 className="mb-3 text-white">{data.nama + " > " + subtryout.nama + " > Soal"} </h1>
+                <Button className="bg-red mb-3" onClick={() => setShowModalForm(!showModalForm)}>
                     <AddIcon />
                     Create
                 </Button>

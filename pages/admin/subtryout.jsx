@@ -4,18 +4,15 @@ import Button from "@/components/Button";
 import AddIcon from '@mui/icons-material/Add';
 import { useState } from "react";
 import SubTryoutModal from "@/components/Admin/Modal/SubTryoutModal";
-import getBaseUrl from "@/utils/getBaseUrl";
 
 const SubTryout = ({ data }) => {
     const [showModalForm, setShowModalForm] = useState(false)
 
-    console.log(data)
-
     return (
         <>
             <div>
-                <h1 className="mb-3">{data.nama} {'>'} Sub Tryout</h1>
-                <Button className="bg-green mb-3" onClick={() => setShowModalForm(!showModalForm)}>
+                <h1 className="mb-3 text-white">{data.nama} {'>'} Sub Tryout</h1>
+                <Button className="bg-red mb-3" onClick={() => setShowModalForm(!showModalForm)}>
                     <AddIcon />
                     Create
                 </Button>

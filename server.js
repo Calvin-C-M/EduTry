@@ -33,17 +33,15 @@ app.prepare()
     // =========================================
 
     server.get('/', (req, res) => {
-        console.log("Hello")
         return app.render(req, res, '/index', req.query)
     })
 
     server.get('/autentikasi', (req, res) => {
-        req.query.message = req.flash("message")
-        console.log(req.query)
         return app.render(req, res, '/autentikasi', req.query)
     })
 
     server.get('/profile', (req, res) => {
+        loginBlocker(req, res)
         console.log("Profile")
         return app.render(req, res, '/profile', req.query)
     })
@@ -59,6 +57,7 @@ app.prepare()
     })
 
     server.get('/intro-tryout/:id', (req, res) => {
+        loginBlocker(req, res)
         const id = req.params.id
 
         fetch(`${baseUrl}/api/mytryout/${id}`)
@@ -239,14 +238,6 @@ app.prepare()
                 res.redirect('/tryouts')
             })
 
-    })
-
-    server.get('/login', (req, res) => {
-        return app.render(req, res, '/test-login', req.query)
-    })
-
-    server.get('/register', (req, res) => {
-        return app.render(req, res, '/test-register', req.query)
     })
   
     server.get('/upload-payment-proof', (req, res) => {
@@ -522,7 +513,7 @@ app.prepare()
         const client = await clientPromise
         const database = client.db(process.env.MONGODB_NAME)
 
-        const tryoutData = await database.collection("tryout").find({ nama: inputData.nama }).toArray()
+        const tryoutData = await database.collection("tryout").find({ nama: req.body.nama }).toArray()
 
         if(tryoutData.length > 0) {
             // If tryout name already exist
@@ -534,7 +525,7 @@ app.prepare()
                     "nama": req.body.nama,
                     "created_at": new Date().toJSON().slice(0, 10),
                     "deadline": req.body.deadline,
-                    "harga": req.body.harga,
+                    "harga": parseInt(req.body.harga),
                     "status": "CLOSED",
                     "subtryout": []
                 })
@@ -613,6 +604,7 @@ app.prepare()
             req.body.pilihan_2,
             req.body.pilihan_3,
             req.body.pilihan_4,
+            req.body.pilihan_5
         ]
 
         const client = await clientPromise

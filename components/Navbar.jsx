@@ -44,10 +44,10 @@ const Navbar = () => {
                         <li className={router.asPath == '/#contact' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Kontak</li>
                     </Link>
                     <div className='flex-none'>
-                        <Link href='/login'>
+                        <Link href='/autentikasi'>
                             <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>Login</button>
                         </Link>
-                        <Link href='/register'>
+                        <Link href='/autentikasi#register'>
                             <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>Sign Up</button>
                         </Link>
                     </div>
