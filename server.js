@@ -33,17 +33,15 @@ app.prepare()
     // =========================================
 
     server.get('/', (req, res) => {
-        console.log("Hello")
         return app.render(req, res, '/index', req.query)
     })
 
     server.get('/autentikasi', (req, res) => {
-        req.query.message = req.flash("message")
-        console.log(req.query)
         return app.render(req, res, '/autentikasi', req.query)
     })
 
     server.get('/profile', (req, res) => {
+        loginBlocker(req, res)
         console.log("Profile")
         return app.render(req, res, '/profile', req.query)
     })
@@ -59,6 +57,7 @@ app.prepare()
     })
 
     server.get('/intro-tryout/:id', (req, res) => {
+        loginBlocker(req, res)
         const id = req.params.id
 
         fetch(`${baseUrl}/api/mytryout/${id}`)
@@ -239,14 +238,6 @@ app.prepare()
                 res.redirect('/tryouts')
             })
 
-    })
-
-    server.get('/login', (req, res) => {
-        return app.render(req, res, '/test-login', req.query)
-    })
-
-    server.get('/register', (req, res) => {
-        return app.render(req, res, '/test-register', req.query)
     })
   
     server.get('/upload-payment-proof', (req, res) => {
