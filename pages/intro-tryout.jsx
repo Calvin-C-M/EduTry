@@ -55,8 +55,8 @@ const IntroTryout = ({ data }) => {
                             ? <Button href={`/result/${data.mytryout._id}`}>
                                 Hasil
                             </Button>
-                            : <Button disabled={true}>
-                                Pending
+                            : <Button href={`/payment/${data.mytryout._id}`}>
+                                Cek Status Pembayaran
                             </Button>
                         }
                     </section>

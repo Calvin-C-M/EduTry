@@ -804,7 +804,8 @@ app.prepare()
             const tryoutData = await database.collection('tryout').findOne({ "_id": tryoutId })
 
             const resTemp = {
-                "_id": tryoutData._id,
+                "_id": myTryoutData._id,
+                "id_tryout": tryoutData._id,
                 "nama": tryoutData.nama,
                 "created_at": tryoutData.created_at,
                 "deadline": tryoutData.deadline,
