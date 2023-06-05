@@ -39,7 +39,7 @@ const KonfirmasiPembayaran = () => {
     useEffect(() => {
         axios({
             method: "GET",
-            url: `${baseUrl}/api/mytryouts`
+            url: `${baseUrl}/api/transaksi`
         }).then(res => {
             setData(res.data)
         }).catch(err => {

@@ -784,7 +784,7 @@ app.prepare()
         res.send(result).status(200)
     })
 
-    server.get('/api/mytryouts', async (req, res) => {
+    server.get('/api/transaksi', async (req, res) => {
         const client = await clientPromise
         const database = client.db(process.env.MONGODB_NAME)
         const myTryoutData = await database.collection("mytryout").find({}).toArray()
