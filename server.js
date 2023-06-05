@@ -784,6 +784,39 @@ app.prepare()
         res.send(result).status(200)
     })
 
+    server.get('/api/mytryouts/:id', async (req, res) => {
+        const idUser = new ObjectId(req.params.id)
+        const client = await clientPromise
+        const database = client.db(process.env.MONGODB_NAME)
+        const userData = await database.collection('user').findOne({ "_id": idUser })
+        const myTryouts = userData.tryouts
+        // const tryouts = new ObjectId(req.session.user.tryouts)
+        if(myTryouts.length <= 0) {
+            res.send({ "zero_data": true }).status(400)
+        }
+
+        let result = []
+        
+        for(let myTryout of myTryouts) {
+            const myTryoutId = new ObjectId(myTryout)
+            const myTryoutData = await database.collection('mytryout').findOne({ "_id": myTryoutId })
+            const tryoutId = new ObjectId(myTryoutData.id_tryout)
+            const tryoutData = await database.collection('tryout').findOne({ "_id": tryoutId })
+
+            const resTemp = {
+                "_id": tryoutData._id,
+                "nama": tryoutData.nama,
+                "created_at": tryoutData.created_at,
+                "deadline": tryoutData.deadline,
+                "status": myTryoutData.status,
+            }
+
+            result = [...result, resTemp]
+        }
+
+        res.send(result).status(200)
+    })
+
     server.get('/api/transaksi', async (req, res) => {
         const client = await clientPromise
         const database = client.db(process.env.MONGODB_NAME)
