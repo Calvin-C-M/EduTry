@@ -94,10 +94,10 @@ const Navbar = () => {
                     <Link href='/#contact' className='flex justify-end my-5'>
                         <li className={router.asPath == '/#contact' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Kontak</li>
                     </Link>
-                    <Link href='/login' className='flex justify-end mt-3'>
+                    <Link href='/autentikasi' className='flex justify-end mt-3'>
                         <button className='bg-blue-light px-7 py-[6px] font-medium text-primary'>Login</button>
                     </Link>
-                    <Link href='/register' className='flex justify-end mt-3'>
+                    <Link href='/autentikasi#register' className='flex justify-end mt-3'>
                         <button className='bg-blue-light px-7 py-[6px] font-medium text-primary'>Sign Up</button>
                     </Link>
                 </ul>

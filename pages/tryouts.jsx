@@ -1,5 +1,8 @@
 import Pict from '../public/pict.png'
 import TryoutCard from '../components/TryoutCard'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import getBaseUrl from '@/utils/getBaseUrl'
 
 export default function Tryouts() {
   const tryoutsData = [
@@ -12,19 +15,35 @@ export default function Tryouts() {
     {id:1, nama:"Tryout Mandiri #2", harga:15000, pict:Pict, href:""},
   ]
 
+  const [tryouts, setTryouts] = useState([])
+  const baseUrl = getBaseUrl()
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: `${baseUrl}/api/tryouts`
+    }).then(res => {
+      setTryouts(res.data)
+    }).catch(err => {
+      console.error(err)
+    })
+  },[])
+  
   return (
     <div className='w-full min-h-screen'>
       <div className='w-full px-10 md:px-28 pt-36'>
-        <h1 className='text-primary'>Paket Tryout</h1>
+        <h1 className='text-white'>Paket Tryout</h1>
       </div>
       <div className='w-full px-10 md:px-28 py-8 pb-20'>
-        {tryoutsData?.length == 0 ? (
+        {tryouts?.length == 0 ? (
           <div className='flex w-full justify-center text-center py-2'>
             <p>Belum ada tryout yang terdaftar</p>
           </div>
         ) : (
           <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-auto place-items-center gap-3 md:gap-5'>
-            {tryoutsData.map((data) => <TryoutCard key={data.id} pict={data.pict} nama={data.nama} harga={data.harga} href={data.href} />)}
+            {
+              tryouts.map((tryout, index) => <TryoutCard key={tryout._id} pict={Pict} nama={tryout.nama} harga={tryout.harga} href={"/purchase/"+tryout._id} />)
+            }
           </div>
         )}
       </div>

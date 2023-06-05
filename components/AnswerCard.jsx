@@ -32,7 +32,7 @@ const AnswerCard = ({ key, allData, data, index, handleIndex, handleNumCard }) =
             </div>
             <div className='w-full'>
                 <p className='text-primary font-bold text-lg md:text-xl mt-2 mb-4'>Video Pembahasan</p>
-                <iframe src={data.pembahasan.link_video} width='100%' height='386vh' title='Video Pembahasan' allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture' frameborder='0'></iframe>
+                <iframe src={data.pembahasan.link_video} width='100%' height='386vh' title='Video Pembahasan' allow='accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture' frameBorder='0'></iframe>
             </div>
             <div className='flex justify-between items-center w-full mt-6 mb-3'>
                 {index > 0 ? (

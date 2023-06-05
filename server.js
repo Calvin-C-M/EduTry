@@ -812,7 +812,7 @@ app.prepare()
     })
 
     server.get('/api/discussion/:id', async (req, res) => {
-        const id = new ObjectId(req.params.id)
+        const id = new ObjectId(req.session.tryout._id)
 
         const client = await clientPromise
         const database = client.db(process.env.MONGODB_NAME)

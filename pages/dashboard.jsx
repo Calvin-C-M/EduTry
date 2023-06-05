@@ -1,17 +1,25 @@
 import Banner from '../components/Banner'
 import Pict from '../public/pict.png'
 import TryoutCard from '../components/TryoutCard'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+import getBaseUrl from '@/utils/getBaseUrl'
 
 export default function Dashboard() {
-  const tryoutsData = [
-    {id:7, nama:"Tryout UTBK #5", harga:20000, pict:Pict, href:"/purchase"},
-    {id:6, nama:"Tryout Mandiri #4", harga:20000, pict:Pict, href:"/purchase"},
-    {id:5, nama:"Tryout Mandiri #3", harga:15000, pict:Pict, href:"/purchase"},
-    {id:4, nama:"Tryout UTBK #4", harga:20000, pict:Pict, href:"/purchase"},
-    {id:3, nama:"Tryout UTBK #3", harga:20000, pict:Pict, href:"/purchase"},
-    {id:2, nama:"Tryout UTBK #2", harga:15000, pict:Pict, href:"/purchase"},
-    {id:1, nama:"Tryout Mandiri #2", harga:15000, pict:Pict, href:"/purchase"},
-  ]
+  const [tryouts, setTryouts] = useState([])
+  const baseUrl = getBaseUrl()
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: `${baseUrl}/api/tryouts`
+    }).then(res => {  
+      console.log(res.data)
+      setTryouts(res.data)
+    }).catch(err => {
+      console.error(err)
+    })
+  }, [])
 
   return (
     <div className='w-full min-h-screen'>
@@ -20,13 +28,15 @@ export default function Dashboard() {
         <h1 className='text-white'>Tryout Terbaru</h1>
       </div>
       <div className='w-full px-10 md:px-28 py-8 pb-20'>
-        {tryoutsData?.length == 0 ? (
+        {tryouts?.length == 0 ? (
           <div className='flex w-full justify-center text-center py-2'>
             <p>Belum ada tryout yang terdaftar</p>
           </div>
         ) : (
           <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-auto place-items-center gap-3 md:gap-5'>
-            {tryoutsData.map(data => <TryoutCard key={data.id} pict={data.pict} nama={data.nama} harga={data.harga} href={data.href} />)}
+            {
+              tryouts.map((tryout, index) => <TryoutCard key={tryout._id} pict={Pict} nama={tryout.nama} harga={tryout.harga} href={"/purchase/"+tryout._id} />)
+            }
           </div>
         )}
       </div>
