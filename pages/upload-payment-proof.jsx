@@ -95,16 +95,16 @@ export default function UploadPaymentProof({ data }) {
           <div className='flex-none w-full'>
             {uploaded ? (
               <div>
-                <CheckCircleIcon className='flex justify-center w-full h-3/5 text-green px-8 pb-2' />
+                <CheckCircleIcon className='flex justify-center w-full h-[200px] text-green px-8 pb-2' />
                 <p className='flex justify-center w-full font-bold text-center text-lg md:text-2xl'>Bukti Pembayaran Terkirim</p>
-                <form method='post' action="/control/confirm-payment">
+                <form method='post' action="/control/confirm-payment" className='flex justify-center'>
                   <input type="hidden" name="confirm_image" value={imageUrl} />
-                  <button type="submit">Ok</button>
+                  <button className="bg-primary font-bold text-white flex items-center justify-center px-8 py-1 w-fit hover:brightness-110 transition-all duration-100" type="submit">Ok</button>
                 </form>
               </div>
             ) : (
               <div>
-                <DangerousOutlinedIcon className='flex justify-center w-full h-3/5 text-red px-8 pb-2' />
+                <DangerousOutlinedIcon className='flex justify-center w-full h-[200px] text-red px-8 pb-2' />
                 <p className='flex justify-center w-full font-bold text-center text-lg md:text-2xl'>Bukti Pembayaran Gagal Terkirim</p>
               </div>
             )}
@@ -120,7 +120,7 @@ export default function UploadPaymentProof({ data }) {
 
 export const getServerSideProps = ({ req, res }) => {
   const data = {
-    'API_KEY': req.flash('api_key')[0],
+    'API_KEY': req.session.API_KEY,
     'transaksi': req.session.transaksi
   }
 
