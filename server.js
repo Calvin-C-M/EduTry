@@ -101,7 +101,6 @@ app.prepare()
         //     res.redirect("/my-tryouts")
         // }
 
-        // return app.render(req, res, '/discuss', req.query)
         const id = req.params.id
 
         fetch(`${baseUrl}/api/discussion/${id}`)
@@ -241,8 +240,7 @@ app.prepare()
     })
   
     server.get('/upload-payment-proof', (req, res) => {
-        req.flash('api_key', process.env.IMBB_API_KEY)
-
+        req.session.API_KEY = process.env.IMBB_API_KEY
         return app.render(req, res, '/upload-payment-proof', req.query)
     })
 
@@ -846,7 +844,7 @@ app.prepare()
     })
 
     server.get('/api/discussion/:id', async (req, res) => {
-        const id = new ObjectId(req.session.tryout._id)
+        const id = new ObjectId(req.params.id)
 
         const client = await clientPromise
         const database = client.db(process.env.MONGODB_NAME)
