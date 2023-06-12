@@ -43,7 +43,7 @@ export default function MyTryouts({ data }) {
   return (
     <>
       <Navbar isLoggedIn={data.isLoggedIn} />
-      <div className='w-full px-6 md:px-28 pt-28 md:pt-6 pb-20'>
+      <div className='w-full px-6 md:px-28 pt-28 pb-20'>
         <h1 className='text-white mx-4'>Tryout Saya</h1>
         <div className='flex w-full justify-center px-0 md:px-10 my-6 md:my-8'>
           <div className='w-fit h-fit bg-white p-5 rounded-xl'>
