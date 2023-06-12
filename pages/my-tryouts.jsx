@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react'
 import MyTryoutCard from '@/components/MyTryoutCard'
 import axios from 'axios'
 import getBaseUrl from '@/utils/getBaseUrl'
+import Navbar from '@/components/Navbar'
 
 export default function MyTryouts({ data }) {
   const myTryouts = [
@@ -40,56 +41,60 @@ export default function MyTryouts({ data }) {
   }
 
   return (
-    <div className='w-full px-6 md:px-28 pt-1 md:pt-6 pb-20'>
-      <h1 className='text-white mx-4'>Tryout Saya</h1>
-      <div className='flex w-full justify-center px-0 md:px-10 my-6 md:my-8'>
-        <div className='w-fit h-fit bg-white p-5 rounded-xl'>
-          <Link onClick={()=>setStatus(true)} href='' className={status ? 'bg-blue-dark font-medium text-white w-fit h-fit p-3 mr-3 rounded-xl' : 'bg-blue text-primary w-fit h-fit p-3 mr-3 rounded-xl'}>Belum dikerjakan</Link>
-          <Link onClick={()=>setStatus(false)} href='' className={status ? 'bg-blue text-primary w-fit h-fit p-3 rounded-xl' : 'bg-blue-dark font-medium text-white w-fit h-fit p-3 rounded-xl'}>Sudah dikerjakan</Link>
+    <>
+      <Navbar isLoggedIn={data.isLoggedIn} />
+      <div className='w-full px-6 md:px-28 pt-28 md:pt-6 pb-20'>
+        <h1 className='text-white mx-4'>Tryout Saya</h1>
+        <div className='flex w-full justify-center px-0 md:px-10 my-6 md:my-8'>
+          <div className='w-fit h-fit bg-white p-5 rounded-xl'>
+            <Link onClick={()=>setStatus(true)} href='' className={status ? 'bg-blue-dark font-medium text-white w-fit h-fit p-3 mr-3 rounded-xl' : 'bg-blue text-primary w-fit h-fit p-3 mr-3 rounded-xl'}>Belum dikerjakan</Link>
+            <Link onClick={()=>setStatus(false)} href='' className={status ? 'bg-blue text-primary w-fit h-fit p-3 rounded-xl' : 'bg-blue-dark font-medium text-white w-fit h-fit p-3 rounded-xl'}>Sudah dikerjakan</Link>
+          </div>
+        </div>
+        <div className='w-full bg-white px-5 md:px-10 py-4 md:py-8 my-1 md:my-3'>
+          {status ? (
+            mytryouts?.length == 0 ? (
+              <div className='flex w-full justify-center text-center py-2'>
+                <p>Belum ada tryout yang terdaftar</p>
+              </div>
+            ) : (
+              <div className='grid grid-cols-1 md:grid-cols-myto place-items-center gap-5 md:gap-7'>
+                {mytryouts.map((tryout, index) => {
+                  if(tryout.status != "DONE") {
+                    return(
+                      <MyTryoutCard key={tryout._id} nama={tryout.nama} tanggal={tryout.created_at} deadline={tryout.deadline} tim={"EduTry Team"} href={'/intro-tryout/'+tryout._id} />
+                    )
+                  }
+                })}
+              </div>
+            )
+          ) : (
+            getDoneTryouts() == 0 ? (
+              <div className='flex w-full justify-center text-center py-2'>
+                <p>Kamu belum menyelesaikan satu tryout pun. Ayo segera selesaikan tryout-mu😊</p>
+              </div>
+            ) : (
+              <div className='grid grid-cols-1 md:grid-cols-myto place-items-center gap-5 md:gap-7'>
+                {mytryouts.map((tryout, index) => {
+                  if(tryout.status == "DONE") {
+                    return(
+                      <MyTryoutCard key={tryout._id} nama={tryout.nama} tanggal={tryout.created_at} deadline={tryout.deadline} tim={"EduTry Team"} href={'/intro-tryout/'+tryout._id} />
+                    )
+                  }
+                })}
+              </div>
+            )
+          )}
         </div>
       </div>
-      <div className='w-full bg-white px-5 md:px-10 py-4 md:py-8 my-1 md:my-3'>
-        {status ? (
-          mytryouts?.length == 0 ? (
-            <div className='flex w-full justify-center text-center py-2'>
-              <p>Belum ada tryout yang terdaftar</p>
-            </div>
-          ) : (
-            <div className='grid grid-cols-1 md:grid-cols-myto place-items-center gap-5 md:gap-7'>
-              {mytryouts.map((tryout, index) => {
-                if(tryout.status != "DONE") {
-                  return(
-                    <MyTryoutCard key={tryout._id} nama={tryout.nama} tanggal={tryout.created_at} deadline={tryout.deadline} tim={"EduTry Team"} href={'/intro-tryout/'+tryout._id} />
-                  )
-                }
-              })}
-            </div>
-          )
-        ) : (
-          getDoneTryouts() == 0 ? (
-            <div className='flex w-full justify-center text-center py-2'>
-              <p>Kamu belum menyelesaikan satu tryout pun. Ayo segera selesaikan tryout-mu😊</p>
-            </div>
-          ) : (
-            <div className='grid grid-cols-1 md:grid-cols-myto place-items-center gap-5 md:gap-7'>
-              {mytryouts.map((tryout, index) => {
-                if(tryout.status == "DONE") {
-                  return(
-                    <MyTryoutCard key={tryout._id} nama={tryout.nama} tanggal={tryout.created_at} deadline={tryout.deadline} tim={"EduTry Team"} href={'/intro-tryout/'+tryout._id} />
-                  )
-                }
-              })}
-            </div>
-          )
-        )}
-      </div>
-    </div>
+    </>
   )
 }
 
 export const getServerSideProps = ({ req, res }) => {
   const data = {
-    "user": req.session.user
+    "user": req.session.user,
+    "isLoggedIn": req.session.isLoggedIn
   }
 
   return {

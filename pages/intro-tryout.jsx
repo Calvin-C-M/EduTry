@@ -3,6 +3,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import TimeBubble from "@/components/TimeBubble";
 import { useEffect, useState } from "react";
 import SubTryoutCard from "@/components/SubTryoutCard";
+import Navbar from "@/components/Navbar";
 
 const IntroTryout = ({ data }) => {
     const [tryoutSet, setTryoutSet] = useState("tps")
@@ -35,7 +36,8 @@ const IntroTryout = ({ data }) => {
 
     return (
         <>
-            <div className="flex flex-col gap-3 mx-20">
+            <Navbar isLoggedIn={data.isLoggedIn} />
+            <div className="flex flex-col gap-3 mx-20 pt-28">
                 <section className="flex justify-between gap-10 bg-white rounded-lg px-14 py-12">
                     <section className="flex flex-col gap-3">
                         <h1 className="text-primary">{data.tryout.nama}</h1>
@@ -114,7 +116,8 @@ const IntroTryout = ({ data }) => {
 export const getServerSideProps = ({ req, res }) => {
     const data = {
         "mytryout": req.session.mytryout,
-        "tryout": req.session.tryout
+        "tryout": req.session.tryout,
+        "isLoggedIn": req.session.isLoggedIn
     }
 
     return {

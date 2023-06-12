@@ -19,8 +19,8 @@ const Layout = ({ children }) => {
   }
   return (
     <>
-        <Navbar />
-        <main className='min-h-screen pt-28'>
+        {/* <Navbar /> */}
+        <main className='min-h-screen'>
           { children }
         </main>
     </>

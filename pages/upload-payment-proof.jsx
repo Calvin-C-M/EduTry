@@ -10,6 +10,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import PlaceholderImg from "@/public/placeholder-img.png"
 import axios from 'axios'
 import getBaseUrl from '@/utils/getBaseUrl'
+import Navbar from '@/components/Navbar'
 
 export default function UploadPaymentProof({ data }) {
   const router = useRouter()
@@ -54,7 +55,8 @@ export default function UploadPaymentProof({ data }) {
 
   return (
     <>
-      <div className='w-full px-10 md:px-28 pt-1 md:pt-6 pb-20'>
+      <Navbar isLoggedIn={data.isLoggedIn} />
+      <div className='w-full px-10 md:px-28 pt-28 md:pt-6 pb-20'>
         <Link href='/payment' className='flex items-center text-white p-2'>
           <ArrowBackIosNewIcon className='mr-5' />
           <h1>Upload Bukti Pembayaran</h1>
@@ -121,7 +123,8 @@ export default function UploadPaymentProof({ data }) {
 export const getServerSideProps = ({ req, res }) => {
   const data = {
     'API_KEY': req.session.API_KEY,
-    'transaksi': req.session.transaksi
+    'transaksi': req.session.transaksi,
+    'isLoggedIn': req.session.isLoggedIn
   }
 
   return {

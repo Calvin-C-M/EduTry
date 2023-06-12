@@ -9,6 +9,7 @@ import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import PersonIcon from '@mui/icons-material/Person';
+import Navbar from "@/components/Navbar";
 
 export default function Login({ data }){
     const [showPassword, setShowPassword]=useState(false)
@@ -26,6 +27,7 @@ export default function Login({ data }){
 
     return(
         <>
+            <Navbar />
             <form action={isLogin ? "/control/login" : "/control/register"} method="post">
                 <div className="flex">
                     <div className="w-1/2 h-[100vh] bg-[url('/wellcome.png')]"></div>

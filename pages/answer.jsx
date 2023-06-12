@@ -3,6 +3,7 @@ import Link from 'next/link'
 import AnswerCard from '@/components/AnswerCard'
 import NumberCard from '@/components/NumberCard'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import Navbar from '@/components/Navbar'
 
 export default function Answer({ data }) {
   const Tryout = data.tryout.nama
@@ -39,44 +40,48 @@ export default function Answer({ data }) {
   }, [scroll])
 
   return (
-    <div className='w-full px-10 md:px-28 pt-3 md:pt-8 pb-20'>
-      <h1 className='text-white'>{Tryout} : {subTryout}</h1>
-      <div className='md:grid grid-cols-3 gap-3 w-full py-5 md:py-8'>
-        <div className='col-start-1 col-end-3'>
-          <AnswerCard allData={data.hasil.kerjaan} data={data.hasil.kerjaan[index]} index={index} handleIndex={handleIndex} handleNumCard={handleNumCard} />
-          <div className={scroll ? 'fixed md:hidden left-1/2 translate-x-[-50%] bottom-[-10%] w-4/5 mt-3 ease-in duration-200' : 'fixed md:hidden left-1/2 translate-x-[-50%] bottom-8 w-4/5 mt-3 ease-in duration-200'}>
-            <Link href={'/discuss'}>
-              <button className='bg-primary font-bold text-white shadow-lg flex items-center justify-between w-full h-fit px-3 py-2 text-sm hover:brightness-110 transition-all duration-100'>
-                <p>Konsultasi Soal</p>
-                <ArrowForwardIosIcon />
-              </button>
-            </Link>
+    <>
+      <Navbar isLoggedIn={data.isLoggedIn} />
+      <div className='w-full px-10 md:px-28 pt-3 md:pt-8 pb-20'>
+        <h1 className='text-white'>{Tryout} : {subTryout}</h1>
+        <div className='md:grid grid-cols-3 gap-3 w-full py-5 md:py-8'>
+          <div className='col-start-1 col-end-3'>
+            <AnswerCard allData={data.hasil.kerjaan} data={data.hasil.kerjaan[index]} index={index} handleIndex={handleIndex} handleNumCard={handleNumCard} />
+            <div className={scroll ? 'fixed md:hidden left-1/2 translate-x-[-50%] bottom-[-10%] w-4/5 mt-3 ease-in duration-200' : 'fixed md:hidden left-1/2 translate-x-[-50%] bottom-8 w-4/5 mt-3 ease-in duration-200'}>
+              <Link href={'/discuss'}>
+                <button className='bg-primary font-bold text-white shadow-lg flex items-center justify-between w-full h-fit px-3 py-2 text-sm hover:brightness-110 transition-all duration-100'>
+                  <p>Konsultasi Soal</p>
+                  <ArrowForwardIosIcon />
+                </button>
+              </Link>
+            </div>
+          </div>
+          <div className='hidden md:flex'>
+            <div className='flex-none w-full'>
+              <NumberCard data={data.hasil.kerjaan} index={index} handleClick={handleIndex} button={'Konsultasi Soal'} onClick={''} href={''} />
+              <Link href={'/discuss'}>
+                <button className='hidden md:flex justify-between w-full h-fit bg-white font-bold text-primary text-center px-5 py-3 mt-2 rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>
+                  <p>Konsultasi Soal</p>
+                  <ArrowForwardIosIcon />
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
-        <div className='hidden md:flex'>
-          <div className='flex-none w-full'>
-            <NumberCard data={data.hasil.kerjaan} index={index} handleClick={handleIndex} button={'Konsultasi Soal'} onClick={''} href={''} />
-            <Link href={'/discuss'}>
-              <button className='hidden md:flex justify-between w-full h-fit bg-white font-bold text-primary text-center px-5 py-3 mt-2 rounded-lg shadow-md hover:bg-blue-100 transition-all duration-100'>
-                <p>Konsultasi Soal</p>
-                <ArrowForwardIosIcon />
-              </button>
-            </Link>
-          </div>
+        <div onClick={handleNumCard} className={numCard ? 'md:hidden fixed right-0 top-0 w-full h-screen bg-black/25' : ''} />
+        <div className={numCard ? 'md:hidden fixed left-1/2 bottom-0 translate-x-[-50%] translate-y-[-100%] w-[60%]' : 'hidden'}>
+          <NumberCard data={data.hasil.kerjaan} index={index} handleClick={handleIndex} button={'Konsultasi Soal'} onClick={''} href={''} />
         </div>
       </div>
-      <div onClick={handleNumCard} className={numCard ? 'md:hidden fixed right-0 top-0 w-full h-screen bg-black/25' : ''} />
-      <div className={numCard ? 'md:hidden fixed left-1/2 bottom-0 translate-x-[-50%] translate-y-[-100%] w-[60%]' : 'hidden'}>
-        <NumberCard data={data.hasil.kerjaan} index={index} handleClick={handleIndex} button={'Konsultasi Soal'} onClick={''} href={''} />
-      </div>
-    </div>
+    </>
   )
 }
 
 export const getServerSideProps = ({ req,res }) => {
   const data = {
     "hasil": req.session.hasil,
-    "tryout": req.session.tryout
+    "tryout": req.session.tryout,
+    "isLoggedIn": req.session.isLoggedIn
   }
 
   return {

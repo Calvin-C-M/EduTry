@@ -3,6 +3,7 @@ import Link from 'next/link'
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import DiscussPanel from '@/components/DiscussPanel'
 import QuestionBox from '@/components/QuestionBox'
+import Navbar from '@/components/Navbar';
 
 export default function Discuss({ data }) {
     // const discussData = [
@@ -39,7 +40,8 @@ export default function Discuss({ data }) {
 
   return (
     <>
-        <div className='w-full px-10 md:px-28 pt-1 md:pt-4 pb-8 md:pb-20'>
+        <Navbar isLoggedIn={data.isLoggedIn} />
+        <div className='w-full px-10 md:px-28 pt-28 md:pt-4 pb-8 md:pb-20'>
             <div className='flex justify-between md:mt-3 mb-3 md:mb-8'>
                 <div className='flex items-center text-white'>
                     <Link href='/answer' className='flex items-center p-2'>
@@ -69,7 +71,8 @@ export default function Discuss({ data }) {
 
 export const getServerSideProps = ({ req, res }) => {
     const data = {
-        "discuss": req.session.discuss
+        "discuss": req.session.discuss,
+        "isLoggedIn": req.session.isLoggedIn
     }
 
     return {

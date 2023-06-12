@@ -8,9 +8,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import Logo from '../public/edutry.svg'
 import Profile from '../public/profile.jpg'
 
-const Navbar = () => {
+const Navbar = ({ isLoggedIn }) => {
   const [nav, setNav] = useState(false)
   const router = useRouter();
+  const loggedIn = isLoggedIn || false
 
   const handleNav = () => {
       setNav(!nav)
@@ -32,45 +33,49 @@ const Navbar = () => {
                     </div>
                 </form>
             </div>
-            <div className='hidden md:flex items-center'>
-                <ul className='flex items-center font-medium text-gray-dark mx-3'>
-                    <Link href='/#about' className='flex-none my-1 mx-7'>
-                        <li className={router.asPath == '/' || router.asPath == '/#about' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Tentang Edutry</li>
-                    </Link>
-                    <Link href='/#features' className='my-1 mx-7'>
-                        <li className={router.asPath == '/#features' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Fitur</li>
-                    </Link>
-                    <Link href='/#contact' className='my-1 mx-7'>
-                        <li className={router.asPath == '/#contact' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Kontak</li>
-                    </Link>
-                    <div className='flex-none'>
-                        <Link href='/autentikasi'>
-                            <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>Login</button>
+            {
+                (loggedIn) 
+                ? <div className='hidden md:flex items-center'>
+                    <ul className='flex items-center font-medium text-gray-dark mx-3'>
+                        <Link href='/dashboard' className='my-1 mx-7'>
+                            <li className={router.asPath == '/dashboard' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Dashboard</li>
                         </Link>
-                        <Link href='/autentikasi#register'>
-                            <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>Sign Up</button>
+                        <Link href='/tryouts' className='my-1 mx-7'>
+                            <li className={router.asPath == '/tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Paket TO</li>
                         </Link>
-                    </div>
-                </ul>
-            </div>
-            <div className='hidden md:hidden items-center'>
-                <ul className='flex items-center font-medium text-gray-dark mx-3'>
-                    <Link href='/dashboard' className='my-1 mx-7'>
-                        <li className={router.asPath == '/dashboard' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Dashboard</li>
-                    </Link>
-                    <Link href='/tryouts' className='my-1 mx-7'>
-                        <li className={router.asPath == '/tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Paket TO</li>
-                    </Link>
-                    <Link href='/my-tryouts' className='my-1 mx-7'>
-                        <li className={router.asPath == '/my-tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>My Tryout</li>
-                    </Link>
-                    <div className='flex-none ml-6'>
-                        <Link href='/profile'>
-                            <Image src={Profile} alt='Profile Picture' className='w-12 h-12 rounded-full' />
+                        <Link href='/my-tryouts' className='my-1 mx-7'>
+                            <li className={router.asPath == '/my-tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>My Tryout</li>
                         </Link>
-                    </div>
-                </ul>
-            </div>
+                        <div className='flex-none ml-6'>
+                            <Link href='/profile'>
+                                <Image src={Profile} alt='Profile Picture' className='w-12 h-12 rounded-full' />
+                            </Link>
+                        </div>
+                    </ul>
+                </div>
+                : <div className='hidden md:flex items-center'>
+                    <ul className='flex items-center font-medium text-gray-dark mx-3'>
+                        <Link href='/#about' className='flex-none my-1 mx-7'>
+                            <li className={router.asPath == '/' || router.asPath == '/#about' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Tentang Edutry</li>
+                        </Link>
+                        <Link href='/#features' className='my-1 mx-7'>
+                            <li className={router.asPath == '/#features' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Fitur</li>
+                        </Link>
+                        <Link href='/#contact' className='my-1 mx-7'>
+                            <li className={router.asPath == '/#contact' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Kontak</li>
+                        </Link>
+                        <div className='flex-none'>
+                            <Link href='/autentikasi'>
+                                <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>Login</button>
+                            </Link>
+                            <Link href='/autentikasi#register'>
+                                <button className='bg-blue-light px-7 py-[6px] ml-2 font-medium text-primary'>Sign Up</button>
+                            </Link>
+                        </div>
+                    </ul>
+                </div>
+            }
+            
             <div onClick={handleNav} className='md:hidden'>
                 <MenuIcon className='text-primary hover:cursor-pointer' />
             </div>
@@ -83,52 +88,55 @@ const Navbar = () => {
                     <CloseIcon className='text-primary hover:cursor-pointer' />
                 </div>
             </div>
-            <div className='flex justify-end m-5'>
-                <ul className='font-medium text-gray-dark'>
-                    <Link href='/#about' className='flex justify-end my-5'>
-                        <li className={router.asPath == '/' || router.asPath == '/#about' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Tentang Edutry</li>
-                    </Link>
-                    <Link href='/#features' className='flex justify-end my-5'>
-                        <li className={router.asPath == '/#features' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Fitur</li>
-                    </Link>
-                    <Link href='/#contact' className='flex justify-end my-5'>
-                        <li className={router.asPath == '/#contact' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Kontak</li>
-                    </Link>
-                    <Link href='/autentikasi' className='flex justify-end mt-3'>
-                        <button className='bg-blue-light px-7 py-[6px] font-medium text-primary'>Login</button>
-                    </Link>
-                    <Link href='/autentikasi#register' className='flex justify-end mt-3'>
-                        <button className='bg-blue-light px-7 py-[6px] font-medium text-primary'>Sign Up</button>
-                    </Link>
-                </ul>
-            </div>
-            <div className='hidden justify-end m-5'>
-                <form className='w-full'>
-                    <div className='relative'>
-                        <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
-                            <SearchIcon className='text-gray-dark' />
+            {
+                (loggedIn) 
+                ? <div className='justify-end m-5'>
+                    <form className='w-full'>
+                        <div className='relative'>
+                            <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
+                                <SearchIcon className='text-gray-dark' />
+                            </div>
+                            <input type='search' placeholder='Search' className='w-full pl-10 pr-4 py-2 text-gray-dark border border-gray rounded-lg bg-white outline-none focus:border-blue-dark' />
                         </div>
-                        <input type='search' placeholder='Search' className='w-full pl-10 pr-4 py-2 text-gray-dark border border-gray rounded-lg bg-white outline-none focus:border-blue-dark' />
+                    </form>
+                    <ul className='font-medium text-gray-dark m-5'>
+                        <Link href='/dashboard' className='flex justify-end py-5'>
+                            <li className={router.asPath == '/dashboard' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Dashboard</li>
+                        </Link>
+                        <Link href='/tryouts' className='flex justify-end py-5'>
+                            <li className={router.asPath == '/tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Paket TO</li>
+                        </Link>
+                        <Link href='/my-tryouts' className='flex justify-end py-5'>
+                            <li className={router.asPath == '/my-tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>My Tryout</li>
+                        </Link>
+                    </ul>
+                    <div className='flex justify-end'>
+                        <Link href='/profile' className='flex items-center w-fit p-1 mt-8 text-gray-dark border-2 border-gray rounded-full bg-white outline-none hover:bg-blue-dark/30 hover:border-primary hover:text-primary'>
+                            <p className='font-medium px-4'>Profile</p>
+                            <Image src={Profile} alt='Profile Picture' className='w-9 h-9 rounded-full' />
+                        </Link>
                     </div>
-                </form>
-                <ul className='font-medium text-gray-dark m-5'>
-                    <Link href='/dashboard' className='flex justify-end py-5'>
-                        <li className={router.asPath == '/dashboard' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Dashboard</li>
-                    </Link>
-                    <Link href='/tryouts' className='flex justify-end py-5'>
-                        <li className={router.asPath == '/tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Paket TO</li>
-                    </Link>
-                    <Link href='/my-tryouts' className='flex justify-end py-5'>
-                        <li className={router.asPath == '/my-tryouts' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>My Tryout</li>
-                    </Link>
-                </ul>
-                <div className='flex justify-end'>
-                    <Link href='/profile' className='flex items-center w-fit p-1 mt-8 text-gray-dark border-2 border-gray rounded-full bg-white outline-none hover:bg-blue-dark/30 hover:border-primary hover:text-primary'>
-                        <p className='font-medium px-4'>Profile</p>
-                        <Image src={Profile} alt='Profile Picture' className='w-9 h-9 rounded-full' />
-                    </Link>
                 </div>
-            </div>
+                : <div className='flex justify-end m-5'>
+                    <ul className='font-medium text-gray-dark'>
+                        <Link href='/#about' className='flex justify-end my-5'>
+                            <li className={router.asPath == '/' || router.asPath == '/#about' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Tentang Edutry</li>
+                        </Link>
+                        <Link href='/#features' className='flex justify-end my-5'>
+                            <li className={router.asPath == '/#features' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Fitur</li>
+                        </Link>
+                        <Link href='/#contact' className='flex justify-end my-5'>
+                            <li className={router.asPath == '/#contact' ? 'hover:border-b-2  border-solid border-primary text-primary' : 'hover:border-b-2  border-solid border-primary hover:text-primary'}>Kontak</li>
+                        </Link>
+                        <Link href='/autentikasi' className='flex justify-end mt-3'>
+                            <button className='bg-blue-light px-7 py-[6px] font-medium text-primary'>Login</button>
+                        </Link>
+                        <Link href='/autentikasi#register' className='flex justify-end mt-3'>
+                            <button className='bg-blue-light px-7 py-[6px] font-medium text-primary'>Sign Up</button>
+                        </Link>
+                    </ul>
+                </div>
+            }
         </div>
     </div>
   )
