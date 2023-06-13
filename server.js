@@ -358,7 +358,7 @@ app.prepare()
                 kontak: "",
                 tryouts: [],
                 pilihan: [],
-                id_account: account[0]._id
+                id_account: account[0]._id.toString()
             })
             
             req.flash('message', 'Pendaftaran berhasil!')
