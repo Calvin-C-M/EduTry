@@ -40,7 +40,7 @@ const Tryout = () => {
                 }
                 <section className="grid grid-cols-4 gap-3 p-8 bg-white">
                     {
-                        tryouts.map(tryout => <TryoutCard key={tryout._id} image={TestImage} title={tryout.nama} date={tryout.created_at} href={`/admin/subtryout/${tryout._id}`} />)
+                        tryouts.map(tryout => <TryoutCard key={tryout._id} image={TestImage} title={tryout.nama} date={tryout.created_at} href={`/admin/subtryout/${tryout._id}`} discussHref={`/discuss/${tryout._id}`} />)
                     }
                 </section>
             </section>

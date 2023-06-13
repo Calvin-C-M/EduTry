@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Button from "../Button";
 
-const TryoutCard = ({ image, title, date, href }) => {
+const TryoutCard = ({ image, title, date, href, discussHref }) => {
     return (
         <div className="bg-blue-dark py-5 px-10 flex flex-col items-center w-fit text-white gap-3">
             <Image 
@@ -14,6 +14,9 @@ const TryoutCard = ({ image, title, date, href }) => {
                 <span>{date}</span>
                 <Button href={href}>
                     Details
+                </Button>
+                <Button href={discussHref}>
+                    Discuss
                 </Button>
             </div>
         </div>

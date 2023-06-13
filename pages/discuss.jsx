@@ -41,10 +41,10 @@ export default function Discuss({ data }) {
   return (
     <>
         <Navbar isLoggedIn={data.isLoggedIn} />
-        <div className='w-full px-10 md:px-28 pt-28 md:pt-4 pb-8 md:pb-20'>
+        <div className='w-full px-10 md:px-28 pt-28 pb-8 md:pb-20'>
             <div className='flex justify-between md:mt-3 mb-3 md:mb-8'>
                 <div className='flex items-center text-white'>
-                    <Link href='/answer' className='flex items-center p-2'>
+                    <Link href='/my-tryouts' className='flex items-center p-2'>
                         <ArrowBackIosNewIcon className='mr-5' />
                         <h1>Diskusi {data.discuss.nama}</h1>
                     </Link>

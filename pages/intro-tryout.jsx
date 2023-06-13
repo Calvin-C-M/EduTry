@@ -48,19 +48,28 @@ const IntroTryout = ({ data }) => {
                         <p className="max-w-md">
                             Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium ad repellat provident perspiciatis aliquid optio, earum dolores, aspernatur iusto vero expedita rerum harum omnis amet molestias eos esse magnam iure!
                         </p>
-                        {
-                            (data.mytryout.status == "OPEN") 
-                            ? <Button href={`/questions/${data.tryout.subtryout[0]._id}`}>
-                                Mulai
-                            </Button>
-                            : (data.mytryout.status == "DONE")
-                            ? <Button href={`/result/${data.mytryout._id}`}>
-                                Hasil
-                            </Button>
-                            : <Button href={`/payment/${data.mytryout._id}`}>
-                                Cek Status Pembayaran
-                            </Button>
-                        }
+                        <div className="flex items-center gap-3">
+                            {
+                                (data.mytryout.status == "OPEN") 
+                                ? <Button href={`/questions/${data.tryout.subtryout[0]._id}`}>
+                                    Mulai
+                                </Button>
+                                : (data.mytryout.status == "DONE")
+                                ? <Button href={`/result/${data.mytryout._id}`}>
+                                    Hasil
+                                </Button>
+                                : <Button href={`/payment/${data.mytryout._id}`}>
+                                    Cek Status Pembayaran
+                                </Button>
+                            }
+                            {
+                                (data.mytryout.status == "DONE")
+                                &&
+                                <Button href={`/discuss/${data.mytryout._id}`}>
+                                    Diskusi
+                                </Button>
+                            }
+                        </div>
                     </section>
                     <section className="text-center flex flex-col items-center justify-between gap-3">
                         <section className="flex flex-col gap-3">
